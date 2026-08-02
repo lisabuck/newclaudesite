@@ -1,0 +1,15 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: #FAF9F6;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Metric', system-ui, -apple-system, sans-serif;
+  color: #393533;
+  background: #FAF9F6;
+}
+
+img, video { max-width: 100%; }

@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-testimonials.html?raw';
+import '../../styles/pages/thorne-testimonials.css';
+---
+<Base
+  title="Client Testimonials | Thorne Group, Bay of Plenty"
+  description="A reputation built one client at a time. What clients say about building with Thorne Group over the past 20 years, in their own words."
+>
+  <thorne-testimonials set:html={body}></thorne-testimonials>
+  <script is:inline defer src="/js/lightdom-shim.js"></script>
+  <script is:inline defer src="/js/thorne-testimonials26.js"></script>
+</Base>

@@ -1,0 +1,229 @@
+---
+// Shared menu, styled to match the nav in thorne-home-page16.js:
+// frosted warm-grey bar, THORNE GROUP wordmark, small uppercase links.
+// Structure per the site brief: Home | About(v) | Projects | Services(v).
+const { pathname } = Astro.url;
+const isActive = (p: string) =>
+  p === '/' ? pathname === '/' : pathname === p || pathname.startsWith(p + '/');
+---
+<header class="tg-nav">
+  <div class="tg-nav-in">
+    <a class="tg-wordmark" href="/">THORNE GROUP</a>
+
+    <button class="tg-burger" type="button" aria-expanded="false" aria-controls="tg-menu" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="tg-links" id="tg-menu" aria-label="Main">
+      <ul class="tg-links-list">
+        <li><a href="/" class:list={[{ 'tg-current': isActive('/') }]} aria-current={isActive('/') ? 'page' : undefined}>Home</a></li>
+        <li class="tg-has-drop">
+          <button type="button" class="tg-drop-btn" class:list={[{ 'tg-current': isActive('/about') }]} aria-expanded="false">
+            About<svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <ul class="tg-drop">
+            <li><a href="/about">About</a></li>
+            <li><a href="/about/team">Team</a></li>
+            <li><a href="/about/testimonials">Testimonials</a></li>
+          </ul>
+        </li>
+        <li><a href="/projects" class:list={[{ 'tg-current': isActive('/projects') }]} aria-current={isActive('/projects') ? 'page' : undefined}>Projects</a></li>
+        <li class="tg-has-drop">
+          <button type="button" class="tg-drop-btn" class:list={[{ 'tg-current': isActive('/services') }]} aria-expanded="false">
+            Services<svg width="10" height="7" viewBox="0 0 10 7" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          </button>
+          <ul class="tg-drop">
+            <li><a href="/services/architectural-homes">Architectural Homes</a></li>
+            <li><a href="/services/renovations">Renovations</a></li>
+            <li><a href="/services/development-collaborations">Development Collaborations</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style is:global>
+.tg-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(242, 240, 237, .7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-bottom: 1px solid #c8c3bb;
+  padding: 22px 56px;
+}
+.tg-nav-in {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.tg-wordmark {
+  font-family: 'Metric', system-ui, sans-serif;
+  font-size: 19px;
+  letter-spacing: .22em;
+  color: #393533;
+  font-weight: 400;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.tg-links-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 38px;
+  align-items: center;
+}
+.tg-links-list > li { position: relative; }
+.tg-links-list a,
+.tg-drop-btn {
+  font-family: 'Metric', system-ui, sans-serif;
+  font-size: 14px;
+  letter-spacing: .16em;
+  text-decoration: none;
+  text-transform: uppercase;
+  color: #393533;
+  font-weight: 400;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.tg-links-list a:hover,
+.tg-drop-btn:hover { color: #7a746e; }
+.tg-links-list .tg-current {
+  border-bottom: 1px solid #393533;
+  padding-bottom: 3px;
+}
+.tg-drop {
+  list-style: none;
+  margin: 0;
+  padding: 12px 0;
+  position: absolute;
+  top: calc(100% + 19px);
+  left: -24px;
+  min-width: 250px;
+  background: #FAF9F6;
+  border: 1px solid #c8c3bb;
+  display: none;
+}
+.tg-has-drop::after {
+  /* invisible bridge so the dropdown doesn't close crossing the gap */
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 22px;
+}
+.tg-drop a {
+  display: block;
+  padding: 11px 24px;
+  letter-spacing: .16em;
+  font-size: 14px;
+}
+.tg-drop a:hover { background: #F2F0ED; color: #393533; }
+.tg-has-drop:hover .tg-drop,
+.tg-has-drop:focus-within .tg-drop,
+.tg-has-drop.open .tg-drop { display: block; }
+.tg-burger { display: none; }
+
+@media (max-width: 1000px) {
+  .tg-nav { padding: 18px 32px; }
+  .tg-links-list { gap: 24px; }
+}
+
+@media (max-width: 750px) {
+  .tg-nav { padding: 15px 24px; }
+  .tg-wordmark { font-size: 17px; }
+  .tg-burger {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 44px;
+    height: 44px;
+    margin: -10px -10px -10px 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .tg-burger span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: #393533;
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .tg-burger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .tg-burger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .tg-burger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .tg-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #FAF9F6;
+    border-bottom: 1px solid #c8c3bb;
+    max-height: calc(100vh - 100%);
+    overflow-y: auto;
+  }
+  .tg-links.open { display: block; }
+  .tg-links-list { flex-direction: column; align-items: stretch; gap: 0; padding: 8px 0 16px; }
+  .tg-links-list a, .tg-drop-btn { padding: 13px 24px; width: 100%; font-size: 14px; }
+  .tg-links-list .tg-current { border-bottom: 0; padding-bottom: 13px; font-weight: 500; }
+  .tg-drop-btn { justify-content: space-between; }
+  .tg-has-drop::after { display: none; }
+  .tg-drop { position: static; border: 0; background: #F2F0ED; padding: 4px 0; min-width: 0; left: auto; }
+  .tg-drop a { padding: 12px 36px; }
+  .tg-has-drop:hover .tg-drop, .tg-has-drop:focus-within .tg-drop { display: none; }
+  .tg-has-drop.open .tg-drop { display: block; }
+}
+
+@media (max-width: 430px) {
+  .tg-nav { padding: 14px 20px; }
+  .tg-wordmark { font-size: 15px; letter-spacing: .18em; }
+}
+</style>
+
+<script is:inline>
+(function () {
+  var header = document.querySelector('.tg-nav');
+  if (!header) return;
+  var burger = header.querySelector('.tg-burger');
+  var nav = header.querySelector('.tg-links');
+  burger.addEventListener('click', function () {
+    var open = nav.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  header.querySelectorAll('.tg-drop-btn').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var li = btn.closest('.tg-has-drop');
+      var open = li.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      header.querySelectorAll('.tg-has-drop').forEach(function (o) {
+        if (o !== li) { o.classList.remove('open'); var b = o.querySelector('.tg-drop-btn'); if (b) b.setAttribute('aria-expanded', 'false'); }
+      });
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (!header.contains(e.target)) {
+      header.querySelectorAll('.tg-has-drop.open').forEach(function (o) {
+        o.classList.remove('open');
+        var b = o.querySelector('.tg-drop-btn'); if (b) b.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+})();
+</script>

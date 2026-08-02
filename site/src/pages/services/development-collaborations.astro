@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-dev-tabs.html?raw';
+import '../../styles/pages/thorne-dev-tabs.css';
+---
+<Base
+  title="Development Collaborations and Turnkey Homes | Thorne Group"
+  description="Cleverly connected. Project feasibility, land acquisition, design collaboration, joint ventures and turnkey architectural homes in Mount Maunganui."
+>
+  <thorne-dev-tabs set:html={body}></thorne-dev-tabs>
+  <script is:inline defer src="/js/lightdom-shim.js"></script>
+  <script is:inline defer src="/js/thorne-dev-boxes4.js"></script>
+</Base>

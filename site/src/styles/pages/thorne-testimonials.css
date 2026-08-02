@@ -1,0 +1,187 @@
+thorne-testimonials{display:block}
+
+thorne-testimonials{display:block;background:#FAF9F6;font-family:'Metric','Helvetica Neue',Arial,sans-serif;font-weight:400;color:#54504c;-webkit-font-smoothing:antialiased;--pad:56px;--hero-top:64px;--hero-bot:44px}
+thorne-testimonials *{box-sizing:border-box;margin:0;padding:0}
+thorne-testimonials a{color:#393533;text-decoration:none}thorne-testimonials a:hover{color:#7a746e}
+thorne-testimonials a.tg-btn:hover{color:#FAF9F6;opacity:.88}
+thorne-testimonials strong{font-weight:500}
+thorne-testimonials .cta-link{display:inline-block;padding:6px 0 8px}
+thorne-testimonials .cta-link span{display:inline-block;transition:transform .3s ease}
+thorne-testimonials .cta-link:hover span{transform:translateX(6px)}
+thorne-testimonials .wrap{max-width:1440px;margin:0 auto;padding:0 var(--pad)}
+thorne-testimonials .eyebrow{font-size:14px;letter-spacing:.4em;text-transform:uppercase;color:#7a746e}
+/* hero */
+thorne-testimonials .hero-frame{position:relative;width:100%;height:76vh;min-height:560px;overflow:hidden}
+thorne-testimonials .hero-frame>img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+thorne-testimonials .scrim{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(35,32,30,.14),rgba(35,32,30,0) 45%);pointer-events:none}
+thorne-testimonials .hero-h1{position:absolute;top:var(--hero-top);left:var(--pad);right:var(--pad);color:#FAF9F6;font-weight:300;line-height:1.22;letter-spacing:-.02em;font-size:clamp(27px,2.53vw,41px)}
+thorne-testimonials .hero-h1 strong{display:block;max-width:17em;font-weight:300;font-size:clamp(30px,4.2vw,68px);line-height:1.18}
+thorne-testimonials .hero-h1 span{display:block;max-width:17em;margin-top:.34em;font-size:clamp(27px,2.53vw,41px);line-height:1.22}
+thorne-testimonials .key-msg{margin:56px 0 0;max-width:720px;background:#F2F0ED;border-top:2px solid #6B4E3D;padding:34px 38px}
+thorne-testimonials .key-msg blockquote{font-weight:300;font-size:clamp(20px,1.5vw,25px);line-height:1.5;letter-spacing:-.01em;color:#393533}
+thorne-testimonials .key-msg figcaption{margin-top:16px;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#7a746e}
+/* rotator */
+thorne-testimonials .rotator{position:absolute;left:var(--pad);bottom:28px;max-width:880px;padding:26px 42px 24px;border-bottom:none;z-index:2;background:rgba(250,249,246,.7)}thorne-testimonials .rotator .eyebrow{display:none}thorne-testimonials .rotator .rot-pos{display:none}thorne-testimonials .rotator .rq{font-size:clamp(26px,2.6vw,44px);line-height:1.3;max-width:22em}thorne-testimonials .rotator .rot-controls{display:none}
+thorne-testimonials .rotator .eyebrow{margin-bottom:34px}
+thorne-testimonials .rot-box{min-height:clamp(80px,8vw,150px);position:relative}
+thorne-testimonials .rq{display:none;font-weight:300;font-size:clamp(23px,1.8vw,30px);line-height:1.45;letter-spacing:-.01em;color:#393533;max-width:26em}
+thorne-testimonials .rq.active{display:block;animation:tgQIn .7s cubic-bezier(.22,.61,.36,1)}
+@keyframes tgQIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+thorne-testimonials .rot-cite{display:block;margin-top:24px;font-style:normal;font-size:16px;letter-spacing:.06em;color:#7a746e;transition:opacity .3s ease}
+thorne-testimonials .rot-controls{display:flex;align-items:center;gap:26px;margin-top:26px}
+thorne-testimonials .dots{display:flex;gap:8px}
+thorne-testimonials .dot{appearance:none;background:none;border:0;padding:8px 2px;cursor:pointer;display:block}
+thorne-testimonials .dot span{display:block;width:26px;height:2px;background:#c8c3bb;transition:background .35s ease}
+thorne-testimonials .dot.on span{background:#6B4E3D}
+thorne-testimonials .rot-pos{font-size:14px;letter-spacing:.28em;text-transform:uppercase;color:#7a746e}
+/* badges */
+thorne-testimonials .badges{display:flex;align-items:center;gap:52px;padding:64px 0 8px}
+thorne-testimonials .badge-imgs{display:flex;align-items:flex-start;gap:20px;flex-shrink:0}
+thorne-testimonials .badge-banner{display:block;width:212px;height:265px;object-fit:contain}
+thorne-testimonials .badge-kiwi{display:block;width:181px;height:181px;object-fit:contain;margin-top:21px}
+thorne-testimonials .badges h2{font-weight:300;font-size:clamp(32px,2.8vw,44px);line-height:1.2;letter-spacing:-.025em;color:#393533;max-width:20em}
+/* research + meet */
+thorne-testimonials .split{border-top:1px solid #c8c3bb;padding:96px 0 92px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:88px;align-items:start}
+thorne-testimonials .split h2{font-weight:300;font-size:clamp(32px,2.8vw,44px);line-height:1.2;letter-spacing:-.025em;color:#393533}
+thorne-testimonials .split .eyebrow{margin-bottom:26px}
+thorne-testimonials .side{border-left:1px solid #c8c3bb;padding-left:56px;display:flex;flex-direction:column;gap:26px}
+thorne-testimonials .side p{font-size:18px;line-height:1.75;color:#54504c;max-width:40em}
+thorne-testimonials .cta-line{align-self:flex-start;margin-top:6px;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#393533;border-bottom:1px solid #393533;padding-bottom:4px}
+thorne-testimonials .cta-btn{display:inline-block;align-self:flex-start;margin-top:8px;font-size:15px;letter-spacing:.28em;text-transform:uppercase;color:#FAF9F6;background:#393533;padding:20px 44px}
+thorne-testimonials .cta-btn:hover{color:#FAF9F6;opacity:.88}
+/* voices */
+thorne-testimonials .voices{padding-bottom:104px}
+thorne-testimonials .voices-in{border-top:1px solid #c8c3bb;padding-top:64px}
+thorne-testimonials .voices h2{font-weight:300;font-size:clamp(30px,2.4vw,40px);line-height:1.22;letter-spacing:-.025em;color:#393533}
+thorne-testimonials .list-controls{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-top:36px;padding-bottom:14px;border-bottom:1px solid #c8c3bb}
+thorne-testimonials .count{font-size:14px;letter-spacing:.4em;text-transform:uppercase;color:#7a746e}
+thorne-testimonials .count strong{color:#393533;margin-right:10px}
+thorne-testimonials .ctrl-r{display:flex;align-items:center;gap:28px}
+thorne-testimonials .toggle-all{appearance:none;background:none;border:0;padding:4px 0;font-family:inherit;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#393533;border-bottom:1px solid #393533;cursor:pointer}
+thorne-testimonials .toggle-all:hover{color:#7a746e;border-bottom-color:#7a746e}
+thorne-testimonials .arrows{display:flex;gap:10px}
+thorne-testimonials .arrow{appearance:none;font-family:inherit;font-size:17px;line-height:1;color:#393533;background:#FAF9F6;border:1px solid #393533;padding:11px 20px;cursor:pointer;transition:background .25s ease,color .25s ease}
+thorne-testimonials .arrow:hover{background:#393533;color:#FAF9F6}
+thorne-testimonials .ir-band{display:grid;grid-template-columns:1fr 1fr;min-height:560px}
+thorne-testimonials .ir-media{position:relative;overflow:hidden;background:#393533;min-height:440px}
+thorne-testimonials .ir-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+thorne-testimonials .ir-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 35%}
+thorne-testimonials .ir-copy.mt-copy{background:#FAF9F6}
+thorne-testimonials .ir-copy{display:flex;flex-direction:column;justify-content:center;padding:48px clamp(40px,6vw,88px);background:#F2F0ED}
+thorne-testimonials .ir-copy h2{font-weight:300;font-size:clamp(30px,2.6vw,42px);line-height:1.2;letter-spacing:-.02em;color:#393533;margin:14px 0 0}
+thorne-testimonials .ir-copy .ir-body{margin:22px 0 0;font-size:18px;line-height:1.75;max-width:26em;color:#54504c}
+thorne-testimonials .ir-cta{margin-top:28px}
+thorne-testimonials .card-grid{max-height:1050px;overflow-y:auto;overscroll-behavior:contain;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;padding:24px 24px 24px 0;align-content:start;align-items:stretch}
+thorne-testimonials .card-grid::-webkit-scrollbar{width:10px}
+thorne-testimonials .card-grid::-webkit-scrollbar-track{background:#FAF9F6;border-left:1px solid #c8c3bb}
+thorne-testimonials .card-grid::-webkit-scrollbar-thumb{background:#c8c3bb}
+thorne-testimonials .card-grid::-webkit-scrollbar-thumb:hover{background:#7a746e}
+thorne-testimonials .card-grid .v-item{margin:0;min-width:0;display:flex;background:#393533}
+thorne-testimonials .card-grid .v-item video{width:100%;height:100%;min-height:280px;object-fit:cover;display:block}
+thorne-testimonials .t-card{background:#F2F0ED;border-top:2px solid transparent;padding:34px 34px 30px;cursor:pointer;display:flex;flex-direction:column;min-width:0;transition:border-color .35s ease}
+thorne-testimonials .t-card.open{border-top-color:#6B4E3D}
+thorne-testimonials .t-accent{display:block;width:38px;height:2px;background:#6B4E3D;margin-bottom:20px}
+thorne-testimonials .t-quote{font-weight:400;font-size:19px;line-height:1.55;color:#393533;margin-bottom:30px}
+thorne-testimonials .t-full{display:none;margin:-8px 0 30px;flex-direction:column;gap:18px}
+thorne-testimonials .t-card.open .t-full{display:flex;animation:tgQIn .45s cubic-bezier(.22,.61,.36,1)}
+thorne-testimonials .t-full p{font-size:18px;line-height:1.75;color:#54504c}
+thorne-testimonials .t-meta{margin-top:auto;padding-top:18px;border-top:1px solid #c8c3bb;display:flex;align-items:center;gap:16px}
+thorne-testimonials .t-pic{display:block;width:92px;height:92px;min-width:92px;border-radius:50%;object-fit:cover;object-position:center 30%;flex-shrink:0}
+thorne-testimonials .t-name{flex:1;min-width:0;font-size:14px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:#393533}
+thorne-testimonials .t-plus{font-size:24px;line-height:1;color:#6B4E3D;transition:transform .35s ease}
+thorne-testimonials .t-card.open .t-plus{transform:rotate(45deg)}
+thorne-testimonials .hint{margin-top:18px;font-size:15px;color:#7a746e}
+/* videos */
+thorne-testimonials .videos{padding-bottom:104px}
+thorne-testimonials .videos-in{border-top:1px solid #c8c3bb;padding-top:64px}
+thorne-testimonials .videos .eyebrow{margin-bottom:20px}
+thorne-testimonials .videos h2{font-weight:300;font-size:clamp(30px,2.4vw,40px);line-height:1.22;letter-spacing:-.025em;color:#393533;margin-bottom:44px}
+thorne-testimonials .video-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+thorne-testimonials .v-item video{display:block;width:100%;aspect-ratio:16/9;background:#F2F0ED;object-fit:cover}
+/* trust */
+thorne-testimonials .trust-sec{padding-bottom:104px}
+thorne-testimonials .trust{background:#F2F0ED;border-top:2px solid #6B4E3D;padding:62px 60px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:72px;align-items:start}
+thorne-testimonials .trust-badge{font-size:14px;letter-spacing:.4em;text-transform:uppercase;color:#6B4E3D;font-weight:500;display:block;margin-bottom:20px}
+thorne-testimonials .trust h3{font-weight:300;font-size:clamp(28px,2.4vw,38px);line-height:1.22;letter-spacing:-.02em;color:#393533}
+thorne-testimonials .trust p{font-size:18px;line-height:1.75;color:#54504c;max-width:40em}
+thorne-testimonials .trust-link{display:inline-block;margin-top:30px;font-size:14px;letter-spacing:.26em;text-transform:uppercase;color:#393533;border-bottom:1px solid #393533;padding-bottom:4px}
+/* meet */
+thorne-testimonials .meet{padding-bottom:0}
+thorne-testimonials .meet .split{padding:72px 0 0}
+/* footer - home v49 rules */
+thorne-testimonials .tg-foot{padding:72px var(--pad) 56px}
+thorne-testimonials .tg-foot-row{border-top:1px solid #c8c3bb;padding-top:36px;display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap;font-size:14px;font-weight:400;letter-spacing:.22em;text-transform:uppercase}
+thorne-testimonials .tg-foot-l a{color:#7a746e;text-decoration:none;border-bottom:1px solid #c8c3bb;padding-bottom:3px}
+thorne-testimonials .tg-foot-l a:hover{color:#393533}
+thorne-testimonials .tg-foot-r{display:flex;gap:16px 32px;align-items:center;flex-wrap:wrap}
+thorne-testimonials .tg-foot-r a{color:#393533;text-decoration:none}
+thorne-testimonials .tg-foot-r a:hover{color:#7a746e}
+@media(min-width:751px){
+ thorne-testimonials .ir-copy .ir-body{font-size:clamp(19px,1.45vw,21px)}
+}
+@media(max-width:1000px){
+ thorne-testimonials{--pad:32px;--hero-top:48px;--hero-bot:36px}
+ thorne-testimonials .rotator{left:var(--pad);right:var(--pad);bottom:24px;max-width:none;padding:22px 26px 20px}
+ thorne-testimonials .rotator .rq{max-width:none}
+ thorne-testimonials .list-controls{flex-wrap:wrap;row-gap:14px}
+ thorne-testimonials .cta-line{padding:12px 0 8px}
+ thorne-testimonials .badges{flex-wrap:wrap;gap:28px}
+ thorne-testimonials .split{grid-template-columns:1fr;gap:40px;padding-top:72px;padding-bottom:72px}
+ thorne-testimonials .side{border-left:0;padding-left:0;border-top:1px solid #c8c3bb;padding-top:36px}
+ thorne-testimonials .video-grid{grid-template-columns:repeat(2,1fr);gap:24px}
+ thorne-testimonials .trust{grid-template-columns:1fr;gap:36px;padding:44px 32px}
+ thorne-testimonials .card-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;padding-right:18px}
+ thorne-testimonials .t-card{padding:28px 26px 24px}
+ thorne-testimonials .ir-band{grid-template-columns:1fr;min-height:0}
+ thorne-testimonials .ir-band .ir-media{order:0;min-height:0;aspect-ratio:16/11}
+ thorne-testimonials .ir-band .ir-copy{order:1;padding:52px var(--pad)}
+ thorne-testimonials .tg-cta{margin-top:64px!important}
+ thorne-testimonials .tg-cta-grid{grid-template-columns:1fr!important;gap:0!important;padding-top:48px!important}
+ thorne-testimonials .tg-cta-side{border-left:0!important;border-top:1px solid #c8c3bb!important;padding-left:0!important;margin-top:40px!important;padding-top:36px!important}
+ thorne-testimonials .tg-foot{padding-top:64px}
+}
+@media(max-width:750px){
+ thorne-testimonials{--pad:24px;--hero-top:36px;--hero-bot:28px}
+ thorne-testimonials .video-grid{grid-template-columns:1fr}
+ thorne-testimonials .card-grid{grid-template-columns:1fr}
+ thorne-testimonials .hero-frame{height:auto;min-height:0;max-height:none}
+ thorne-testimonials .hero-frame>img{height:74vh;min-height:520px;max-height:640px}
+ thorne-testimonials .scrim{inset:auto;top:0;left:0;right:0;height:74vh;min-height:520px;max-height:640px;background:linear-gradient(to bottom,rgba(35,32,30,.42),rgba(35,32,30,.05) 52%,rgba(35,32,30,.34))}
+ thorne-testimonials .hero-h1{font-size:clamp(25px,6.6vw,34px);line-height:1.3;text-shadow:0 1px 16px rgba(35,32,30,.4)}
+ thorne-testimonials .hero-h1 strong{font-size:clamp(28px,7.4vw,38px);line-height:1.26;max-width:none}
+ thorne-testimonials .hero-h1 span{font-size:clamp(22px,5.6vw,29px);line-height:1.3;max-width:none}
+ thorne-testimonials .rotator{position:static;left:auto;right:auto;bottom:auto;max-width:none;margin:0;padding:26px var(--pad) 30px;background:#F2F0ED}
+ thorne-testimonials .rotator .rq{font-size:clamp(21px,6vw,30px)}
+ thorne-testimonials .rot-cite{font-size:15px}
+ thorne-testimonials .eyebrow{font-size:15px}
+ thorne-testimonials .count{font-size:15px}
+ thorne-testimonials .toggle-all{font-size:15px;padding:9px 0}
+ thorne-testimonials .key-msg figcaption{font-size:15px}
+ thorne-testimonials .list-controls{flex-direction:column;align-items:flex-start;gap:16px;row-gap:16px}
+ thorne-testimonials .ctrl-r{width:100%;justify-content:space-between}
+ thorne-testimonials .ir-band .ir-copy{padding:42px var(--pad)}
+ thorne-testimonials .ir-copy .ir-body{font-size:19px}
+ thorne-testimonials .side p{font-size:19px}
+ thorne-testimonials .t-full p{font-size:19px}
+ thorne-testimonials .trust p{font-size:19px}
+ thorne-testimonials .cta-line{font-size:15px;letter-spacing:.22em}
+ thorne-testimonials .trust-link{font-size:15px;letter-spacing:.22em}
+ thorne-testimonials .t-name{font-size:15px}
+ thorne-testimonials .rot-pos{font-size:15px}
+ thorne-testimonials .badge-banner{width:149px;height:186px}
+ thorne-testimonials .badge-kiwi{width:127px;height:127px;margin-top:15px}
+ thorne-testimonials .trust{padding:36px var(--pad)}
+ thorne-testimonials .cta-btn{display:block;align-self:stretch;text-align:center;padding:20px 24px}
+ thorne-testimonials .cta-row{font-size:19px!important}
+ thorne-testimonials .cta-lab{font-size:15px!important}
+ thorne-testimonials .tg-btn{display:block!important;text-align:center;padding:20px 24px!important}
+ thorne-testimonials .tg-foot{padding-top:56px}
+ thorne-testimonials .tg-foot-row{font-size:15px}
+}
+@media(max-width:430px){
+ thorne-testimonials{--pad:20px}
+ thorne-testimonials .ir-band .ir-copy{padding:36px var(--pad)}
+}
+@media(min-width:1700px){thorne-testimonials{--pad:96px}}
+@media(min-width:2000px){thorne-testimonials{--pad:140px}}
+@media(prefers-reduced-motion:reduce){thorne-testimonials .rq.active,thorne-testimonials .t-card.open .t-full{animation:none}}

@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-why-tabs.html?raw';
+import '../../styles/pages/thorne-why-tabs.css';
+---
+<Base
+  title="About Thorne Group | Design and Build, Tauranga"
+  description="We have spent 20 years refining the way we do things. People, values, partnerships and systems that create a better experience for every client."
+>
+  <thorne-why-tabs set:html={body}></thorne-why-tabs>
+  <script is:inline defer src="/js/lightdom-shim.js"></script>
+  <script is:inline defer src="/js/newwhy11.js"></script>
+</Base>

@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import body from '../html/thorne-home-page.html?raw';
+import '../styles/pages/thorne-home-page.css';
+---
+<Base
+  title="Thorne Group | Architectural Builders, Tauranga and Bay of Plenty"
+  description="Voted Most Trusted Architectural Builder in the Bay of Plenty, five years running. Architectural homes, renovations and development collaborations."
+>
+  <thorne-home-page set:html={body}></thorne-home-page>
+  <script is:inline defer src="/js/lightdom-shim.js"></script>
+  <script is:inline defer src="/js/thorne-home-page50.js"></script>
+</Base>

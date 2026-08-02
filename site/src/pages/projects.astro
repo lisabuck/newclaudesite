@@ -1,0 +1,13 @@
+---
+import Base from '../layouts/Base.astro';
+import body from '../html/thorne-gallery.html?raw';
+import '../styles/pages/thorne-gallery.css';
+---
+<Base
+  title="Featured Projects | Thorne Group, Bay of Plenty"
+  description="Coastal, rural and urban builds from 20 years of architectural construction across Tauranga, Mount Maunganui and the wider Bay of Plenty."
+>
+  <thorne-gallery set:html={body}></thorne-gallery>
+  <script is:inline defer src="/js/lightdom-shim.js"></script>
+  <script is:inline defer src="/js/GALLERY6.js"></script>
+</Base>
