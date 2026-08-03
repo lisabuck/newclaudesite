@@ -165,3 +165,6 @@ thorne-team .tg-foot-r a:hover{ color:#7a746e; }
 }
 @media (min-width:1700px){ thorne-team{ --pad:96px; } }
 @media (min-width:2000px){ thorne-team{ --pad:140px; } }
+
+/* hero cta underline removed */
+thorne-team .wh-cta{border-bottom:none}

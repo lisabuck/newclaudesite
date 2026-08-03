@@ -37,7 +37,30 @@
     return (t || '').replace(/[→>]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
   }
 
+  var SERVICES = {
+    'architectural homes': '/services/architectural-homes',
+    'renovations': '/services/renovations',
+    'development collaborations': '/services/development-collaborations'
+  };
+
+  function linkStrips() {
+    /* the hero strips render service names as plain spans; make them links */
+    var spans = document.querySelectorAll('[class*="strip"] span');
+    for (var i = 0; i < spans.length; i++) {
+      var sp = spans[i];
+      var target = SERVICES[norm(sp.textContent)];
+      if (!target || sp.querySelector('a') || sp.className.indexOf('sep') !== -1) continue;
+      var a = document.createElement('a');
+      a.href = target;
+      a.className = sp.className;
+      a.setAttribute('style', (sp.getAttribute('style') || '') + ';color:inherit;text-decoration:none');
+      a.textContent = sp.textContent;
+      sp.parentNode.replaceChild(a, sp);
+    }
+  }
+
   function apply() {
+    linkStrips();
     var seqCount = {};
     var anchors = document.querySelectorAll('a');
     for (var i = 0; i < anchors.length; i++) {
@@ -63,6 +86,7 @@
           seqCount[rule.text] = n + 1;
           if (rule.seq[n]) a.setAttribute('href', rule.seq[n]);
         } else if (rule.scroll) {
+          a.style.borderBottom = 'none'; /* hero Learn more is not underlined */
           a.addEventListener('click', function (e) {
             e.preventDefault();
             var sec = this.closest('section, header, div[class*="hero"]');
