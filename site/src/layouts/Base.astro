@@ -30,5 +30,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <main>
       <slot />
     </main>
+    <script is:inline defer src="/js/fixlinks.js"></script>
   </body>
 </html>
