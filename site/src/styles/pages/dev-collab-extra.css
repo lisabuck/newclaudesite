@@ -9,9 +9,7 @@ thorne-home-page .dev-sq-band{display:flex!important;flex-direction:column;align
 thorne-home-page .dev-sq-band + .dev-sq-band{margin-top:32px}
 thorne-home-page .dev-sq-band .ah-square-wrap{padding:0!important;order:0;width:100%!important}
 thorne-home-page .dev-sq-band .tg-band-copy{order:1;padding-top:36px!important;padding-bottom:44px!important}
-thorne-home-page .dev-lead-squares{grid-template-columns:1fr!important;padding:44px var(--pad) 0!important;gap:16px!important}
-thorne-home-page .dev-lead-card{min-height:0!important;padding:28px 24px!important}
-thorne-home-page .dev-lead-card p{font-size:19px!important;line-height:1.7!important}
-thorne-home-page .dev-lead-card:first-child p{font-size:22px!important;line-height:1.55!important}
-thorne-home-page .dev-lead-img{min-height:0!important;padding:0!important;height:66vw;max-height:420px}
+thorne-home-page .dev-lead{padding:48px var(--pad) 8px!important}
+thorne-home-page .dev-lead p{font-size:19px!important;line-height:1.7!important}
+thorne-home-page .dev-lead p:first-child{font-size:23px!important;line-height:1.5!important}
 }
