@@ -13,4 +13,5 @@ thorne-home-page .dev-lead-squares{grid-template-columns:1fr!important;padding:4
 thorne-home-page .dev-lead-card{min-height:0!important;padding:28px 24px!important}
 thorne-home-page .dev-lead-card p{font-size:19px!important;line-height:1.7!important}
 thorne-home-page .dev-lead-card:first-child p{font-size:22px!important;line-height:1.55!important}
+thorne-home-page .dev-lead-img{min-height:0!important;padding:0!important;height:66vw;max-height:420px}
 }
