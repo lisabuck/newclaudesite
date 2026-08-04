@@ -28,11 +28,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <body>
     <div id="tg-preloader" aria-hidden="true">
       <div class="pre-words"><span class="pre-w pre-w-left">Celebrating</span><span class="pre-w pre-w-right">20 Years</span></div>
-      <svg class="pre-icon" viewBox="0 0 100 132" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <rect x="14" y="0" width="72" height="13" fill="#8f8a84"/>
-        <polygon points="14,26 40,33 40,132 14,132" fill="#8f8a84"/>
-        <polygon points="60,33 86,26 86,132 60,132" fill="#8f8a84"/>
-      </svg>
+      <img class="pre-icon" src="https://static.wixstatic.com/media/b2375c_49b40a149c39413eb1d914c0718a3a42~mv2.png" alt="" decoding="async" fetchpriority="high" />
       <img class="pre-logo" src="https://static.wixstatic.com/media/b2375c_ef5eca5407f14e7ca8999f7efc3e8d1f~mv2.png" alt="" decoding="async" fetchpriority="high" />
     </div>
     <style is:inline>
@@ -46,7 +42,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       @keyframes tgPreL{from{opacity:0;transform:translateX(-70px)}to{opacity:1;transform:none}}
       @keyframes tgPreR{from{opacity:0;transform:translateX(70px)}to{opacity:1;transform:none}}
       /* the icon opens the sequence, then hands over to the full logo */
-      #tg-preloader .pre-icon{position:relative;width:min(17vw,96px);opacity:0;animation:tgPreIn .7s ease .1s forwards,tgPreOut .6s ease 2.8s forwards}
+      #tg-preloader .pre-icon{position:relative;max-width:min(18vw,100px);max-height:22vh;width:auto;height:auto;opacity:0;animation:tgPreIn .7s ease .1s forwards,tgPreOut .6s ease 2.8s forwards}
       #tg-preloader .pre-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(64vw,340px);max-height:44vh;width:auto;height:auto;opacity:0;animation:tgPreIn .9s ease 2.9s forwards}
       @keyframes tgPreIn{to{opacity:1}}
       @keyframes tgPreOut{to{opacity:0}}
