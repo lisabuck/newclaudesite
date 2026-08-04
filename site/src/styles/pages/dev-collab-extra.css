@@ -1,0 +1,11 @@
+/* Development Collaborations page: square sliders + mobile stacking */
+@keyframes tgSlidedevA{0%{opacity:0}4.5%{opacity:1}25%{opacity:1}29.5%{opacity:0}100%{opacity:0}}
+@keyframes tgSlidedevB{0%{opacity:0}9%{opacity:1}50%{opacity:1}59%{opacity:0}100%{opacity:0}}
+@keyframes tgSlidedevC{0%{opacity:0}6%{opacity:1}33.33%{opacity:1}39.33%{opacity:0}100%{opacity:0}}
+@media(max-width:750px){
+thorne-home-page .dev-sq-band{display:flex!important;flex-direction:column;align-items:stretch!important}
+thorne-home-page .dev-sq-band .ah-square-wrap{padding:0 0 8px!important;order:0;width:100%!important}
+thorne-home-page .dev-sq-band .tg-band-copy{order:1}
+thorne-home-page .dev-hero-words{font-size:16px!important;line-height:1.6!important}
+thorne-home-page .dev-lead{padding-top:44px!important}
+}
