@@ -33,7 +33,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         <polygon points="14,26 40,33 40,132 14,132" fill="#8f8a84"/>
         <polygon points="60,33 86,26 86,132 60,132" fill="#8f8a84"/>
       </svg>
-      <img class="pre-logo" src="https://static.wixstatic.com/media/b2375c_d134d81bae3c4d669bfb390b23c171e3~mv2.png" alt="" decoding="async" fetchpriority="high" />
+      <img class="pre-logo" src="https://static.wixstatic.com/media/b2375c_ef5eca5407f14e7ca8999f7efc3e8d1f~mv2.png" alt="" decoding="async" fetchpriority="high" />
     </div>
     <style is:inline>
       #tg-preloader{position:fixed;inset:0;z-index:200;background:#2e2b29;display:flex;align-items:center;justify-content:center;transition:opacity .65s ease}
@@ -41,13 +41,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       /* faint celebration text, sweeping in from each side */
       #tg-preloader .pre-words{position:absolute;left:0;right:0;top:50%;transform:translateY(-58%);display:flex;justify-content:center;align-items:center;gap:min(26vw,190px);pointer-events:none;white-space:nowrap}
       #tg-preloader .pre-w{font-family:'Metric',system-ui,sans-serif;font-weight:300;font-size:clamp(44px,8.5vw,104px);letter-spacing:.01em;color:rgba(250,249,246,.10);opacity:0}
-      #tg-preloader .pre-w-left{animation:tgPreL 1s cubic-bezier(.22,.61,.36,1) .75s forwards}
-      #tg-preloader .pre-w-right{animation:tgPreR 1s cubic-bezier(.22,.61,.36,1) .75s forwards}
+      #tg-preloader .pre-w-left{animation:tgPreL 2s cubic-bezier(.22,.61,.36,1) .7s forwards}
+      #tg-preloader .pre-w-right{animation:tgPreR 2s cubic-bezier(.22,.61,.36,1) .7s forwards}
       @keyframes tgPreL{from{opacity:0;transform:translateX(-70px)}to{opacity:1;transform:none}}
       @keyframes tgPreR{from{opacity:0;transform:translateX(70px)}to{opacity:1;transform:none}}
       /* the icon opens the sequence, then hands over to the full logo */
-      #tg-preloader .pre-icon{position:relative;width:min(17vw,96px);opacity:0;animation:tgPreIn .7s ease .1s forwards,tgPreOut .5s ease 1.95s forwards}
-      #tg-preloader .pre-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(52vw,300px);height:auto;opacity:0;animation:tgPreIn .8s ease 2.05s forwards}
+      #tg-preloader .pre-icon{position:relative;width:min(17vw,96px);opacity:0;animation:tgPreIn .7s ease .1s forwards,tgPreOut .6s ease 2.8s forwards}
+      #tg-preloader .pre-logo{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);max-width:min(64vw,340px);max-height:44vh;width:auto;height:auto;opacity:0;animation:tgPreIn .9s ease 2.9s forwards}
       @keyframes tgPreIn{to{opacity:1}}
       @keyframes tgPreOut{to{opacity:0}}
       @media(prefers-reduced-motion:reduce){
@@ -58,7 +58,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <script is:inline>
       (function () {
         var p = document.getElementById('tg-preloader');
-        var t0 = Date.now(), MIN = 3000, hidden = false;
+        var t0 = Date.now(), MIN = 4200, hidden = false;
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) MIN = 400;
         function hide() {
           if (hidden) return; hidden = true;
@@ -70,7 +70,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         }
         if (document.readyState === 'complete') hide();
         else window.addEventListener('load', hide);
-        setTimeout(hide, 7000); /* never trap the visitor if something stalls */
+        setTimeout(hide, 8500); /* never trap the visitor if something stalls */
       })();
     </script>
     <Header />
