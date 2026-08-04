@@ -1,4 +1,9 @@
-/* Architectural Homes page: sliders + square design slider */
+/* Architectural Homes page: sliders + development-style square bands */
+@media(max-width:750px){
+thorne-home-page .dev-sq-band{display:flex!important;flex-direction:column;align-items:stretch!important}
+thorne-home-page .dev-sq-band .ah-square-wrap{padding:0!important;order:0;width:100%!important}
+thorne-home-page .dev-sq-band .tg-band-copy{order:1;padding-top:36px!important;padding-bottom:44px!important}
+}
 @keyframes tgSlideAH{0%{opacity:0}1.88%{opacity:1}12.5%{opacity:1}14.38%{opacity:0}100%{opacity:0}}
 @keyframes tgSlideAHD{0%{opacity:0}3%{opacity:1}16.67%{opacity:1}19.67%{opacity:0}100%{opacity:0}}
 @media(max-width:750px){
