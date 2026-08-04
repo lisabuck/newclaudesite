@@ -105,3 +105,9 @@ thorne-why-tabs .tg-foot-r { display:flex; gap:16px 32px; align-items:center; fl
   thorne-why-tabs .tg-band-media img.pslide { animation:none; }
   thorne-why-tabs .tg-band-media img.bslide:first-of-type { opacity:1; }
 }
+/* hero matched to home format */
+thorne-why-tabs .wh-hlead{line-height:1.12}
+@media(max-width:750px){
+thorne-why-tabs .wh-hlead{line-height:1.15}
+thorne-why-tabs .wh-hero-kicker{letter-spacing:.22em!important;font-weight:500!important;text-shadow:0 1px 14px rgba(35,32,30,.5)!important}
+}
