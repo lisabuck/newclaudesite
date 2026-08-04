@@ -46,15 +46,48 @@ const isActive = (p: string) =>
 
 <style is:global>
 .tg-nav {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 50;
   background: rgba(242, 240, 237, .7);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-bottom: 1px solid #c8c3bb;
   padding: 22px 56px;
+  transition: background .35s ease, border-color .35s ease;
 }
+/* over the hero: transparent bar, light text, soft gradient for legibility */
+.tg-nav.at-top {
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-bottom-color: transparent;
+}
+.tg-nav.at-top::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 -28px 0;
+  background: linear-gradient(to bottom, rgba(35, 32, 30, .38), rgba(35, 32, 30, 0));
+  pointer-events: none;
+}
+.tg-nav-in { position: relative; }
+.tg-nav.at-top .tg-wordmark,
+.tg-nav.at-top .tg-links-list a,
+.tg-nav.at-top .tg-drop-btn {
+  color: #FAF9F6;
+  text-shadow: 0 1px 14px rgba(35, 32, 30, .5);
+}
+.tg-nav.at-top .tg-links-list .tg-current,
+.tg-nav.at-top .tg-links-list a.tg-chat {
+  border-bottom-color: #FAF9F6;
+}
+.tg-nav.at-top .tg-links-list a:hover,
+.tg-nav.at-top .tg-drop-btn:hover { color: rgba(250, 249, 246, .75); }
+.tg-nav.at-top .tg-burger span { background: #FAF9F6; }
+/* dropdown panels stay opaque and dark-on-light in both states */
+.tg-nav.at-top .tg-drop a { color: #393533; text-shadow: none; }
 .tg-nav-in {
   max-width: 1440px;
   margin: 0 auto;
@@ -211,10 +244,18 @@ const isActive = (p: string) =>
   if (!header) return;
   var burger = header.querySelector('.tg-burger');
   var nav = header.querySelector('.tg-links');
+  /* transparent over the hero, frosted once scrolled or when the menu is open */
+  function setBar() {
+    var top = window.scrollY < 10 && !nav.classList.contains('open');
+    header.classList.toggle('at-top', top);
+  }
+  window.addEventListener('scroll', setBar, { passive: true });
+  setBar();
   burger.addEventListener('click', function () {
     var open = nav.classList.toggle('open');
     burger.setAttribute('aria-expanded', open ? 'true' : 'false');
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    setBar();
   });
   header.querySelectorAll('.tg-drop-btn').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
