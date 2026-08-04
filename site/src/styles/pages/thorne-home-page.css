@@ -28,3 +28,11 @@ thorne-home-page .tg-reno-divider{display:none}
   
 /* unify people/home thumbnails: warm, slightly muted */
 thorne-home-page .tg-card img{filter:saturate(.78) sepia(.10) contrast(.98)}
+
+/* Mobile hero type: calmer tracking on the sub-line; services strip stacks
+   as a tidy list with the pipe separators hidden. */
+@media(max-width:750px){
+  thorne-home-page .tg-hero-sub{letter-spacing:.16em!important;text-wrap:balance}
+  thorne-home-page .tg-hero-strip{flex-direction:column!important;align-items:flex-start!important;gap:13px!important;letter-spacing:.2em!important}
+  thorne-home-page .tg-hero-strip > span[style*="opacity"]{display:none!important}
+}
