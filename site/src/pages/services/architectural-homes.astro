@@ -1,13 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
-import body from '../../html/thorne-build-tabs.html?raw';
-import '../../styles/pages/thorne-build-tabs.css';
+import body from '../../html/thorne-arch-homes.html?raw';
+import '../../styles/pages/thorne-home-page.css';
+import '../../styles/pages/arch-homes-extra.css';
 ---
 <Base
   title="Architectural Homes | Award-Winning Design and Build, Bay of Plenty"
-  description="From space-optimising homes to large-scale architectural projects. Assess, design and price, and build with one experienced team."
+  description="Building award-winning architectural homes throughout the Bay of Plenty since 2006. Scope, design, pricing, project management and build with one experienced team."
 >
-  <thorne-build-tabs set:html={body}></thorne-build-tabs>
-  <script is:inline defer src="/js/lightdom-shim.js"></script>
-  <script is:inline defer src="/js/thorne-build-tabs13.js"></script>
+  <thorne-home-page set:html={body}></thorne-home-page>
 </Base>
