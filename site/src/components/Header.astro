@@ -73,21 +73,24 @@ const isActive = (p: string) =>
   pointer-events: none;
 }
 .tg-nav-in { position: relative; }
+/* white treatment applies to TOP-LEVEL items only - never dropdown contents */
 .tg-nav.at-top .tg-wordmark,
-.tg-nav.at-top .tg-links-list a,
-.tg-nav.at-top .tg-drop-btn {
+.tg-nav.at-top .tg-links-list > li > a,
+.tg-nav.at-top .tg-links-list > li > .tg-drop-btn {
   color: #FAF9F6;
   text-shadow: 0 1px 14px rgba(35, 32, 30, .5);
 }
-.tg-nav.at-top .tg-links-list .tg-current,
-.tg-nav.at-top .tg-links-list a.tg-chat {
+.tg-nav.at-top .tg-links-list > li > a.tg-current,
+.tg-nav.at-top .tg-links-list > li > .tg-drop-btn.tg-current,
+.tg-nav.at-top .tg-links-list > li > a.tg-chat {
   border-bottom-color: #FAF9F6;
 }
-.tg-nav.at-top .tg-links-list a:hover,
-.tg-nav.at-top .tg-drop-btn:hover { color: rgba(250, 249, 246, .75); }
+.tg-nav.at-top .tg-links-list > li > a:hover,
+.tg-nav.at-top .tg-links-list > li > .tg-drop-btn:hover { color: rgba(250, 249, 246, .75); }
 .tg-nav.at-top .tg-burger span { background: #FAF9F6; }
-/* dropdown panels stay opaque and dark-on-light in both states */
-.tg-nav.at-top .tg-drop a { color: #393533; text-shadow: none; }
+/* dropdown panels are always opaque warm white with dark text */
+.tg-nav .tg-drop a { color: #393533; text-shadow: none; }
+.tg-nav .tg-drop a:hover { background: #F2F0ED; color: #393533; }
 .tg-nav-in {
   max-width: 1440px;
   margin: 0 auto;
