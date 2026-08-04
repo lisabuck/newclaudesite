@@ -10,4 +10,28 @@ import '../styles/pages/thorne-gallery.css';
   <thorne-gallery set:html={body}></thorne-gallery>
   <script is:inline defer src="/js/lightdom-shim.js"></script>
   <script is:inline defer src="/js/GALLERY6.js"></script>
+  <script is:inline defer>
+/* open-from-hash: /projects#on-the-dunes opens that project's slideshow */
+(function () {
+  function openFromHash() {
+    var want = decodeURIComponent(location.hash.slice(1)).replace(/-/g, ' ').toLowerCase().trim();
+    if (!want) return;
+    var el = document.querySelector('thorne-gallery');
+    if (!el) return;
+    var card = Array.prototype.slice.call(el.querySelectorAll('.card')).find(function (c) {
+      return (c.getAttribute('aria-label') || '').toLowerCase().indexOf(want) !== -1;
+    });
+    if (!card) return;
+    var head = null;
+    el.querySelectorAll('button.acc-head').forEach(function (hd) {
+      var id = hd.getAttribute('aria-controls');
+      var panel = id ? document.getElementById(id) : null;
+      if (panel && panel.contains(card)) head = hd;
+    });
+    if (head && head.getAttribute('aria-expanded') !== 'true') head.click();
+    setTimeout(function () { card.click(); }, 350);
+  }
+  window.addEventListener('load', function () { setTimeout(openFromHash, 600); });
+})();
+  </script>
 </Base>
