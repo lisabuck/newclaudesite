@@ -17,3 +17,11 @@ img, video { max-width: 100%; }
 /* Contact CTA: full-width tinted band behind "Let's Create Something Exceptional" */
 .tg-cta { max-width: none !important; margin: 96px 0 0 !important; padding: 0 !important; background: #F2F0ED; }
 .tg-cta-grid { max-width: 1240px; margin: 0 auto !important; border-top: 0 !important; padding: 72px var(--pad, 56px) 80px !important; }
+
+/* Phone hero spacing: drop the hero heading clear of the fixed menu bar. */
+@media (max-width: 750px) {
+  thorne-home-page, thorne-renovation, thorne-gallery, thorne-team,
+  thorne-testimonials, thorne-why-tabs {
+    --hero-top: 92px !important;
+  }
+}
