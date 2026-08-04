@@ -167,3 +167,63 @@ thorne-renovation .tg-foot-r a:hover{ color:#7a746e; }
 }
 @media (min-width:1700px){ thorne-renovation{ --pad:96px; --hpad:96px; } }
 @media (min-width:2000px){ thorne-renovation{ --pad:140px; --hpad:140px; } }
+
+/* --- Phase bands (Development page layout) --- */
+thorne-renovation .rn-band{ position:relative; display:grid; grid-template-columns:1fr 1fr; align-items:center; background:var(--panel); margin-top:72px; }
+thorne-renovation .rn-band:first-of-type{ margin-top:64px; }
+thorne-renovation .rn-sq-wrap{ padding:clamp(24px,4vw,64px); }
+thorne-renovation .rn-sq-cap{ max-width:640px; margin:0 auto; }
+thorne-renovation .rn-sq{ position:relative; height:0; padding-bottom:100%; overflow:hidden; background:var(--wg); }
+thorne-renovation .rn-sq img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; }
+thorne-renovation .rn-copy{ display:flex; flex-direction:column; justify-content:center; padding:70px clamp(40px,6vw,88px); }
+thorne-renovation .rn-kick{ font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; color:var(--mid); margin-bottom:16px; }
+thorne-renovation .rn-band h2{ margin:0; font-weight:300; font-size:clamp(30px,2.6vw,42px); line-height:1.2; letter-spacing:-.02em; color:var(--wg); }
+thorne-renovation .rn-band p{ margin:22px 0 0; font-size:18px; line-height:1.75; max-width:30em; color:var(--read); }
+thorne-renovation .rn-detail .sec{ padding-top:8px; }
+@media(max-width:1000px){
+  thorne-renovation .rn-band{ grid-template-columns:1fr; margin-top:56px; }
+  thorne-renovation .rn-band .rn-sq-wrap{ order:0; }
+  thorne-renovation .rn-band .rn-copy{ order:1; padding:48px var(--pad) 56px; }
+}
+@media(max-width:750px){
+  thorne-renovation .rn-band{ margin-top:48px; }
+  thorne-renovation .rn-band .rn-copy{ padding:40px var(--pad) 48px; }
+  thorne-renovation .rn-band p{ font-size:17px; }
+}
+
+/* --- Before/after reveal (same sliding-window effect as the home page) --- */
+thorne-renovation .rn-reveal{ position:relative; overflow:hidden; background:var(--wg); aspect-ratio:16/10; max-height:640px; margin-top:32px; }
+thorne-renovation .rn-reveal .tg-reno-pair{ position:absolute; inset:0; }
+thorne-renovation .rn-reveal .tg-reno-pair img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:left center; }
+thorne-renovation .rn-reveal .rn-p1{ animation:rnPair1 24s ease infinite both; }
+thorne-renovation .rn-reveal .rn-p2{ opacity:0; animation:rnPair2 24s ease infinite both; }
+thorne-renovation .rn-reveal .tg-reno-afterwrap{ position:absolute; inset:0; overflow:hidden; transform:translateX(-100%); will-change:transform; animation:rnRevWrap 24s cubic-bezier(.4,.04,.22,1) infinite both; }
+thorne-renovation .rn-reveal .tg-reno-after{ transform:translateX(100%); will-change:transform; animation:rnRevImg 24s cubic-bezier(.4,.04,.22,1) infinite both; }
+thorne-renovation .rn-reveal .tg-reno-divider{ position:absolute; top:0; bottom:0; right:0; width:2px; background:var(--ww); box-shadow:0 0 14px rgba(35,32,30,.5); opacity:0; animation:rnRevDiv 24s ease infinite both; }
+thorne-renovation .rn-reveal .tg-reno-lab{ position:absolute; bottom:0; padding:14px 22px; background:var(--wg); color:var(--ww); font-size:14px; font-weight:400; letter-spacing:.24em; text-transform:uppercase; line-height:1; }
+thorne-renovation .rn-reveal .tg-reno-lab-b{ right:0; animation:rnRevLabB 24s ease infinite both; }
+thorne-renovation .rn-reveal .tg-reno-lab-a{ left:0; opacity:0; animation:rnRevLabA 24s ease infinite both; }
+thorne-renovation .rn-reveal .rn-p2 .tg-reno-afterwrap,
+thorne-renovation .rn-reveal .rn-p2 .tg-reno-after,
+thorne-renovation .rn-reveal .rn-p2 .tg-reno-divider,
+thorne-renovation .rn-reveal .rn-p2 .tg-reno-lab{ animation-delay:12s; }
+@keyframes rnPair1{ 0%,45%{opacity:1} 52%,94%{opacity:0} 100%{opacity:1} }
+@keyframes rnPair2{ 0%,45%{opacity:0} 52%,94%{opacity:1} 100%{opacity:0} }
+@keyframes rnRevWrap{ 0%,12.5%{transform:translateX(-100%)} 25%,45.8%{transform:translateX(0)} 50%,100%{transform:translateX(-100%)} }
+@keyframes rnRevImg{ 0%,12.5%{transform:translateX(100%)} 25%,45.8%{transform:translateX(0)} 50%,100%{transform:translateX(100%)} }
+@keyframes rnRevLabB{ 0%,12.5%{opacity:1} 18%,100%{opacity:0} }
+@keyframes rnRevLabA{ 0%,21%{opacity:0} 25%,45.8%{opacity:1} 50%,100%{opacity:0} }
+@keyframes rnRevDiv{ 0%,12%{opacity:0} 12.9%{opacity:1} 24.3%{opacity:1} 27%,100%{opacity:0} }
+@media(prefers-reduced-motion:reduce){
+  thorne-renovation .rn-reveal .rn-p1,thorne-renovation .rn-reveal .rn-p2,thorne-renovation .rn-reveal .tg-reno-afterwrap,thorne-renovation .rn-reveal .tg-reno-after,thorne-renovation .rn-reveal .tg-reno-lab-b,thorne-renovation .rn-reveal .tg-reno-lab-a{ animation:none; }
+  thorne-renovation .rn-reveal .rn-p2{ opacity:0; }
+  thorne-renovation .rn-reveal .tg-reno-afterwrap{ transform:none; }
+  thorne-renovation .rn-reveal .tg-reno-after{ transform:none; }
+  thorne-renovation .rn-reveal .tg-reno-lab-b{ opacity:0; }
+  thorne-renovation .rn-reveal .tg-reno-lab-a{ opacity:1; }
+  thorne-renovation .rn-reveal .tg-reno-divider{ display:none; }
+}
+
+/* Detail sections sit between bands now, so trim the old tab-panel end padding. */
+thorne-renovation .rn-detail .tab-cta{ padding:48px 0 12px; }
+thorne-renovation .rn-detail.rn-last .tab-cta{ padding-bottom:64px; }
