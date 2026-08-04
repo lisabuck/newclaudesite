@@ -232,3 +232,32 @@ thorne-gallery .th-b:hover{ border-color:#FAF9F6; background:rgba(250,249,246,.1
   thorne-gallery .card .pic img{ transition:none; }
   thorne-gallery .th-fill{ transition:none; }
 }
+
+/* theatre layout v2: photo to the very top; no progress line;
+   thumbs beside the photo on desktop, in a strip below it on mobile */
+thorne-gallery .th-bar{ display:none; }
+thorne-gallery .th-fill{ display:none; }
+thorne-gallery .th-top{ position:absolute; top:10px; left:16px; z-index:6; padding:0; pointer-events:none; background:none; }
+thorne-gallery .th-top .th-close{ pointer-events:auto; background:rgba(35,32,30,.45); }
+thorne-gallery .th-top .th-close:hover{ background:#FAF9F6; }
+thorne-gallery .th-title{ font-size:18px; text-shadow:0 1px 12px rgba(35,32,30,.7); }
+thorne-gallery .th-eyebrow{ text-shadow:0 1px 12px rgba(35,32,30,.7); }
+thorne-gallery .th-counter{ text-shadow:0 1px 12px rgba(35,32,30,.7); }
+@media(min-width:751px){
+thorne-gallery .th-top{ right:168px; }
+thorne-gallery .th.open{ display:grid; grid-template-columns:minmax(0,1fr) 152px; grid-template-rows:minmax(0,1fr) auto; }
+thorne-gallery .th-stage{ grid-column:1; grid-row:1 / span 2; margin:0; }
+thorne-gallery .th-thumbs{ grid-column:2; grid-row:1; display:flex; flex-direction:column; flex-wrap:nowrap; overflow-y:auto; justify-content:flex-start; padding:10px; gap:8px; }
+thorne-gallery .th-thumbs .tt{ width:100%; height:84px; flex:0 0 auto; }
+thorne-gallery .th-ctrls{ grid-column:2; grid-row:2; flex-direction:column; padding:10px; gap:8px; }
+thorne-gallery .th-ctrls .th-b{ width:100%; }
+thorne-gallery .th-ctrls .th-pause{ padding:0; }
+}
+@media(max-width:750px){
+thorne-gallery .th.open{ display:flex; flex-direction:column; }
+thorne-gallery .th-top{ right:12px; }
+thorne-gallery .th-stage{ flex:1; min-height:0; margin:0; }
+thorne-gallery .th-thumbs{ display:flex; flex-wrap:nowrap; overflow-x:auto; justify-content:flex-start; padding:8px; gap:6px; }
+thorne-gallery .th-thumbs .tt{ flex:0 0 auto; width:72px; height:48px; }
+thorne-gallery .th-ctrls{ padding:8px 12px 12px; }
+}
