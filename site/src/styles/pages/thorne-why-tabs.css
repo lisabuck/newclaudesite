@@ -17,7 +17,7 @@ thorne-why-tabs h1,thorne-why-tabs h2,thorne-why-tabs h3,thorne-why-tabs p { mar
 /* ─── HERO · slideshow (home-page style) ─── */
 thorne-why-tabs .wh-frame { height:76vh; min-height:560px; overflow:hidden; position:relative; background:#393533; }
 thorne-why-tabs .wh-frame img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; }
-thorne-why-tabs .wh-frame img.slide { opacity:0; animation:tgSlide6 36s linear infinite both; }
+thorne-why-tabs .wh-frame img.slide { opacity:0; animation:tgSlideWhy 42s linear infinite both; }
 thorne-why-tabs .tg-band-media img.bslide { opacity:0; animation:tgSlide4 24s linear infinite; }
 thorne-why-tabs .tg-band-media img.pslide { opacity:0; animation:tgSlide7 14s linear infinite; }
 thorne-why-tabs .wh-scrim { position:absolute; inset:0; background:linear-gradient(to bottom,rgba(35,32,30,.14),rgba(35,32,30,0) 45%); pointer-events:none; }
@@ -111,3 +111,5 @@ thorne-why-tabs .wh-hlead{line-height:1.12}
 thorne-why-tabs .wh-hlead{line-height:1.15}
 thorne-why-tabs .wh-hero-kicker{letter-spacing:.22em!important;font-weight:500!important;text-shadow:0 1px 14px rgba(35,32,30,.5)!important}
 }
+
+@keyframes tgSlideWhy{0%{opacity:0}2.14%{opacity:1}14.29%{opacity:1}16.43%{opacity:0}100%{opacity:0}}
