@@ -233,3 +233,29 @@ thorne-renovation .rn-detail.rn-last .tab-cta{ padding-bottom:64px; }
   thorne-renovation .hero-strip{ flex-direction:column; align-items:flex-start; gap:13px; }
   thorne-renovation .hero-strip .sep{ display:none; }
 }
+
+/* --- 10-point build or renovate guide: animated checklist --- */
+thorne-renovation .rn-check{ margin-top:88px; }
+thorne-renovation .rn-check .rn-kick{ display:block; }
+thorne-renovation .rn-check-h2{ margin:0 0 12px; font-weight:300; font-size:clamp(30px,2.6vw,42px); line-height:1.2; letter-spacing:-.02em; color:var(--wg); }
+thorne-renovation .rn-check-list{ list-style:none; margin:28px 0 0; padding:0; max-width:860px; }
+thorne-renovation .rn-check-list li{ display:flex; align-items:flex-start; gap:20px; padding:19px 0; border-bottom:1px solid var(--rule); font-size:19px; line-height:1.55; color:var(--wg); }
+thorne-renovation .rn-check-list li:first-child{ border-top:1px solid var(--rule); }
+thorne-renovation .rn-tick{ flex:none; width:30px; height:30px; margin-top:-1px; border:1px solid var(--rule); border-radius:50%; display:flex; align-items:center; justify-content:center; transition:border-color .4s ease; transition-delay:var(--d,0s); }
+thorne-renovation .rn-tick svg{ width:16px; height:16px; }
+thorne-renovation .rn-tick path{ stroke:var(--brown); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; stroke-dasharray:22; stroke-dashoffset:0; transition:stroke-dashoffset .5s cubic-bezier(.22,.61,.36,1); transition-delay:var(--d,0s); }
+/* armed by the page script before the list scrolls into view; ticked when it arrives */
+thorne-renovation .rn-check.rn-armed .rn-tick path{ stroke-dashoffset:22; }
+thorne-renovation .rn-check.rn-armed.rn-on .rn-tick path{ stroke-dashoffset:0; }
+thorne-renovation .rn-check.rn-armed.rn-on .rn-tick{ border-color:var(--brown); }
+@media(max-width:750px){
+  thorne-renovation .rn-check{ margin-top:64px; }
+  thorne-renovation .rn-check-list li{ font-size:17px; gap:16px; padding:17px 0; }
+  thorne-renovation .rn-tick{ width:27px; height:27px; }
+  thorne-renovation .rn-tick svg{ width:14px; height:14px; }
+}
+@media(prefers-reduced-motion:reduce){
+  thorne-renovation .rn-tick, thorne-renovation .rn-tick path{ transition:none; }
+  thorne-renovation .rn-check.rn-armed .rn-tick path{ stroke-dashoffset:0; }
+  thorne-renovation .rn-check.rn-armed .rn-tick{ border-color:var(--brown); }
+}

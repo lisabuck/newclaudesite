@@ -8,4 +8,20 @@ import '../../styles/pages/thorne-renovation.css';
   description="Renovate, extend or start again? We help you assess the options, understand the risks and establish a budget you can realistically plan around."
 >
   <thorne-renovation set:html={body}></thorne-renovation>
+  <script is:inline defer>
+/* Ticks the 10-point guide off item by item when it scrolls into view. */
+(function () {
+  var sec = document.querySelector('.rn-check');
+  if (!sec || !('IntersectionObserver' in window)) return;
+  var ticks = sec.querySelectorAll('.rn-tick');
+  for (var i = 0; i < ticks.length; i++) ticks[i].style.setProperty('--d', (i * 0.18) + 's');
+  sec.classList.add('rn-armed');
+  var io = new IntersectionObserver(function (entries) {
+    if (!entries.some(function (e) { return e.isIntersecting; })) return;
+    io.disconnect();
+    sec.classList.add('rn-on');
+  }, { threshold: 0.25 });
+  io.observe(sec.querySelector('.rn-check-list'));
+})();
+  </script>
 </Base>
