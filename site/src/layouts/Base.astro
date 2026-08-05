@@ -37,7 +37,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       /* faint celebration text, sweeping in from each side */
       /* words sit at the icon's level, sweep in and rest either side of it */
       #tg-preloader .pre-words{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;justify-content:center;align-items:center;gap:calc(min(18vw,100px) + 64px);pointer-events:none;white-space:nowrap}
-      #tg-preloader .pre-w{font-family:'Metric',system-ui,sans-serif;font-weight:300;font-size:clamp(27px,7.5vw,104px);letter-spacing:.01em;color:rgba(250,249,246,.14);opacity:0}
+      #tg-preloader .pre-w{font-family:'Metric',system-ui,sans-serif;font-weight:300;font-size:clamp(27px,7.5vw,104px);letter-spacing:.01em;color:rgba(250,249,246,.88);opacity:0}
       #tg-preloader .pre-w-left{animation:tgPreL 1.6s cubic-bezier(.22,.61,.36,1) .7s forwards,tgPreOut .6s ease 2.8s forwards}
       #tg-preloader .pre-w-right{animation:tgPreR 1.6s cubic-bezier(.22,.61,.36,1) .7s forwards,tgPreOut .6s ease 2.8s forwards}
       @keyframes tgPreL{from{opacity:0;transform:translateX(min(-14vw,-110px))}to{opacity:1;transform:none}}
