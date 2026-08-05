@@ -14,7 +14,7 @@ import '../../styles/pages/thorne-renovation.css';
   var sec = document.querySelector('.rn-check');
   if (!sec || !('IntersectionObserver' in window)) return;
   var ticks = sec.querySelectorAll('.rn-tick');
-  for (var i = 0; i < ticks.length; i++) ticks[i].style.setProperty('--d', (i * 0.18) + 's');
+  for (var i = 0; i < ticks.length; i++) ticks[i].style.setProperty('--d', (i * 0.5) + 's');
   sec.classList.add('rn-armed');
   var io = new IntersectionObserver(function (entries) {
     if (!entries.some(function (e) { return e.isIntersecting; })) return;
