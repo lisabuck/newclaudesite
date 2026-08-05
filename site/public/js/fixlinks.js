@@ -59,6 +59,37 @@
     }
   }
 
+  /* Internal navigation lands just below the destination page's hero so
+     visitors reach content quicker. Links get "#content" appended; the
+     landing code below positions the page when it sees that hash. Direct
+     arrivals (search, shared links) have no hash and keep the full hero. */
+  var HERO = '.tg-hero-frame, .hero-frame, .wh-video, .g-hero';
+
+  function tagInternalLinks() {
+    var anchors = document.querySelectorAll('a[href^="/"]');
+    for (var i = 0; i < anchors.length; i++) {
+      var href = anchors[i].getAttribute('href');
+      if (href === '/' || href.indexOf('#') !== -1) continue; /* home keeps its hero; keep deep-links like /projects#on-the-dunes */
+      anchors[i].setAttribute('href', href + '#content');
+    }
+  }
+
+  function landBelowHero() {
+    if (location.hash !== '#content') return;
+    var hero = document.querySelector(HERO);
+    if (!hero) return;
+    var nav = document.querySelector('.tg-nav');
+    var navH = nav ? nav.offsetHeight : 0;
+    var y = Math.max(0, hero.getBoundingClientRect().bottom + window.scrollY - navH);
+    window.scrollTo(0, y);
+    /* re-check once the page has fully loaded, but never fight the visitor */
+    window.addEventListener('load', function () {
+      if (Math.abs(window.scrollY - y) > 2) return;
+      var y2 = Math.max(0, hero.getBoundingClientRect().bottom + window.scrollY - navH);
+      if (y2 !== y) window.scrollTo(0, y2);
+    });
+  }
+
   function apply() {
     linkStrips();
     var seqCount = {};
@@ -101,6 +132,8 @@
         break;
       }
     }
+    tagInternalLinks();
+    landBelowHero();
   }
 
   if (document.readyState === 'loading') {
