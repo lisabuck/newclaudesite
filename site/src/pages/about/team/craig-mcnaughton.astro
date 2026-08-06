@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-craig-mcnaughton.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Craig McNaughton | Senior Site Foreman | Thorne Group"
+  description="Craig McNaughton brings bespoke furniture-maker craftsmanship and award-recognised skill to complex high end homes as Senior Site Foreman."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>

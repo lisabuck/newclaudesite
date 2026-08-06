@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-scott-evered.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Scott Evered | Senior Project Manager | Thorne Group"
+  description="Scott Evered brings 16 years on high-end residential builds to his role as Senior Project Manager at Thorne Group."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>

@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-lisa-buck.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Lisa Buck | Process and Marketing | Thorne Group"
+  description="Lisa Buck co-founded Thorne Group, combining a love of interiors studied in London with the systems that shape the Thorne Group client experience."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>

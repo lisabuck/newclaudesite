@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-denton-mccarty.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Denton McCarty | Qualified Carpenter | Thorne Group"
+  description="Denton McCarty is a BCITO qualified carpenter who has grown with Thorne Group for over 10 years, known for his work ethic and eye for detail."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>

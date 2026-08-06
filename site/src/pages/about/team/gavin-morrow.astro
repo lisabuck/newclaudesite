@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-gavin-morrow.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Gavin Morrow | Construction Director | Thorne Group"
+  description="Gavin Morrow co-founded Thorne Group and leads construction, with an eye for detail honed on high-end homes in New Zealand and Europe."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>

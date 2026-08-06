@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-clare-sokimi.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Clare Sokimi | Business and Client Care Manager | Thorne Group"
+  description="Clare Sokimi looks after business and client care at Thorne Group, committed to great service, high standards and exceeding client expectations."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>
