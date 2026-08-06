@@ -34,4 +34,26 @@ import '../styles/pages/thorne-gallery.css';
   window.addEventListener('load', function () { setTimeout(openFromHash, 600); });
 })();
   </script>
+  <script is:inline defer>
+/* Portrait photos in the slideshow get a 4:5 frame (see .tg-portrait in the page CSS). */
+(function () {
+  function mark(img) {
+    if (img.dataset.tgMarked) return;
+    img.dataset.tgMarked = '1';
+    function set() { img.classList.toggle('tg-portrait', img.naturalHeight > img.naturalWidth); }
+    if (img.complete && img.naturalWidth) set();
+    img.addEventListener('load', set); /* re-check every time the slideshow swaps the photo */
+  }
+  new MutationObserver(function (muts) {
+    muts.forEach(function (m) {
+      m.addedNodes.forEach(function (n) {
+        if (n.nodeType !== 1) return;
+        if (n.matches && n.matches('img.th-img')) mark(n);
+        if (n.querySelectorAll) n.querySelectorAll('img.th-img').forEach(mark);
+      });
+    });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+  document.querySelectorAll('img.th-img').forEach(mark);
+})();
+  </script>
 </Base>
