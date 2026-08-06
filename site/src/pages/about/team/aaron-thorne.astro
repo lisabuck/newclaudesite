@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-aaron-thorne.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Aaron Thorne | Managing Director | Thorne Group"
+  description="Aaron Thorne co-founded Thorne Group and leads the company as Managing Director, bringing deep experience in property development, planning and project management."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>
