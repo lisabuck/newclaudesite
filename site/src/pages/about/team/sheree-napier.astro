@@ -1,0 +1,11 @@
+---
+import Base from '../../../layouts/Base.astro';
+import body from '../../../html/team-sheree-napier.html?raw';
+import '../../../styles/pages/team-profile.css';
+---
+<Base
+  title="Sheree Napier | Office and Finance Support Admin | Thorne Group"
+  description="Sheree Napier provides office and finance support at Thorne Group."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>
