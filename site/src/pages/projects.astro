@@ -35,25 +35,56 @@ import '../styles/pages/thorne-gallery.css';
 })();
   </script>
   <script is:inline defer>
-/* Portrait photos in the slideshow get a 4:5 frame (see .tg-portrait in the page CSS). */
+/* Slideshow extras: portrait photos get a 4:5 frame (see .tg-portrait in the
+   page CSS), and a "Next project" button appears when a slideshow reaches its
+   last photo. Both run off a light poll while the theatre is open. */
 (function () {
-  function mark(img) {
-    if (img.dataset.tgMarked) return;
-    img.dataset.tgMarked = '1';
-    function set() { img.classList.toggle('tg-portrait', img.naturalHeight > img.naturalWidth); }
-    if (img.complete && img.naturalWidth) set();
-    img.addEventListener('load', set); /* re-check every time the slideshow swaps the photo */
+  var lastCard = null;
+  var nextBtn = null;
+
+  document.addEventListener('click', function (e) {
+    var card = e.target && e.target.closest && e.target.closest('.card');
+    if (card) lastCard = card;
+  }, true);
+
+  function cards() {
+    return Array.prototype.slice.call(document.querySelectorAll('.card[data-p]'));
   }
-  new MutationObserver(function (muts) {
-    muts.forEach(function (m) {
-      m.addedNodes.forEach(function (n) {
-        if (n.nodeType !== 1) return;
-        if (n.matches && n.matches('img.th-img')) mark(n);
-        if (n.querySelectorAll) n.querySelectorAll('img.th-img').forEach(mark);
-      });
+
+  function ensureButton(top) {
+    if (nextBtn && nextBtn.isConnected) return nextBtn;
+    nextBtn = document.createElement('button');
+    nextBtn.type = 'button';
+    nextBtn.className = 'th-b th-nextproj';
+    nextBtn.textContent = 'Next project →';
+    nextBtn.style.display = 'none';
+    nextBtn.addEventListener('click', function () {
+      var list = cards();
+      var i = list.indexOf(lastCard);
+      var next = list[(i + 1) % list.length] || list[0];
+      var closeBtn = document.querySelector('.th-close');
+      if (closeBtn) closeBtn.click();
+      setTimeout(function () { if (next) next.click(); }, 350);
     });
-  }).observe(document.documentElement, { childList: true, subtree: true });
-  document.querySelectorAll('img.th-img').forEach(mark);
+    top.appendChild(nextBtn);
+    return nextBtn;
+  }
+
+  setInterval(function () {
+    var th = document.querySelector('.th.open');
+    if (!th) { if (nextBtn) nextBtn.style.display = 'none'; return; }
+    /* 4:5 framing for whichever photo is currently loaded */
+    th.querySelectorAll('img.th-img').forEach(function (img) {
+      if (img.naturalWidth) img.classList.toggle('tg-portrait', img.naturalHeight > img.naturalWidth);
+    });
+    /* reveal Next project once the counter reaches the final photo */
+    var top = th.querySelector('.th-top');
+    var ct = th.querySelector('.th-counter');
+    if (!top || !ct) return;
+    var btn = ensureButton(top);
+    var m = /(\d+)\s*(?:\/|of)\s*(\d+)/.exec(ct.textContent || '');
+    if (m && m[1] === m[2]) btn.style.display = '';
+  }, 250);
 })();
   </script>
 </Base>

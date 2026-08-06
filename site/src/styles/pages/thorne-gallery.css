@@ -264,3 +264,6 @@ thorne-gallery .th-ctrls{ padding:8px 12px 12px; }
 
 /* Portrait slideshow photos display as a centred 4:5 frame (slight crop) instead of a skinny tall strip. */
 thorne-gallery .th-stage .th-img.tg-portrait{ inset:auto; top:0; bottom:0; left:50%; transform:translateX(-50%); width:auto; height:100%; aspect-ratio:4/5; object-fit:cover; }
+
+/* Next project button in the slideshow top bar */
+thorne-gallery .th-b.th-nextproj{ width:auto; padding:0 22px; font-size:14px; letter-spacing:.22em; text-transform:uppercase; }
