@@ -24,6 +24,7 @@
     { text: 'book a conversation', href: CONTACT },
     { text: 'start a conversation', href: CONTACT },
     { text: 'get in touch', href: CONTACT },
+    { text: 'contact us', href: CONTACT },
     { text: 'privacy statement', href: 'https://www.thornegroup.co.nz/privacy-statement' },
     { text: 'find out more', seq: ['/services/architectural-homes', '/services/renovations', '/services/development-collaborations'] },
     { text: 'learn more', scroll: true }
