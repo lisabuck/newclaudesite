@@ -116,3 +116,7 @@ thorne-why-tabs .wh-hero-kicker{letter-spacing:.22em!important;font-weight:500!i
 
 /* service links in the hero strip read as links */
 thorne-why-tabs .wh-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}
+
+/* client credit on the aftercare photo */
+thorne-why-tabs .tg-band-media{ position:relative; }
+thorne-why-tabs .band-credit{ position:absolute; left:0; bottom:0; padding:12px 20px; background:linear-gradient(to top,rgba(35,32,30,.55),rgba(35,32,30,0)); color:#FAF9F6; font-size:14px; font-weight:400; letter-spacing:.24em; text-transform:uppercase; line-height:1; pointer-events:none; }
