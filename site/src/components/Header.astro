@@ -103,11 +103,13 @@ const isActive = (p: string) =>
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+  flex-shrink: 0; /* never squeeze the logo: aspect stays true */
 }
 /* image logo: dark on the frosted bar, white over the hero video */
 .tg-logo {
-  height: 74px;
-  margin-left: -23px; /* the PNG carries blank space on its left; pull the visible mark onto the content line */
+  height: 66px;
+  max-width: none; /* the global img max-width would squash the mark */
+  margin-left: -20px; /* the PNG carries blank space on its left; pull the visible mark onto the content line */
   width: auto;
   display: block;
   filter: brightness(0);
@@ -183,6 +185,7 @@ const isActive = (p: string) =>
 @media (max-width: 1000px) {
   .tg-nav { padding: 4px 32px 8px; }
   .tg-links-list { gap: 24px; }
+  .tg-logo { height: 54px; margin-left: -17px; }
 }
 
 @media (max-width: 750px) {
