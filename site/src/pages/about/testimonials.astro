@@ -10,4 +10,23 @@ import '../../styles/pages/thorne-testimonials.css';
   <thorne-testimonials set:html={body}></thorne-testimonials>
   <script is:inline defer src="/js/lightdom-shim.js"></script>
   <script is:inline defer src="/js/thorne-testimonials26.js"></script>
+  <script is:inline defer>
+/* First nine testimonials show; the rest reveal with one click, so the page has a single scroll. */
+window.addEventListener('load', function () {
+  var sec = document.getElementById('tg-voices'), grid = document.getElementById('grid');
+  if (!sec || !grid) return;
+  var cards = grid.querySelectorAll('.t-card');
+  if (cards.length <= 9) return;
+  sec.classList.add('tg-collapsed');
+  var btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'tg-showall';
+  btn.textContent = 'Show all ' + cards.length + ' testimonials';
+  grid.parentNode.insertBefore(btn, grid.nextSibling);
+  function openAll() { sec.classList.remove('tg-collapsed'); btn.remove(); }
+  btn.addEventListener('click', openAll);
+  var ta = document.getElementById('toggleAll');
+  if (ta) ta.addEventListener('click', openAll);
+});
+  </script>
 </Base>
