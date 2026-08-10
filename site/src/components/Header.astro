@@ -8,7 +8,7 @@ const isActive = (p: string) =>
 ---
 <header class="tg-nav">
   <div class="tg-nav-in">
-    <a class="tg-wordmark" href="/">THORNE GROUP</a>
+    <a class="tg-wordmark" href="/"><img class="tg-logo" src="https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png" alt="Thorne Group" decoding="async" fetchpriority="high"></a>
 
     <button class="tg-burger" type="button" aria-expanded="false" aria-controls="tg-menu" aria-label="Open menu">
       <span></span><span></span><span></span>
@@ -92,21 +92,26 @@ const isActive = (p: string) =>
 .tg-nav .tg-drop a { color: #393533; text-shadow: none; }
 .tg-nav .tg-drop a:hover { background: #F2F0ED; color: #393533; }
 .tg-nav-in {
-  max-width: 1440px;
+  /* full width so the logo's left edge tracks the page padding and lines up
+     with the hero headline (the V of Voted) at every screen size */
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 .tg-wordmark {
-  font-family: 'Metric', system-ui, sans-serif;
-  font-size: 19px;
-  letter-spacing: .22em;
-  color: #393533;
-  font-weight: 400;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  white-space: nowrap;
 }
+/* image logo: dark on the frosted bar, white over the hero video */
+.tg-logo {
+  height: 30px;
+  width: auto;
+  display: block;
+  filter: brightness(0);
+}
+.tg-nav.at-top .tg-logo { filter: brightness(0) invert(1); }
 .tg-links-list {
   list-style: none;
   margin: 0;
@@ -187,7 +192,7 @@ const isActive = (p: string) =>
 
 @media (max-width: 750px) {
   .tg-nav { padding: 22px 24px 15px; }
-  .tg-wordmark { font-size: 17px; }
+  .tg-logo { height: 26px; }
   .tg-burger {
     display: inline-flex;
     flex-direction: column;
@@ -237,7 +242,15 @@ const isActive = (p: string) =>
 
 @media (max-width: 430px) {
   .tg-nav { padding: 20px 20px 14px; }
-  .tg-wordmark { font-size: 15px; letter-spacing: .18em; }
+  .tg-logo { height: 23px; }
+}
+
+/* keep the logo aligned with the hero headline on very wide screens */
+@media (min-width: 1700px) {
+  .tg-nav { padding-left: 96px; padding-right: 96px; }
+}
+@media (min-width: 2000px) {
+  .tg-nav { padding-left: 140px; padding-right: 140px; }
 }
 </style>
 
