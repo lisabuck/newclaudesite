@@ -189,13 +189,10 @@ thorne-testimonials .tg-foot-r a:hover{color:#7a746e}
 /* service links in the hero strip read as links */
 thorne-testimonials .hero-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}
 
-/* Ange's quote sits plain over the hero photo (no panel), like the home hero strip */
-thorne-testimonials .rotator{ background:none; }
+/* Ange's quote sits below the hero photo like the intro line on other pages */
+thorne-testimonials .rotator{ position:static; left:auto; right:auto; bottom:auto; max-width:1440px; margin:0 auto; padding:52px var(--pad) 8px; background:none; }
+thorne-testimonials .rot-box{ min-height:0; }
 thorne-testimonials .rot-controls{ display:none; }
-@media(min-width:751px){
-  thorne-testimonials .rotator{ padding-left:0; }
-  thorne-testimonials .rotator .rq, thorne-testimonials .rot-cite, thorne-testimonials .rotator .eyebrow{ color:#FAF9F6; text-shadow:0 1px 14px rgba(35,32,30,.55); }
-}
 
 /* testimonial list flows with the page: no inner scroll, no arrows */
 thorne-testimonials .card-grid{ max-height:none; overflow:visible; padding-right:0; }
