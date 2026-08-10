@@ -36,8 +36,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       #tg-preloader.done{opacity:0;pointer-events:none}
       /* faint celebration text, sweeping in from each side */
       /* three distinct steps: 1. icon grows then vanishes, 2. words alone, 3. full logo */
-      #tg-preloader .pre-words{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;justify-content:center;align-items:center;gap:.45em;pointer-events:none;white-space:nowrap}
-      #tg-preloader .pre-w{font-family:'Metric',system-ui,sans-serif;font-weight:300;font-size:clamp(34px,8.5vw,104px);letter-spacing:.01em;color:rgba(250,249,246,.88);opacity:0}
+      #tg-preloader .pre-words{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;justify-content:center;align-items:center;font-size:clamp(34px,8.5vw,104px);gap:.55em;pointer-events:none;white-space:nowrap}
+      #tg-preloader .pre-w{font-family:'Metric',system-ui,sans-serif;font-weight:300;font-size:inherit;letter-spacing:.01em;color:rgba(250,249,246,.88);opacity:0}
       #tg-preloader .pre-w-left{animation:tgPreL 1.1s cubic-bezier(.22,.61,.36,1) 1.9s forwards,tgPreOut .45s ease 3.5s forwards}
       #tg-preloader .pre-w-right{animation:tgPreR 1.1s cubic-bezier(.22,.61,.36,1) 1.9s forwards,tgPreOut .45s ease 3.5s forwards}
       @keyframes tgPreL{from{opacity:0;transform:translateX(min(-14vw,-110px))}to{opacity:1;transform:none}}
@@ -56,13 +56,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <script is:inline>
       (function () {
         var p = document.getElementById('tg-preloader');
-        /* Intro plays once per visit: skip it instantly on every page after the first. */
+        /* Intro plays only on the first arrival at the site: skip it when moving
+           between pages, and remember across tabs for 12 hours so links that
+           open in a new tab do not replay it. */
         try {
-          if (sessionStorage.getItem('tgPreSeen')) {
+          var seenAt = 0;
+          try { seenAt = +localStorage.getItem('tgPreSeen') || 0; } catch (e) {}
+          if (sessionStorage.getItem('tgPreSeen') || (seenAt && Date.now() - seenAt < 43200000)) {
             if (p && p.parentNode) p.parentNode.removeChild(p);
             return;
           }
           sessionStorage.setItem('tgPreSeen', '1');
+          try { localStorage.setItem('tgPreSeen', String(Date.now())); } catch (e) {}
         } catch (e) { /* private browsing: just play the intro */ }
         var t0 = Date.now(), MIN = 5400, hidden = false;
         if (matchMedia('(prefers-reduced-motion: reduce)').matches) MIN = 400;

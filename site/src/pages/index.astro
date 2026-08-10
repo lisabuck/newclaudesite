@@ -10,4 +10,13 @@ import '../styles/pages/thorne-home-page.css';
   <thorne-home-page set:html={body}></thorne-home-page>
   <script is:inline defer src="/js/lightdom-shim.js"></script>
   <script is:inline defer src="/js/thorne-home-page50.js"></script>
+  <script is:inline defer>
+/* Project links on the home page open in a new tab, keeping home open. */
+window.addEventListener('load', function () {
+  document.querySelectorAll('a[href^="/projects"]').forEach(function (a) {
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
+});
+  </script>
 </Base>
