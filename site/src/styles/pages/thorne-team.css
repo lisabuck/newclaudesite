@@ -168,3 +168,6 @@ thorne-team .tg-foot-r a:hover{ color:#7a746e; }
 
 /* hero cta underline removed */
 thorne-team .wh-cta{border-bottom:none}
+
+/* service links in the hero strip read as links */
+thorne-team .wh-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}

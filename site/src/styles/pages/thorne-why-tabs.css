@@ -113,3 +113,6 @@ thorne-why-tabs .wh-hero-kicker{letter-spacing:.22em!important;font-weight:500!i
 }
 
 @keyframes tgSlideWhy{0%{opacity:0}2.14%{opacity:1}14.29%{opacity:1}16.43%{opacity:0}100%{opacity:0}}
+
+/* service links in the hero strip read as links */
+thorne-why-tabs .wh-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}

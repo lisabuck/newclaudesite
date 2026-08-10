@@ -185,3 +185,6 @@ thorne-testimonials .tg-foot-r a:hover{color:#7a746e}
 @media(min-width:1700px){thorne-testimonials{--pad:96px}}
 @media(min-width:2000px){thorne-testimonials{--pad:140px}}
 @media(prefers-reduced-motion:reduce){thorne-testimonials .rq.active,thorne-testimonials .t-card.open .t-full{animation:none}}
+
+/* service links in the hero strip read as links */
+thorne-testimonials .hero-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}

@@ -38,7 +38,7 @@ const isActive = (p: string) =>
             <li><a href="/services/development-collaborations">Development Collaborations</a></li>
           </ul>
         </li>
-        <li><a class="tg-chat" href="https://www.thornegroup.co.nz/contact">Chat now</a></li>
+        <li><a class="tg-chat" href="https://www.thornegroup.co.nz/contact">Contact</a></li>
       </ul>
     </nav>
   </div>
@@ -55,7 +55,7 @@ const isActive = (p: string) =>
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   border-bottom: 1px solid #c8c3bb;
-  padding: 22px 56px;
+  padding: 10px 56px 16px;
   transition: background .35s ease, border-color .35s ease;
 }
 /* over the hero: transparent bar, light text, soft gradient for legibility */
@@ -106,7 +106,7 @@ const isActive = (p: string) =>
 }
 /* image logo: dark on the frosted bar, white over the hero video */
 .tg-logo {
-  height: 59px;
+  height: 74px;
   width: auto;
   display: block;
   filter: brightness(0);
@@ -147,14 +147,7 @@ const isActive = (p: string) =>
   border-bottom: 1px solid #393533;
   padding-bottom: 3px;
 }
-.tg-links-list a.tg-chat {
-  border-bottom: 1px solid #393533;
-  padding-bottom: 3px;
-}
-.tg-links-list a.tg-chat:hover {
-  color: #7a746e;
-  border-bottom-color: #7a746e;
-}
+.tg-links-list a.tg-chat:hover { color: #7a746e; }
 .tg-drop {
   list-style: none;
   margin: 0;
@@ -189,13 +182,13 @@ const isActive = (p: string) =>
 .tg-burger { display: none; }
 
 @media (max-width: 1000px) {
-  .tg-nav { padding: 18px 32px; }
+  .tg-nav { padding: 10px 32px 14px; }
   .tg-links-list { gap: 24px; }
 }
 
 @media (max-width: 750px) {
-  .tg-nav { padding: 22px 24px 15px; }
-  .tg-logo { height: 48px; }
+  .tg-nav { padding: 12px 24px 13px; }
+  .tg-logo { height: 60px; }
   .tg-burger {
     display: inline-flex;
     flex-direction: column;
@@ -234,7 +227,6 @@ const isActive = (p: string) =>
   .tg-links-list { flex-direction: column; align-items: stretch; gap: 0; padding: 8px 0 16px; }
   .tg-links-list a, .tg-drop-btn { padding: 13px 24px; width: 100%; font-size: 14px; }
   .tg-links-list .tg-current { border-bottom: 0; padding-bottom: 13px; font-weight: 500; }
-  .tg-links-list a.tg-chat { border-bottom: 0; padding-bottom: 13px; text-decoration: underline; text-underline-offset: 4px; }
   .tg-drop-btn { justify-content: space-between; }
   .tg-has-drop::after { display: none; }
   .tg-drop { position: static; border: 0; background: #F2F0ED; padding: 4px 0; min-width: 0; left: auto; }
@@ -244,8 +236,8 @@ const isActive = (p: string) =>
 }
 
 @media (max-width: 430px) {
-  .tg-nav { padding: 20px 20px 14px; }
-  .tg-logo { height: 42px; }
+  .tg-nav { padding: 12px 20px 12px; }
+  .tg-logo { height: 53px; }
 }
 
 /* keep the logo aligned with the hero headline on very wide screens */

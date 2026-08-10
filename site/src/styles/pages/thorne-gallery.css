@@ -267,3 +267,6 @@ thorne-gallery .th-stage .th-img.tg-portrait{ inset:auto; top:0; bottom:0; left:
 
 /* Next project button in the slideshow top bar */
 thorne-gallery .th-b.th-nextproj{ width:auto; padding:0 22px; font-size:14px; letter-spacing:.22em; text-transform:uppercase; }
+
+/* service links in the hero strip read as links */
+thorne-gallery .g-strip2 a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}
