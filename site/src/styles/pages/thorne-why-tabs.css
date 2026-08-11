@@ -12,7 +12,7 @@ thorne-why-tabs strong { font-weight:500; }
 thorne-why-tabs h1,thorne-why-tabs h2,thorne-why-tabs h3,thorne-why-tabs p { margin:0; }
 @keyframes tgSlide6 { 0%{opacity:0} 2.8%{opacity:1} 16.7%{opacity:1} 19.5%{opacity:0} 100%{opacity:0} }
 @keyframes tgSlide5 { 0%{opacity:0} 3.3%{opacity:1} 20%{opacity:1} 23.3%{opacity:0} 100%{opacity:0} }
-@keyframes tgLogoSwap { 0%{opacity:0} 45%{opacity:0} 50%{opacity:1} 95%{opacity:1} 100%{opacity:0} }
+@keyframes tgLogoCycle { 0%{opacity:0} 2.1%{opacity:1} 14.3%{opacity:1} 16.4%{opacity:0} 100%{opacity:0} }
 
 /* ─── HERO · slideshow (home-page style) ─── */
 thorne-why-tabs .wh-frame { height:76vh; min-height:560px; overflow:hidden; position:relative; background:#393533; }
@@ -23,7 +23,7 @@ thorne-why-tabs .tg-band-media.pt-collage { display:flex; align-items:center; }
 thorne-why-tabs .pt-grid { width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(10px,1.8vw,18px); padding:clamp(20px,3.5vw,40px); }
 thorne-why-tabs .pt-tile { position:relative; aspect-ratio:1/1; background:#FAF9F6; overflow:hidden; }
 thorne-why-tabs .pt-tile img { object-fit:contain; object-position:center; padding:14%; background:#FAF9F6; }
-thorne-why-tabs .pt-tile img.plogo-alt { opacity:0; animation:tgLogoSwap 12s linear infinite; }
+thorne-why-tabs .pt-tile img.plogo { opacity:0; animation:tgLogoCycle 28s linear infinite; }
 thorne-why-tabs .tg-band-media img.vslide { opacity:0; animation:tgSlide5 12.5s linear infinite; }
 thorne-why-tabs .wh-scrim { position:absolute; inset:0; background:linear-gradient(to bottom,rgba(35,32,30,.14),rgba(35,32,30,0) 45%); pointer-events:none; }
 thorne-why-tabs .wh-h1 { position:absolute; top:var(--hero-top); left:var(--pad); right:var(--pad); color:#FAF9F6; font-weight:300; }
@@ -107,7 +107,7 @@ thorne-why-tabs .tg-foot-r { display:flex; gap:16px 32px; align-items:center; fl
 @media (prefers-reduced-motion:reduce) {
   thorne-why-tabs .wh-frame img.slide { animation:none; }
   thorne-why-tabs .tg-band-media img.bslide { animation:none; }
-  thorne-why-tabs .pt-tile img.plogo-alt { animation:none; }
+  thorne-why-tabs .pt-tile img.plogo { animation:none; }
   thorne-why-tabs .tg-band-media img.vslide { animation:none; }
   thorne-why-tabs .tg-band-media img.bslide:first-of-type { opacity:1; }
 }
