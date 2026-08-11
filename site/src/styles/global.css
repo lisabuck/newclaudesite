@@ -14,9 +14,14 @@ body {
 
 img, video { max-width: 100%; }
 
-/* Contact CTA: full-width dark band with warm white type on every page */
-.tg-cta { max-width: none !important; margin: 96px 0 0 !important; padding: 0 !important; background: #393533; }
-.tg-cta-grid { max-width: 1240px; margin: 0 auto !important; border-top: 0 !important; padding: 72px var(--pad, 56px) 80px !important; }
+/* Contact CTA on every page: dark rectangle at 2/3 page width, centred on the light page */
+.tg-cta { max-width: none !important; margin: 96px 0 0 !important; padding: 0 var(--pad, 56px) 72px !important; background: transparent; }
+.tg-cta-grid { max-width: none; width: 100%; margin: 0 auto !important; border-top: 0 !important; padding: 72px clamp(32px,4vw,64px) 80px !important; background: #393533; }
+@media (min-width: 1001px) { .tg-cta-grid { width: 66.66vw; } }
+@media (max-width: 750px) {
+  .tg-cta { padding: 0 12px 64px !important; }
+  .tg-cta-grid { padding: 56px 20px 64px !important; }
+}
 .tg-cta h2, .tg-cta p, .tg-cta span, .tg-cta a { color: #FAF9F6 !important; }
 .tg-cta .cta-lab, .tg-cta .tgc-lab { color: #cfc9c2 !important; }
 .tg-cta .cta-row, .tg-cta .tgc-row, .tg-cta .tg-cta-side { border-color: rgba(250,249,246,.28) !important; }
