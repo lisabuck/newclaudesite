@@ -1,22 +1,31 @@
 /* Architectural Homes page: sliders + development-style square bands */
 @media(max-width:750px){
 thorne-home-page .dev-sq-band{display:flex!important;flex-direction:column;align-items:stretch!important}
-thorne-home-page .dev-sq-band .ah-square-wrap{padding:0!important;order:0;width:100%!important}
+thorne-home-page .dev-sq-band .ah-square-wrap{padding:0 clamp(16px,2.5vw,40px)!important;order:0;width:100%!important}
 thorne-home-page .dev-sq-band .tg-band-copy{order:1;padding-top:36px!important;padding-bottom:44px!important}
 }
 @keyframes tgSlideAH{0%{opacity:0}1.88%{opacity:1}12.5%{opacity:1}14.38%{opacity:0}100%{opacity:0}}
 @keyframes tgSlideAHD{0%{opacity:0}3%{opacity:1}16.67%{opacity:1}19.67%{opacity:0}100%{opacity:0}}
 @media(max-width:750px){
-thorne-home-page .ah-square-wrap{padding:0 0 8px!important;order:0;width:100%!important}
-thorne-home-page .ah-square{max-width:none!important}
+thorne-home-page .ah-square-wrap{padding:0 clamp(16px,2.5vw,40px) 8px!important;order:0;width:100%!important}
+thorne-home-page .ah-square-cap{max-width:none!important;margin:0!important}
+thorne-home-page .ah-square{max-width:none!important;height:auto!important;padding-bottom:0!important;aspect-ratio:24/11}
 thorne-home-page [data-screen-label="Design band"]{display:flex!important;flex-direction:column;align-items:stretch!important}
 thorne-home-page [data-screen-label="Design band"] .tg-band-copy{order:1}
 }
 
-/* widescreen: band photos run landscape and fill their half, closing the gap to the copy */
+/* about-page style band photos: the box fills its half full-height with a little space left and right */
 @media (min-width: 1001px) {
-  thorne-home-page .ah-square-cap { max-width: none !important; }
-  thorne-home-page .ah-square { padding-bottom: 66.7% !important; }
+  thorne-home-page .dev-sq-band { min-height: 467px; align-items: stretch !important; }
+  thorne-home-page .ah-square-wrap { padding: 0 clamp(16px,2.5vw,40px) !important; }
+  thorne-home-page .ah-square-cap { max-width: none !important; margin: 0 !important; height: 100%; }
+  thorne-home-page .ah-square { height: 100% !important; padding-bottom: 0 !important; }
+}
+/* tablet: bands stack single-column (base CSS), photo runs 16/11 with the same side space */
+@media (min-width: 751px) and (max-width: 1000px) {
+  thorne-home-page .ah-square-wrap { padding: 0 clamp(16px,2.5vw,40px) 8px !important; }
+  thorne-home-page .ah-square-cap { max-width: none !important; margin: 0 !important; }
+  thorne-home-page .ah-square { height: auto !important; padding-bottom: 0 !important; aspect-ratio: 16/11; }
 }
 
 /* the tinted content flows straight into the dark contact band on this page */
