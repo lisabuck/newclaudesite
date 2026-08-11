@@ -189,10 +189,16 @@ thorne-testimonials .tg-foot-r a:hover{color:#7a746e}
 /* service links in the hero strip read as links */
 thorne-testimonials .hero-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}
 
-/* Ange's quote sits below the hero photo like the intro line on other pages */
-thorne-testimonials .rotator{ position:static; left:auto; right:auto; bottom:auto; max-width:1440px; margin:0 auto; padding:52px var(--pad) 8px; background:none; }
+/* Ange's quote over the hero on wide screens (white on a soft fade), below it on phones */
+thorne-testimonials .rotator{ background:none; }
 thorne-testimonials .rot-box{ min-height:0; }
 thorne-testimonials .rot-controls{ display:none; }
+@media(min-width:751px){
+  thorne-testimonials .hero-frame::after{ content:""; position:absolute; left:0; right:0; bottom:0; height:42%; background:linear-gradient(to top, rgba(35,32,30,.62), rgba(35,32,30,0)); pointer-events:none; }
+  thorne-testimonials .rotator{ padding-left:0; }
+  thorne-testimonials .rotator .rq, thorne-testimonials .rot-cite, thorne-testimonials .rotator .eyebrow{ color:#FAF9F6; text-shadow:0 1px 16px rgba(35,32,30,.6); }
+  thorne-testimonials .ir-band{ margin-top:64px; }
+}
 
 /* testimonial list flows with the page: no inner scroll, no arrows */
 thorne-testimonials .card-grid{ max-height:none; overflow:visible; padding-right:0; }
