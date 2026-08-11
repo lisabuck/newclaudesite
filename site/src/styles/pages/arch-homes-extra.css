@@ -18,3 +18,8 @@ thorne-home-page [data-screen-label="Design band"] .tg-band-copy{order:1}
   thorne-home-page .ah-square-cap { max-width: none !important; }
   thorne-home-page .ah-square { padding-bottom: 66.7% !important; }
 }
+
+/* one continuous tinted slab from the hero to the contact band, so the
+   page doesn't alternate between two near-identical creams */
+thorne-home-page .tg-stats { background: #F2F0ED; }
+thorne-home-page .tg-cta { margin-top: 0 !important; }
