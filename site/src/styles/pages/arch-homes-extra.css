@@ -36,3 +36,7 @@ thorne-home-page .tg-stats { background: #393533 !important; max-width: none !im
 thorne-home-page .tg-stat { border-color: rgba(250,249,246,.25) !important; }
 thorne-home-page .tg-stat span { color: #FAF9F6 !important; }
 thorne-home-page .tg-stat span:last-child { color: #d9d4cd !important; }
+
+/* one page background behind the bands */
+thorne-home-page .dev-sq-band { background: #FAF9F6 !important; }
+thorne-home-page .dev-sq-band .tg-band-copy { background: transparent !important; }
