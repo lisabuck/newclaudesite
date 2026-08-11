@@ -11,30 +11,30 @@ import '../../styles/pages/thorne-testimonials.css';
   <script is:inline defer src="/js/lightdom-shim.js"></script>
   <script is:inline defer src="/js/thorne-testimonials26.js"></script>
   <script is:inline defer>
-/* First nine testimonials show; the rest reveal with one click, so the page has a single scroll. */
+/* A handful of cards show first. Expand all reveals every card in its normal
+   collapsed look (one long page); each card's + opens its full story. */
 window.addEventListener('load', function () {
   var sec = document.getElementById('tg-voices'), grid = document.getElementById('grid');
   if (!sec || !grid) return;
-  var cards = grid.querySelectorAll('.t-card');
-  if (cards.length <= 9) return;
+  if (grid.querySelectorAll('.t-card').length <= 9) return;
   sec.classList.add('tg-collapsed');
-  var btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'tg-showall';
-  btn.textContent = 'Show all ' + cards.length + ' testimonials';
-  grid.parentNode.insertBefore(btn, grid.nextSibling);
-  function openAll() { sec.classList.remove('tg-collapsed'); btn.remove(); }
-  btn.addEventListener('click', openAll);
   var ta = document.getElementById('toggleAll');
-  if (ta) ta.addEventListener('click', openAll);
+  if (!ta) return;
+  var btn = ta.cloneNode(true); /* clone drops the engine's expand-everything handler */
+  ta.parentNode.replaceChild(btn, ta);
+  btn.textContent = 'Show all';
+  btn.addEventListener('click', function () {
+    sec.classList.remove('tg-collapsed');
+    btn.style.display = 'none';
+  });
 });
   </script>
   <script is:inline defer>
-/* Video previews show a frame from just before the end; playback starts from the beginning. */
+/* Video previews show a frame from three quarters through; playback starts from the beginning. */
 window.addEventListener('load', function () {
   document.querySelectorAll('video[controls]').forEach(function (v) {
     function preview() {
-      if (v.duration && isFinite(v.duration)) v.currentTime = Math.max(0, v.duration - 0.5);
+      if (v.duration && isFinite(v.duration)) v.currentTime = v.duration * 0.75;
     }
     if (v.readyState >= 1) preview();
     else v.addEventListener('loadedmetadata', preview, { once: true });
