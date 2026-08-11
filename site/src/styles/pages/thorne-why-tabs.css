@@ -20,7 +20,7 @@ thorne-why-tabs .wh-frame img { position:absolute; inset:0; width:100%; height:1
 thorne-why-tabs .wh-frame img.slide { opacity:0; animation:tgSlideWhy 17.5s linear infinite both; }
 thorne-why-tabs .tg-band-media img.bslide { opacity:0; animation:tgSlide6 15s linear infinite; }
 thorne-why-tabs .tg-band-media.pt-collage { display:flex; align-items:center; }
-thorne-why-tabs .pt-grid { width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+thorne-why-tabs .pt-grid { width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(10px,1.8vw,18px); padding:clamp(20px,3.5vw,40px); }
 thorne-why-tabs .pt-tile { position:relative; aspect-ratio:1/1; background:#FAF9F6; overflow:hidden; }
 thorne-why-tabs .pt-tile img { object-fit:contain; object-position:center; padding:14%; background:#FAF9F6; }
 thorne-why-tabs .pt-tile img.plogo-alt { opacity:0; animation:tgLogoSwap 12s linear infinite; }
