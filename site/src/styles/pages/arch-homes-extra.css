@@ -19,13 +19,11 @@ thorne-home-page [data-screen-label="Design band"] .tg-band-copy{order:1}
   thorne-home-page .ah-square { padding-bottom: 66.7% !important; }
 }
 
-/* numbers strip and contact band sit on the dark warm grey with warm white type */
+/* the tinted content flows straight into the dark contact band on this page */
+thorne-home-page .tg-cta { margin-top: 0 !important; }
+
+/* numbers strip: dark warm grey band, warm white type */
 thorne-home-page .tg-stats { background: #393533 !important; max-width: none !important; padding-top: 40px !important; padding-bottom: 40px !important; }
 thorne-home-page .tg-stat { border-color: rgba(250,249,246,.25) !important; }
 thorne-home-page .tg-stat span { color: #FAF9F6 !important; }
 thorne-home-page .tg-stat span:last-child { color: #d9d4cd !important; }
-thorne-home-page .tg-cta { margin-top: 0 !important; background: #393533; }
-thorne-home-page .tg-cta h2, thorne-home-page .tg-cta p, thorne-home-page .tg-cta span, thorne-home-page .tg-cta a { color: #FAF9F6 !important; }
-thorne-home-page .tg-cta .cta-lab, thorne-home-page .tg-cta .tgc-lab { color: #cfc9c2 !important; }
-thorne-home-page .tg-cta .tg-cta-grid, thorne-home-page .tg-cta .cta-row, thorne-home-page .tg-cta .tgc-row, thorne-home-page .tg-cta .tg-cta-side { border-color: rgba(250,249,246,.28) !important; }
-thorne-home-page .tg-cta a.tg-btn { background: #FAF9F6 !important; color: #393533 !important; }

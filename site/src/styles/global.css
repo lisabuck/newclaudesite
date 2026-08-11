@@ -14,9 +14,13 @@ body {
 
 img, video { max-width: 100%; }
 
-/* Contact CTA: full-width tinted band behind "Let's Create Something Exceptional" */
-.tg-cta { max-width: none !important; margin: 96px 0 0 !important; padding: 0 !important; background: #F2F0ED; }
+/* Contact CTA: full-width dark band with warm white type on every page */
+.tg-cta { max-width: none !important; margin: 96px 0 0 !important; padding: 0 !important; background: #393533; }
 .tg-cta-grid { max-width: 1240px; margin: 0 auto !important; border-top: 0 !important; padding: 72px var(--pad, 56px) 80px !important; }
+.tg-cta h2, .tg-cta p, .tg-cta span, .tg-cta a { color: #FAF9F6 !important; }
+.tg-cta .cta-lab, .tg-cta .tgc-lab { color: #cfc9c2 !important; }
+.tg-cta .cta-row, .tg-cta .tgc-row, .tg-cta .tg-cta-side { border-color: rgba(250,249,246,.28) !important; }
+.tg-cta a.tg-btn { background: #FAF9F6 !important; color: #393533 !important; }
 
 /* Phone hero spacing: drop the hero heading clear of the fixed menu bar. */
 @media (max-width: 750px) {
