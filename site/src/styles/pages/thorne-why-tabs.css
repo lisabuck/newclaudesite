@@ -34,12 +34,12 @@ thorne-why-tabs .wh-body { padding:64px var(--pad) 64px; background:#393533; }
 thorne-why-tabs .wh-lead { font-size:clamp(23px,2vw,30px); line-height:1.55; font-weight:300; color:#FAF9F6; max-width:34em; }
 
 /* ─── ALTERNATING BANDS · compact ─── */
-thorne-why-tabs .tg-band { position:relative; display:grid; grid-template-columns:1fr 1fr; min-height:467px; }
+thorne-why-tabs .tg-band { position:relative; display:grid; grid-template-columns:1fr 1fr; min-height:467px; background:#F2F0ED; }
 thorne-why-tabs .tg-band-media { min-height:350px; position:relative; overflow:hidden; background:#393533; margin:0 clamp(16px,2.5vw,40px); }
 thorne-why-tabs .tg-band-media img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; }
 thorne-why-tabs .tg-band-copy { position:relative; display:flex; flex-direction:column; justify-content:center; padding:70px var(--pad) 70px clamp(40px,6vw,88px); }
-thorne-why-tabs .band-tint .tg-band-copy { background:#F2F0ED; }
-thorne-why-tabs .band-plain .tg-band-copy { background:#FAF9F6; }
+thorne-why-tabs .band-tint .tg-band-copy { background:transparent; }
+thorne-why-tabs .band-plain .tg-band-copy { background:transparent; }
 thorne-why-tabs .band-eyebrow { font-size:14px; font-weight:400; letter-spacing:.28em; text-transform:uppercase; color:var(--mid); margin-bottom:16px; }
 thorne-why-tabs .tg-band-copy h3 { font-weight:300; font-size:clamp(30px,2.6vw,42px); line-height:1.2; letter-spacing:-.02em; color:var(--wg); max-width:20em; }
 thorne-why-tabs .tg-band-copy p { margin:22px 0 0; font-size:18px; font-weight:300; line-height:1.7; max-width:30em; color:var(--read); }
