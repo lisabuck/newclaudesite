@@ -1,0 +1,58 @@
+/* Contact page — form left, details right, matching the supplied design */
+.tg-contact{ display:block; background:#FAF9F6; color:#393533; font-family:'Metric','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:400; -webkit-font-smoothing:antialiased; --pad:56px; }
+.tg-contact .ct-shell{ max-width:1280px; margin:0 auto; padding:104px var(--pad) 96px; }
+.tg-contact .ct-eyebrow{ display:block; font-size:14px; letter-spacing:.42em; text-transform:uppercase; color:#7a746e; margin-bottom:26px; }
+.tg-contact .ct-h1{ margin:0; font-weight:300; font-size:clamp(34px,3.37vw,55px); line-height:1.1; letter-spacing:-.02em; }
+.tg-contact .ct-intro{ margin:26px 0 0; font-size:clamp(19px,1.45vw,21px); line-height:1.75; font-weight:300; color:#54504c; max-width:34em; }
+
+.tg-contact .ct-grid{ margin-top:64px; display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:clamp(48px,6vw,96px); align-items:start; }
+
+.tg-contact .ct-form{ display:flex; flex-direction:column; gap:28px; }
+.tg-contact .ct-row2{ display:grid; grid-template-columns:1fr 1fr; gap:28px; }
+.tg-contact .ct-field{ display:flex; flex-direction:column; gap:12px; min-width:0; }
+.tg-contact .ct-lab{ font-size:14px; letter-spacing:.26em; text-transform:uppercase; color:#6B4E3D; }
+.tg-contact .ct-in{ width:100%; border:1px solid #c8c3bb; background:#FAF9F6; border-radius:0; padding:16px 14px; font:inherit; font-size:17px; color:#393533; }
+.tg-contact .ct-in:focus{ outline:none; border-color:#7a746e; }
+.tg-contact .ct-in::placeholder{ color:#7a746e; opacity:1; }
+.tg-contact .ct-ta{ resize:vertical; min-height:150px; line-height:1.6; }
+.tg-contact .ct-select{ position:relative; }
+.tg-contact .ct-select::after{ content:'\2193'; position:absolute; right:18px; top:50%; transform:translateY(-50%); color:#6B4E3D; pointer-events:none; font-size:18px; }
+.tg-contact .ct-select select{ appearance:none; -webkit-appearance:none; cursor:pointer; padding-right:44px; }
+.tg-contact .ct-select select:invalid{ color:#7a746e; }
+.tg-contact .ct-err{ margin:0; font-size:15px; color:#8a3b2e; }
+.tg-contact .ct-btn{ align-self:flex-start; border:0; cursor:pointer; background:#393533; color:#FAF9F6; font:inherit; font-size:14px; letter-spacing:.26em; text-transform:uppercase; padding:20px 44px; margin-top:6px; }
+.tg-contact .ct-btn:hover{ opacity:.88; }
+
+.tg-contact .ct-side{ border-left:1px solid #c8c3bb; padding-left:clamp(32px,4vw,56px); }
+.tg-contact .ct-drow{ display:grid; grid-template-columns:104px 1fr; gap:18px; padding:24px 0; border-bottom:1px solid #c8c3bb; font-size:clamp(17px,1.3vw,19px); line-height:1.6; }
+.tg-contact .ct-drow:first-child{ padding-top:8px; }
+.tg-contact .ct-dlab{ font-size:14px; letter-spacing:.26em; text-transform:uppercase; color:#6B4E3D; padding-top:3px; }
+.tg-contact .ct-dval a{ color:#393533; text-decoration:none; }
+.tg-contact .ct-dval a:hover{ color:#7a746e; }
+
+@media (max-width:1000px){
+  .tg-contact{ --pad:32px; }
+  .tg-contact .ct-shell{ padding-top:84px; }
+}
+@media (max-width:750px){
+  .tg-contact{ --pad:24px; }
+  .tg-contact .ct-shell{ padding:72px var(--pad) 72px; }
+  .tg-contact .ct-grid{ grid-template-columns:1fr; gap:52px; margin-top:48px; }
+  .tg-contact .ct-side{ border-left:0; border-top:1px solid #c8c3bb; padding-left:0; padding-top:16px; }
+  .tg-contact .ct-btn{ width:100%; text-align:center; }
+}
+@media (max-width:560px){
+  .tg-contact .ct-row2{ grid-template-columns:1fr; }
+}
+@media (max-width:430px){
+  .tg-contact{ --pad:20px; }
+}
+
+/* footer, matching the other simple pages */
+.tg-contact .tg-foot{ padding:72px var(--pad) 56px; }
+.tg-contact .tg-foot-row{ max-width:1280px; margin:0 auto; border-top:1px solid #c8c3bb; padding-top:36px; display:flex; justify-content:space-between; align-items:center; gap:32px; flex-wrap:wrap; font-size:14px; font-weight:400; letter-spacing:.22em; text-transform:uppercase; }
+.tg-contact .tg-foot a{ color:#393533; text-decoration:none; }
+.tg-contact .tg-foot a:hover{ color:#7a746e; }
+.tg-contact .tg-foot-l a{ color:#7a746e; border-bottom:1px solid #c8c3bb; padding-bottom:3px; }
+.tg-contact .tg-foot-r{ display:flex; gap:16px 32px; align-items:center; flex-wrap:wrap; }
+@media (max-width:750px){ .tg-contact .tg-foot-row{ font-size:15px; } }

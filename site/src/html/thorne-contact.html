@@ -1,0 +1,94 @@
+<section class="ct-shell" data-screen-label="Contact">
+  <span class="ct-eyebrow">Contact</span>
+  <h1 class="ct-h1">Let&rsquo;s build something exceptional.</h1>
+  <p class="ct-intro">Whether you&rsquo;re an architect or designer with a vision or a homeowner planning your forever home, we&rsquo;d love to talk.</p>
+
+  <div class="ct-grid">
+    <!-- FORM HANDLER: interim behaviour opens the visitor's email app pre-filled.
+         Wix partner agency: replace the submit handler below with the Wix Forms /
+         CRM submission when wiring up Wix Headless. -->
+    <form class="ct-form" id="tg-contact-form" novalidate data-screen-label="Contact form">
+      <div class="ct-row2">
+        <div class="ct-field">
+          <label class="ct-lab" for="ct-first">First name</label>
+          <input class="ct-in" id="ct-first" name="first-name" type="text" autocomplete="given-name" required>
+        </div>
+        <div class="ct-field">
+          <label class="ct-lab" for="ct-last">Last name</label>
+          <input class="ct-in" id="ct-last" name="last-name" type="text" autocomplete="family-name">
+        </div>
+      </div>
+      <div class="ct-row2">
+        <div class="ct-field">
+          <label class="ct-lab" for="ct-email">Email</label>
+          <input class="ct-in" id="ct-email" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="ct-field">
+          <label class="ct-lab" for="ct-phone">Phone</label>
+          <input class="ct-in" id="ct-phone" name="phone" type="tel" autocomplete="tel">
+        </div>
+      </div>
+      <div class="ct-field">
+        <label class="ct-lab" for="ct-type">What best describes your project?</label>
+        <div class="ct-select">
+          <select class="ct-in" id="ct-type" name="project-type">
+            <option value="" selected disabled>Select one</option>
+            <option>New home</option>
+            <option>Renovation / Extension</option>
+            <option>Land feasibility before purchase</option>
+            <option>Development Collaboration</option>
+            <option>Design / Trade Partner</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="ct-field">
+        <label class="ct-lab" for="ct-msg">Tell us about your project</label>
+        <textarea class="ct-in ct-ta" id="ct-msg" name="message" rows="5" placeholder="We&rsquo;d love to hear about your ideas for your project."></textarea>
+      </div>
+      <p class="ct-err" id="ct-err" hidden>Please add your first name and a valid email address so we can reply.</p>
+      <button class="ct-btn" type="submit">Send enquiry</button>
+    </form>
+
+    <aside class="ct-side" data-screen-label="Contact details">
+      <div class="ct-drow"><span class="ct-dlab">Visit</span><span class="ct-dval">Unit 1, 41 Newton Street<br>Mount Maunganui, 3116</span></div>
+      <div class="ct-drow"><span class="ct-dlab">Call</span><span class="ct-dval"><a href="tel:075755555">07 5755555</a><br><a href="tel:021658121">021 658 121</a></span></div>
+      <div class="ct-drow"><span class="ct-dlab">Email</span><span class="ct-dval"><a href="mailto:info@thornegroup.co.nz">info@thornegroup.co.nz</a></span></div>
+    </aside>
+  </div>
+</section>
+
+<script>
+(function () {
+  var f = document.getElementById('tg-contact-form');
+  if (!f) return;
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = function (id) { return (document.getElementById(id).value || '').trim(); };
+    var err = document.getElementById('ct-err');
+    var email = v('ct-email');
+    if (!v('ct-first') || !email || email.indexOf('@') < 1) { err.hidden = false; return; }
+    err.hidden = true;
+    var type = v('ct-type') || 'General enquiry';
+    var body = 'Name: ' + v('ct-first') + ' ' + v('ct-last') + '\n'
+      + 'Email: ' + email + '\n'
+      + 'Phone: ' + v('ct-phone') + '\n'
+      + 'Project type: ' + type + '\n\n'
+      + v('ct-msg');
+    window.location.href = 'mailto:info@thornegroup.co.nz'
+      + '?subject=' + encodeURIComponent('Website enquiry - ' + type)
+      + '&body=' + encodeURIComponent(body);
+  });
+})();
+</script>
+
+<footer class="tg-foot" data-screen-label="Footer">
+  <div class="tg-foot-row">
+    <div class="tg-foot-l"><a href="/privacy-statement">Privacy statement</a></div>
+    <div class="tg-foot-r">
+      <a href="https://www.facebook.com/thornegroup">Facebook</a>
+      <a href="https://nz.linkedin.com/company/thorne-group">LinkedIn</a>
+      <a href="https://www.instagram.com/thornegroup">Instagram</a>
+    </div>
+  </div>
+</footer>

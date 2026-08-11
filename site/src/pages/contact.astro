@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import body from '../html/thorne-contact.html?raw';
+import '../styles/pages/thorne-contact.css';
+---
+<Base
+  title="Contact | Thorne Group"
+  description="Get in touch with Thorne Group, architectural builders in Tauranga and the Bay of Plenty. Tell us about your new home, renovation or development project."
+>
+  <div class="tg-contact" set:html={body}></div>
+</Base>
