@@ -206,3 +206,11 @@ thorne-testimonials .arrows{ display:none; }
 thorne-testimonials .voices.tg-collapsed .card-grid .t-card:nth-child(n+10){ display:none; }
 thorne-testimonials .tg-showall{ display:block; margin:30px auto 0; font-family:inherit; font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; background:#393533; color:#FAF9F6; border:0; padding:18px 40px; cursor:pointer; }
 thorne-testimonials .tg-showall:hover{ opacity:.88; }
+
+/* cards keep their natural height and pack into columns, so expanded
+   testimonials and videos never stretch each other out of balance */
+thorne-testimonials .card-grid{ display:block; column-count:3; column-gap:22px; }
+thorne-testimonials .card-grid .t-card{ display:inline-block; width:100%; margin:0 0 22px; break-inside:avoid; }
+thorne-testimonials .t-card video{ width:100%; height:auto; }
+@media(max-width:1024px){ thorne-testimonials .card-grid{ column-count:2; } }
+@media(max-width:750px){ thorne-testimonials .card-grid{ column-count:1; } }

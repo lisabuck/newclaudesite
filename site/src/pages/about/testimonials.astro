@@ -29,4 +29,22 @@ window.addEventListener('load', function () {
   if (ta) ta.addEventListener('click', openAll);
 });
   </script>
+  <script is:inline defer>
+/* Video previews show a frame from just before the end; playback starts from the beginning. */
+window.addEventListener('load', function () {
+  document.querySelectorAll('video[controls]').forEach(function (v) {
+    function preview() {
+      if (v.duration && isFinite(v.duration)) v.currentTime = Math.max(0, v.duration - 0.5);
+    }
+    if (v.readyState >= 1) preview();
+    else v.addEventListener('loadedmetadata', preview, { once: true });
+    v.addEventListener('play', function () {
+      if (!v.dataset.tgPlayed) {
+        v.dataset.tgPlayed = '1';
+        if (v.currentTime > 1) v.currentTime = 0;
+      }
+    });
+  });
+});
+  </script>
 </Base>
