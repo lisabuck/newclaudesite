@@ -13,7 +13,6 @@
     { text: 'view our projects', href: '/projects' },
     { text: 'view renovation projects', href: '/projects' },
     { text: 'read client stories', href: '/about/testimonials' },
-    { text: 'ask for a demo', href: CONTACT },
     { text: 'book a feasibility discussion', href: CONTACT },
     { text: 'request a plan review', href: CONTACT },
     { text: 'start your project', href: CONTACT },
