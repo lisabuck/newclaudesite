@@ -12,3 +12,9 @@ thorne-home-page .ah-square{max-width:none!important}
 thorne-home-page [data-screen-label="Design band"]{display:flex!important;flex-direction:column;align-items:stretch!important}
 thorne-home-page [data-screen-label="Design band"] .tg-band-copy{order:1}
 }
+
+/* widescreen: band photos run landscape and fill their half, closing the gap to the copy */
+@media (min-width: 1001px) {
+  thorne-home-page .ah-square-cap { max-width: none !important; }
+  thorne-home-page .ah-square { padding-bottom: 66.7% !important; }
+}
