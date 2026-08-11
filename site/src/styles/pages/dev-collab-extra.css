@@ -5,9 +5,29 @@
 /* bands sit flush like the other pages; the photo/text alternation gives the rhythm */
 @media(max-width:750px){
 thorne-home-page .dev-sq-band{display:flex!important;flex-direction:column;align-items:stretch!important}
-thorne-home-page .dev-sq-band .ah-square-wrap{padding:0!important;order:0;width:100%!important}
+thorne-home-page .dev-sq-band .ah-square-wrap{padding:0 clamp(16px,2.5vw,40px) 8px!important;order:0;width:100%!important}
+thorne-home-page .dev-sq-band .ah-square-cap{max-width:none!important;margin:0!important}
 thorne-home-page .dev-sq-band .tg-band-copy{order:1;padding-top:36px!important;padding-bottom:44px!important}
-thorne-home-page .dev-lead{padding:48px var(--pad) 40px!important}
-thorne-home-page .dev-lead p{font-size:19px!important;line-height:1.7!important}
-thorne-home-page .dev-lead p:first-child{font-size:23px!important;line-height:1.5!important}
+thorne-home-page .dev-lead{padding:48px var(--pad) 44px!important}
+thorne-home-page .dev-lead p{font-size:22px!important;line-height:1.6!important}
+}
+
+/* about-page treatment: dark intro strip under the hero */
+thorne-home-page .dev-lead{max-width:none!important;background:#393533;padding:64px var(--pad)!important}
+thorne-home-page .dev-lead p{color:#FAF9F6!important;font-size:clamp(23px,2vw,30px)!important;line-height:1.55!important;font-weight:300!important;max-width:34em!important}
+
+/* one page background; band photos fill their half full-height with a little space left and right */
+thorne-home-page .dev-sq-band{background:#FAF9F6!important}
+thorne-home-page .dev-sq-band .tg-band-copy{background:transparent!important}
+@media (min-width: 1001px) {
+  thorne-home-page .dev-sq-band { min-height: 467px; align-items: stretch !important; }
+  thorne-home-page .dev-sq-band .ah-square-wrap { padding: 0 clamp(16px,2.5vw,40px) !important; }
+  thorne-home-page .dev-sq-band .ah-square-cap { max-width: none !important; margin: 0 !important; height: 100%; }
+  thorne-home-page .dev-sq-band .ah-square { height: 100% !important; padding-bottom: 0 !important; }
+}
+/* tablet: bands stack single-column (base CSS), photo runs 16/11 with the same side space */
+@media (min-width: 751px) and (max-width: 1000px) {
+  thorne-home-page .dev-sq-band .ah-square-wrap { padding: 0 clamp(16px,2.5vw,40px) 8px !important; }
+  thorne-home-page .dev-sq-band .ah-square-cap { max-width: none !important; margin: 0 !important; }
+  thorne-home-page .dev-sq-band .ah-square { height: auto !important; padding-bottom: 0 !important; aspect-ratio: 16/11; }
 }
