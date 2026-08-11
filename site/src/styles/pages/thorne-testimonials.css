@@ -214,3 +214,8 @@ thorne-testimonials .card-grid .t-card{ display:inline-block; width:100%; margin
 thorne-testimonials .t-card video{ width:100%; height:auto; }
 @media(max-width:1024px){ thorne-testimonials .card-grid{ column-count:2; } }
 @media(max-width:750px){ thorne-testimonials .card-grid{ column-count:1; } }
+
+/* independent reviews link under the testimonial list */
+thorne-testimonials .tg-morelink{ margin:34px 0 0; }
+thorne-testimonials .tg-morelink a{ font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; color:#393533; text-decoration:none; border-bottom:1px solid #393533; padding-bottom:4px; }
+thorne-testimonials .tg-morelink a:hover{ color:#7a746e; border-bottom-color:#7a746e; }
