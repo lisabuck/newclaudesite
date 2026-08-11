@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import body from '../html/privacy-statement.html?raw';
+import '../styles/pages/team-profile.css';
+---
+<Base
+  title="Privacy Statement | Thorne Group"
+  description="How Thorne Group stores and uses your personal information, and how to access, correct or remove it."
+>
+  <div class="tg-profile" set:html={body}></div>
+</Base>

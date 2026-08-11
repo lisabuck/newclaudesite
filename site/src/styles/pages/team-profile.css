@@ -42,3 +42,7 @@
 @media(max-width:430px){
   .tg-profile{ --pad:20px; }
 }
+
+/* simple list styling for text pages sharing this layout */
+.tg-profile .tp-list{ margin:20px 0 0 1.2em; padding:0; }
+.tg-profile .tp-list li{ font-size:18px; line-height:1.75; color:#54504c; margin-top:8px; }
