@@ -32,7 +32,7 @@ thorne-home-page [data-screen-label="Design band"] .tg-band-copy{order:1}
 thorne-home-page .tg-cta { margin-top: 0 !important; }
 
 /* numbers strip: dark warm grey band, warm white type */
-thorne-home-page .tg-stats { background: #393533 !important; max-width: none !important; padding-top: 40px !important; padding-bottom: 40px !important; }
+thorne-home-page .tg-stats { background: #393533 !important; max-width: none !important; padding-top: 40px !important; padding-bottom: 40px !important; margin-bottom: 64px !important; }
 thorne-home-page .tg-stat { border-color: rgba(250,249,246,.25) !important; }
 thorne-home-page .tg-stat span { color: #FAF9F6 !important; }
 thorne-home-page .tg-stat span:last-child { color: #d9d4cd !important; }
