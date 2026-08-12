@@ -11,6 +11,7 @@ thorne-why-tabs a:hover { color:var(--mid); }
 thorne-why-tabs strong { font-weight:500; }
 thorne-why-tabs h1,thorne-why-tabs h2,thorne-why-tabs h3,thorne-why-tabs p { margin:0; }
 @keyframes tgSlide6 { 0%{opacity:0} 2.8%{opacity:1} 16.7%{opacity:1} 19.5%{opacity:0} 100%{opacity:0} }
+@keyframes tgSlide8 { 0%{opacity:0} 1.8%{opacity:1} 12.5%{opacity:1} 14.3%{opacity:0} 100%{opacity:0} }
 @keyframes tgSlide5 { 0%{opacity:0} 3.3%{opacity:1} 20%{opacity:1} 23.3%{opacity:0} 100%{opacity:0} }
 @keyframes tgLogoCycle { 0%{opacity:0} 1.4%{opacity:1} 10%{opacity:1} 11.4%{opacity:0} 100%{opacity:0} }
 @keyframes tgLogoCycleVar { 0%{opacity:0} 0.7%{opacity:1} 5%{opacity:1} 5.7%{opacity:0} 100%{opacity:0} }
@@ -19,7 +20,7 @@ thorne-why-tabs h1,thorne-why-tabs h2,thorne-why-tabs h3,thorne-why-tabs p { mar
 thorne-why-tabs .wh-frame { height:76vh; min-height:560px; overflow:hidden; position:relative; background:#393533; }
 thorne-why-tabs .wh-frame img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; }
 thorne-why-tabs .wh-frame img.slide { opacity:0; animation:tgSlideWhy 17.5s linear infinite both; }
-thorne-why-tabs .tg-band-media img.bslide { opacity:0; animation:tgSlide6 15s linear infinite; }
+thorne-why-tabs .tg-band-media img.bslide { opacity:0; animation:tgSlide8 20s linear infinite; }
 thorne-why-tabs .tg-band-media.pt-collage { display:flex; align-items:center; }
 thorne-why-tabs .pt-grid { width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(10px,1.8vw,18px); padding:clamp(20px,3.5vw,40px); }
 thorne-why-tabs .pt-tile { position:relative; aspect-ratio:1/1; background:#FAF9F6; overflow:hidden; }
