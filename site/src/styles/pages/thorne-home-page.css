@@ -40,5 +40,3 @@ thorne-home-page .tg-card img{filter:saturate(.78) sepia(.10) contrast(.98)}
 /* service links in the hero strip read as links */
 thorne-home-page .tg-hero-strip a{border-bottom:1px solid rgba(250,249,246,.6)!important;padding-bottom:4px}
 
-/* home page only: drop the hero heading a touch on wide screens for air below the logo */
-@media(min-width:1001px){thorne-home-page.tg-home .tg-hero-h1{top:calc(var(--hero-top) + 36px)!important}}
