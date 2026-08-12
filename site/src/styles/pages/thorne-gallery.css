@@ -272,9 +272,9 @@ thorne-gallery .th-b.th-nextproj{ width:auto; padding:0 22px; font-size:14px; le
 thorne-gallery .g-strip2 a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}
 
 /* featured project header under the hero */
-thorne-gallery .feat{ max-width:var(--max); margin:26px auto 34px; padding:0 var(--pad); }
+thorne-gallery .feat{ margin:26px 0 44px; }
 thorne-gallery .feat-card{ position:relative; display:block; width:100%; border:0; cursor:pointer; background:#393533; overflow:hidden; text-align:left; padding:0; color:#FAF9F6; font-family:var(--f); }
 thorne-gallery .feat-frame{ display:block; position:relative; aspect-ratio:16/9; overflow:hidden; background:#393533; }
 thorne-gallery .feat-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; display:block; transition:opacity .9s ease; }
 thorne-gallery .feat-img.feat-b{ opacity:0; }
-@media(max-width:750px){ thorne-gallery .feat{ padding:0; margin:8px auto 26px; } thorne-gallery .feat-frame{ aspect-ratio:16/10; } }
+@media(max-width:750px){ thorne-gallery .feat{ margin:8px 0 30px; } thorne-gallery .feat-frame{ aspect-ratio:16/10; } }
