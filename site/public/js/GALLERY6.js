@@ -1,4 +1,4 @@
-/* Thorne Group — Project gallery page v7 (option 2a): cover index + slideshow theatre. v8: featured header under the hero shows the open category's first project; clicking it opens that project's slideshow; updates whenever a category is opened.
+/* Thorne Group — Project gallery page v7 (option 2a): cover index + slideshow theatre. v9: all categories closed on load - no auto-open; the featured header appears once a category is opened. v8: featured header under the hero shows the open category's first project; clicking it opens that project's slideshow; updates whenever a category is opened.
    Each category opens to one cover card per project (no collage). Clicking a card opens a
    full-width auto-playing slideshow (2.5s/photo, edit SLIDE_MS below) with a clickable
    filmstrip, which rolls into the next project with a costs prompt between projects.
@@ -47,8 +47,6 @@
           if(o){ var c=a.querySelector('.card'); if(c) setFeature(parseInt(c.getAttribute('data-p'),10)); }
         });
       });
-      /* open the first category by default */
-      var first=root.querySelector('.acc-head'); if(first) first.click();
 
       /* slideshow theatre */
       var th=root.querySelector('.th');
