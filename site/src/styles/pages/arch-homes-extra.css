@@ -28,8 +28,6 @@ thorne-home-page [data-screen-label="Design band"] .tg-band-copy{order:1}
   thorne-home-page .ah-square { height: auto !important; padding-bottom: 0 !important; aspect-ratio: 16/11; }
 }
 
-/* the tinted content flows straight into the dark contact band on this page */
-thorne-home-page .tg-cta { margin-top: 0 !important; }
 
 /* numbers strip: dark warm grey band, warm white type */
 thorne-home-page .tg-stats { background: #393533 !important; max-width: none !important; padding-top: 40px !important; padding-bottom: 40px !important; margin-bottom: 64px !important; }
@@ -40,3 +38,14 @@ thorne-home-page .tg-stat span:last-child { color: #d9d4cd !important; }
 /* one page background behind the bands */
 thorne-home-page .dev-sq-band { background: #FAF9F6 !important; }
 thorne-home-page .dev-sq-band .tg-band-copy { background: transparent !important; }
+
+/* Partnerships logo collage - identical to the About page */
+@keyframes tgLogoCycle{0%{opacity:0}2.8%{opacity:1}16.7%{opacity:1}19.5%{opacity:0}100%{opacity:0}}
+@keyframes tgLogoCycleVar{0%{opacity:0}1.4%{opacity:1}8.35%{opacity:1}9.75%{opacity:0}100%{opacity:0}}
+thorne-home-page .tg-band-media.pt-collage{display:flex;align-items:center;min-height:350px}
+thorne-home-page .pt-grid{width:100%;display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(10px,1.8vw,18px);padding:clamp(20px,3.5vw,40px)}
+thorne-home-page .pt-tile{position:relative;aspect-ratio:1/1;background:#FAF9F6;overflow:hidden}
+thorne-home-page .pt-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;padding:14%;background:#FAF9F6}
+thorne-home-page .pt-tile img.plogo{opacity:0;animation:tgLogoCycle 24s linear infinite}
+thorne-home-page .pt-tile img.plogo-a,thorne-home-page .pt-tile img.plogo-b{opacity:0;animation:tgLogoCycleVar 48s linear infinite}
+@media(prefers-reduced-motion:reduce){thorne-home-page .pt-tile img.plogo,thorne-home-page .pt-tile img.plogo-a,thorne-home-page .pt-tile img.plogo-b{animation:none!important}}
