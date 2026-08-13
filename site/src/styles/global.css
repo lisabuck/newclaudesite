@@ -27,6 +27,15 @@ img, video { max-width: 100%; }
 .tg-cta .cta-row, .tg-cta .tgc-row, .tg-cta .tg-cta-side { border-color: rgba(250,249,246,.28) !important; }
 .tg-cta a.tg-btn { background: #FAF9F6 !important; color: #393533 !important; }
 
+/* Call row: office line, then a Mobile block; names and numbers never split,
+   hours notes never break mid-phrase */
+.tg-callgrid { display: grid; grid-template-columns: 1fr; row-gap: 3px; }
+.tg-callgrid a { white-space: nowrap; }
+.tg-calllab { color: #7a746e; margin-right: 10px; }
+.tg-callgrid > .tg-calllab { margin: 12px 0 0; }
+.tg-callnote { color: #7a746e; font-size: 0.88em; white-space: nowrap; }
+.tg-cta .tg-calllab, .tg-cta .tg-callnote { color: #cfc9c2 !important; }
+
 /* Phone hero spacing: drop the hero heading clear of the fixed menu bar. */
 @media (max-width: 750px) {
   thorne-home-page, thorne-renovation, thorne-gallery, thorne-team,
