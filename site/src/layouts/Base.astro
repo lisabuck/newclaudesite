@@ -6,8 +6,9 @@ import Header from '../components/Header.astro';
 interface Props {
   title: string;
   description: string;
+  preloadImage?: string;
 }
-const { title, description } = Astro.props;
+const { title, description, preloadImage } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -24,6 +25,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_NZ" />
+    {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
   </head>
   <body>
     <div id="tg-preloader" aria-hidden="true">
