@@ -1,4 +1,4 @@
-/* Thorne Group — Project gallery page v7 (option 2a): cover index + slideshow theatre. v14: contact CTA call row laid out as an Office / Mobile mini table with work-hours and after-hours notes in muted brackets. v13: contact CTA call row adds office hours (Clare 027 281 3850) and after hours (Aaron 021 658 121, Peter 021 716 129) numbers. v12: the category slideshow moves inside the opened section, below the heading and intro copy and above the covers; it stops and hides when the section closes. v11: featured slideshow is words-free (no scrim/eyebrow/title overlay), frame softened to 16/9, and each project's slide is its first landscape photo after the cover (orientation probed via tiny thumbnails, cover never repeated). v10: the featured header is a per-category slideshow - the opened category's projects crossfade (3s each) using each project's second photo so the preview covers never repeat; the title tracks the visible project and clicking opens it. v9: all categories closed on load - no auto-open; the featured header appears once a category is opened. v8: featured header under the hero shows the open category's first project; clicking it opens that project's slideshow; updates whenever a category is opened.
+/* Thorne Group — Project gallery page v7 (option 2a): cover index + slideshow theatre. v15: the Coastal category slideshow opens on a chosen lead photo (FEAT_FIRST below) before cycling through the projects. v14: contact CTA call row laid out as an Office / Mobile mini table with work-hours and after-hours notes in muted brackets. v13: contact CTA call row adds office hours (Clare 027 281 3850) and after hours (Aaron 021 658 121, Peter 021 716 129) numbers. v12: the category slideshow moves inside the opened section, below the heading and intro copy and above the covers; it stops and hides when the section closes. v11: featured slideshow is words-free (no scrim/eyebrow/title overlay), frame softened to 16/9, and each project's slide is its first landscape photo after the cover (orientation probed via tiny thumbnails, cover never repeated). v10: the featured header is a per-category slideshow - the opened category's projects crossfade (3s each) using each project's second photo so the preview covers never repeat; the title tracks the visible project and clicking opens it. v9: all categories closed on load - no auto-open; the featured header appears once a category is opened. v8: featured header under the hero shows the open category's first project; clicking it opens that project's slideshow; updates whenever a category is opened.
    Each category opens to one cover card per project (no collage). Clicking a card opens a
    full-width auto-playing slideshow (2.5s/photo, edit SLIDE_MS below) with a clickable
    filmstrip, which rolls into the next project with a costs prompt between projects.
@@ -38,6 +38,8 @@
       function stopFeat(){ if(featTimer){ clearInterval(featTimer); featTimer=null; } }
       /* pick each project's first LANDSCAPE photo, skipping the cover (images[0]) so
          the preview cards never repeat here; orientation is probed on tiny thumbnails */
+      /* per-category lead photo: shown first when the category opens */
+      var FEAT_FIRST={"Coastal":"https://static.wixstatic.com/media/b2375c_6820617c8a894ed1b2dfb5227fae2e2e~mv2.jpg/v1/fit/w_1800,h_1800,q_85,enc_auto/coastal-first.jpg"};
       function probeLandscape(p, done){
         if(p._land!==undefined){ done(p._land); return; }
         var cands=p.images.slice(1);
@@ -60,7 +62,9 @@
           if(p.eyebrow===cat) featSlides.push({p:p, pi:idx, src:p.images[1]||p.images[0]});
         });
         if(!featSlides.length) return;
+        if(FEAT_FIRST[cat]){ featSlides.unshift({p:featSlides[0].p, pi:featSlides[0].pi, src:FEAT_FIRST[cat], fixed:true}); }
         featSlides.forEach(function(sl){
+          if(sl.fixed) return;
           probeLandscape(sl.p, function(src){ if(run===featRun){ sl.src=src; if(featSlides[featIdx]===sl && featIdx===0){ fA.src=src; } } });
         });
         featIdx=0; featFront=0;
