@@ -55,11 +55,3 @@ thorne-home-page .tg-hero-slides .tg-hsl{position:absolute;inset:0;width:100%;he
 @media (min-width:1001px){
   thorne-home-page .tg-hero-frame{ height:89vh !important; min-height:650px !important; }
 }
-
-/* phone hero: one-third shorter than the standard mobile frame */
-@media (max-width:750px){
-  thorne-home-page .tg-hero-frame{ height:49vh !important; min-height:347px !important; max-height:427px !important; }
-}
-@media (max-width:360px){
-  thorne-home-page .tg-hero-frame{ min-height:384px !important; }
-}
