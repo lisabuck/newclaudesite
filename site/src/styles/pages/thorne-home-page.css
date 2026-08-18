@@ -40,3 +40,8 @@ thorne-home-page .tg-card img{filter:saturate(.78) sepia(.10) contrast(.98)}
 /* service links in the hero strip read as links */
 thorne-home-page .tg-hero-strip a{border-bottom:1px solid rgba(250,249,246,.6)!important;padding-bottom:4px}
 
+
+/* hero video stays invisible until it actually plays; the photo layer behind
+   it shows for exactly that long, then a quick fade to the moving picture */
+thorne-home-page .tg-hero-frame video{opacity:0;transition:opacity .4s ease}
+thorne-home-page .tg-hero-frame video.tg-vid-on{opacity:1}
