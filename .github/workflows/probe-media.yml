@@ -1,0 +1,29 @@
+name: Probe media files
+on: workflow_dispatch
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install ffmpeg
+        run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg > /dev/null
+      - name: Probe hero video renditions
+        run: |
+          for u in \
+            "https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/1080p/mp4/file.mp4" \
+            "https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/720p/mp4/file.mp4" \
+            "https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/480p/mp4/file.mp4" \
+            "https://video.wixstatic.com/video/b2375c_d49aca6a808a46c88d5d44760c275f89/1080p/mp4/file.mp4" \
+            "https://video.wixstatic.com/video/b2375c_0107408475924668b87d43d0c480eaec/1080p/mp4/file.mp4"; do
+            echo "===== $u"
+            curl -sSIL --max-time 30 "$u" | grep -iE '^HTTP|content-length|content-type' || echo "HEAD failed"
+          done
+      - name: Download and integrity-check the new hero video
+        run: |
+          set -x
+          curl -sSL --max-time 300 -o hero.mp4 "https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/1080p/mp4/file.mp4" || echo "DOWNLOAD FAILED"
+          ls -la hero.mp4 || true
+          echo "----- metadata"
+          ffprobe -v error -show_entries format=duration,size,bit_rate -show_entries stream=codec_name,codec_type,width,height -of default hero.mp4 || echo "FFPROBE FAILED"
+          echo "----- full decode check (errors below mean the file is damaged)"
+          ffmpeg -v error -i hero.mp4 -f null - 2>&1 | head -30
+          echo "----- decode check finished"
