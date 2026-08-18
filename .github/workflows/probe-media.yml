@@ -17,6 +17,14 @@ jobs:
             echo "===== $u"
             curl -sSIL --max-time 30 "$u" | grep -iE '^HTTP|content-length|content-type' || echo "HEAD failed"
           done
+      - name: Detect frozen content in the videos
+        run: |
+          for pair in "new-hero b2375c_16393d3133b2416a86184e8968f01af5" "old-hero b2375c_0107408475924668b87d43d0c480eaec" "team-control b2375c_d49aca6a808a46c88d5d44760c275f89"; do
+            set -- $pair
+            echo "===================== $1"
+            curl -sSL --max-time 300 -o "$1.mp4" "https://video.wixstatic.com/video/$2/480p/mp4/file.mp4"
+            ffmpeg -v info -i "$1.mp4" -vf "freezedetect=n=0.003:d=1.5" -map 0:v -f null - 2>&1 | grep -E 'freezedetect|Duration' || echo "no freezes detected"
+          done
       - name: Download and integrity-check the new hero video
         run: |
           set -x
