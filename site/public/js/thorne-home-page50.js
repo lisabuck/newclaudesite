@@ -1,4 +1,5 @@
-/* Thorne Group — Home page v52 · Wix Custom Element
+/* Thorne Group — Home page v53 · Wix Custom Element
+   v53 changes: the static fragment no longer carries its own hero video (photo layer only) - this engine renders the single hero video, so it loads and plays exactly once instead of being torn down and re-fetched by the re-render.
    v52 changes: hero video replaced with the re-uploaded file 16393d3133b2416a86184e8968f01af5.
    v51 changes: hero video is invisible until it actually plays (photo layer shows for exactly the load time) and its source steps down 1080p-720p-480p on load failure.
    v50 changes: hero gets a dedicated fetchpriority-high poster image layer under the video so the placeholder photo shows while the 1080p video loads;
