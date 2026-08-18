@@ -1,9 +1,12 @@
 name: Probe media files
 on: workflow_dispatch
+permissions:
+  contents: write
 jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - name: Install ffmpeg
         run: sudo apt-get update -q && sudo apt-get install -y -q ffmpeg > /dev/null
       - name: Probe hero video renditions
@@ -25,6 +28,21 @@ jobs:
             curl -sSL --max-time 300 -o "$1.mp4" "https://video.wixstatic.com/video/$2/480p/mp4/file.mp4"
             ffmpeg -v info -i "$1.mp4" -vf "freezedetect=n=0.003:d=1.5" -map 0:v -f null - 2>&1 | grep -E 'freezedetect|Duration' || echo "no freezes detected"
           done
+      - name: Extract frames and push them for visual inspection
+        run: |
+          curl -sSL --max-time 300 -o nh.mp4 "https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/480p/mp4/file.mp4"
+          curl -sSL -o poster.jpg "https://static.wixstatic.com/media/b2375c_85010d213e844bfc858b75405bd2748f~mv2.jpg/v1/fit/w_854,h_534,q_80,enc_auto/poster.jpg"
+          mkdir -p diagnostics/frames
+          cp poster.jpg diagnostics/frames/poster.jpg
+          for t in 0.2 0.7 1.2 1.7 2.5 4 8 15 25 40 50; do
+            ffmpeg -v error -ss "$t" -i nh.mp4 -frames:v 1 -q:v 5 "diagnostics/frames/t${t}.jpg" -y
+          done
+          ls -la diagnostics/frames/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-frames
+          git add diagnostics/frames
+          git commit -m "Diagnostic frames from the new hero video"
+          git push -f origin diag-frames
       - name: Download and integrity-check the new hero video
         run: |
           set -x
