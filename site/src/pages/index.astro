@@ -20,44 +20,4 @@ window.addEventListener('load', function () {
   });
 });
   </script>
-  <script is:inline>
-/* Hero video diagnostics: dormant unless the page is opened with ?vdebug=1.
-   Shows an on-screen log of every media event so a screenshot tells the
-   whole story of what the video did on that exact device. */
-(function () {
-  if (location.search.indexOf('vdebug=1') < 0) return;
-  var box = document.createElement('div');
-  box.style.cssText = 'position:fixed;left:8px;bottom:8px;z-index:99999;background:rgba(0,0,0,.85);color:#7CFC00;font:11px/1.5 monospace;padding:10px 12px;max-width:92vw;max-height:45vh;overflow:auto;white-space:pre;border-radius:6px';
-  var lines = ['VDEBUG ' + (navigator.userAgent.slice(0, 80))];
-  function paint() { box.textContent = lines.join('\n'); box.scrollTop = 1e9; }
-  function stamp() { return (performance.now() / 1000).toFixed(1) + 's'; }
-  function vidInfo(v) {
-    if (!v || v.tagName !== 'VIDEO') return '';
-    var src = (v.currentSrc || '').match(/\/(\d+p)\//);
-    return ' t=' + v.currentTime.toFixed(1) + ' rs=' + v.readyState + ' ns=' + v.networkState +
-      (src ? ' ' + src[1] : '') + (v.error ? ' ERR' + v.error.code : '') +
-      (v.classList.contains('tg-vid-on') ? ' on' : ' off') + ' op=' + getComputedStyle(v).opacity;
-  }
-  document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(box); paint(); });
-  if (document.body) { document.body.appendChild(box); paint(); }
-  ['loadstart', 'loadedmetadata', 'canplay', 'playing', 'pause', 'waiting', 'stalled', 'suspend', 'emptied', 'abort', 'error', 'ended', 'seeking'].forEach(function (type) {
-    document.addEventListener(type, function (e) {
-      var t = e.target;
-      if (!t || (t.tagName !== 'VIDEO' && t.tagName !== 'SOURCE')) return;
-      var v = t.tagName === 'SOURCE' ? t.parentNode : t;
-      if (!v.closest || !v.closest('.tg-hero-frame')) return;
-      lines.push(stamp() + ' ' + type + (t.tagName === 'SOURCE' ? '(src)' : '') + vidInfo(v));
-      if (lines.length > 60) lines.shift();
-      paint();
-    }, true);
-  });
-  var tick = setInterval(function () {
-    var v = document.querySelector('.tg-hero-frame video');
-    lines.push(stamp() + ' . vids=' + document.querySelectorAll('.tg-hero-frame video').length + vidInfo(v));
-    if (lines.length > 60) lines.shift();
-    paint();
-    if (performance.now() > 30000) clearInterval(tick);
-  }, 2000);
-})();
-  </script>
 </Base>
