@@ -1,4 +1,4 @@
-/* Thorne Group — Project gallery page v7 (option 2a): cover index + slideshow theatre. v22: Space optimising features Sophisticated Mount and Rural residential features Hilltop Haven, same orientation-aware treatment as Coastal. v21: featured slideshow extends half a pad into the side padding either side on widescreen only (>1000px). v20: portraits pair up (two per slide, page-cream between and beside them, near-square cells) and the Coastal lead photo is dropped - the slideshow is all On the dunes. v19: featured-project slideshow is orientation-aware - landscape photos run full width. v18: the Coastal category slideshow now plays On the dunes's own photos (lead photo first) and clicking it opens that project, instead of one photo per Coastal project (FEAT_PROJECT below). v17: hero placeholder photo removed per Lisa (film fades in over the plain dark frame). v16: hero photo slideshow replaced by the Thorne film (720p, photo backdrop until it plays, pre-play 480p fallback) - the video moved here from the home page per Lisa. v15: the Coastal category slideshow opens on a chosen lead photo (FEAT_FIRST below) before cycling through the projects. v14: contact CTA call row laid out as an Office / Mobile mini table with work-hours and after-hours notes in muted brackets. v13: contact CTA call row adds office hours (Clare 027 281 3850) and after hours (Aaron 021 658 121, Peter 021 716 129) numbers. v12: the category slideshow moves inside the opened section, below the heading and intro copy and above the covers; it stops and hides when the section closes. v11: featured slideshow is words-free (no scrim/eyebrow/title overlay), frame softened to 16/9, and each project's slide is its first landscape photo after the cover (orientation probed via tiny thumbnails, cover never repeated). v10: the featured header is a per-category slideshow - the opened category's projects crossfade (3s each) using each project's second photo so the preview covers never repeat; the title tracks the visible project and clicking opens it. v9: all categories closed on load - no auto-open; the featured header appears once a category is opened. v8: featured header under the hero shows the open category's first project; clicking it opens that project's slideshow; updates whenever a category is opened.
+/* Thorne Group — Project gallery page v7 (option 2a): cover index + slideshow theatre. v23: no white flash between featured slides - all photos warm up front, the next slide is staged on the hidden layer straight after each fade, and the first reveal waits for its photo to load. v22: Space optimising features Sophisticated Mount and Rural residential features Hilltop Haven, same orientation-aware treatment as Coastal. v21: featured slideshow extends half a pad into the side padding either side on widescreen only (>1000px). v20: portraits pair up (two per slide, page-cream between and beside them, near-square cells) and the Coastal lead photo is dropped - the slideshow is all On the dunes. v19: featured-project slideshow is orientation-aware - landscape photos run full width. v18: the Coastal category slideshow now plays On the dunes's own photos (lead photo first) and clicking it opens that project, instead of one photo per Coastal project (FEAT_PROJECT below). v17: hero placeholder photo removed per Lisa (film fades in over the plain dark frame). v16: hero photo slideshow replaced by the Thorne film (720p, photo backdrop until it plays, pre-play 480p fallback) - the video moved here from the home page per Lisa. v15: the Coastal category slideshow opens on a chosen lead photo (FEAT_FIRST below) before cycling through the projects. v14: contact CTA call row laid out as an Office / Mobile mini table with work-hours and after-hours notes in muted brackets. v13: contact CTA call row adds office hours (Clare 027 281 3850) and after hours (Aaron 021 658 121, Peter 021 716 129) numbers. v12: the category slideshow moves inside the opened section, below the heading and intro copy and above the covers; it stops and hides when the section closes. v11: featured slideshow is words-free (no scrim/eyebrow/title overlay), frame softened to 16/9, and each project's slide is its first landscape photo after the cover (orientation probed via tiny thumbnails, cover never repeated). v10: the featured header is a per-category slideshow - the opened category's projects crossfade (3s each) using each project's second photo so the preview covers never repeat; the title tracks the visible project and clicking opens it. v9: all categories closed on load - no auto-open; the featured header appears once a category is opened. v8: featured header under the hero shows the open category's first project; clicking it opens that project's slideshow; updates whenever a category is opened.
    Each category opens to one cover card per project (no collage). Clicking a card opens a
    full-width auto-playing slideshow (2.5s/photo, edit SLIDE_MS below) with a clickable
    filmstrip, which rolls into the next project with a costs prompt between projects.
@@ -69,22 +69,37 @@
         function finish(){
           if(run!==featRun || !featSlides.length) return;
           if(FEAT_FIRST[cat]){ featSlides.unshift({p:featSlides[0].p, pi:featSlides[0].pi, src:FEAT_FIRST[cat], fixed:true}); }
+          /* warm every full-size photo so no slide ever reveals unpainted */
+          featSlides.forEach(function(sl){ (sl.srcs||[sl.src]).forEach(function(u){ var im=new Image(); im.src=u; }); });
           featIdx=0; featFront=0;
           renderLay(fA, featSlides[0]); fA.style.opacity=1; fB.style.opacity=0;
           featPi=featSlides[0].pi;
-          feat.hidden=false;
-          if(!reducedF && featSlides.length>1){
-            featTimer=setInterval(function(){
-              featIdx=(featIdx+1)%featSlides.length;
-              var sl=featSlides[featIdx];
-              var back = featFront===0 ? fB : fA;
-              var front = featFront===0 ? fA : fB;
-              renderLay(back, sl);
-              back.style.opacity=1; front.style.opacity=0;
-              featFront=1-featFront;
-              featPi=sl.pi;
-            }, 3000);
+          function reveal(){
+            if(run!==featRun) return;
+            feat.hidden=false;
+            if(!reducedF && featSlides.length>1){
+              renderLay(fB, featSlides[1]);
+              featTimer=setInterval(function(){
+                featIdx=(featIdx+1)%featSlides.length;
+                var back = featFront===0 ? fB : fA;
+                var front = featFront===0 ? fA : fB;
+                /* the back layer was staged with this slide last cycle - just crossfade */
+                back.style.opacity=1; front.style.opacity=0;
+                featFront=1-featFront;
+                featPi=featSlides[featIdx].pi;
+                /* once the fade is done, stage the following slide on the hidden layer
+                   so it has the rest of the cycle to load before its reveal */
+                setTimeout(function(){ if(run===featRun && featTimer){ renderLay(front, featSlides[(featIdx+1)%featSlides.length]); } }, 1000);
+              }, 3000);
+            }
           }
+          /* hold the first reveal until its photo has loaded (capped at 1.2s) */
+          var pend=[].slice.call(fA.querySelectorAll('img')).filter(function(im){ return !im.complete; });
+          if(!pend.length){ reveal(); return; }
+          var left=pend.length, done=false;
+          function go(){ if(done) return; done=true; reveal(); }
+          pend.forEach(function(im){ im.onload=im.onerror=function(){ if(--left<=0) go(); }; });
+          setTimeout(go, 1200);
         }
         var only=FEAT_PROJECT[cat];
         var proj=null, pIdx=-1;
