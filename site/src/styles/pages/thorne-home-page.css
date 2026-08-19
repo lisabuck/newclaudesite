@@ -50,6 +50,11 @@ thorne-home-page .tg-hero-slides .tg-hslm{position:absolute;inset:0;width:100%;h
 @keyframes tgHomeHeroM{0%{opacity:0}4%{opacity:1}25%{opacity:1}29%{opacity:0}100%{opacity:0}}
 @media(max-width:750px){thorne-home-page .tg-hero-slides .tg-hsl{display:none!important}}
 @media(min-width:751px){thorne-home-page .tg-hero-slides .tg-hslm{display:none!important}}
+
+/* widescreen hero: one-sixth taller than the standard 76vh frame */
+@media (min-width:1001px){
+  thorne-home-page .tg-hero-frame{ height:89vh !important; min-height:650px !important; }
+}
 @media(prefers-reduced-motion:reduce){
   thorne-home-page .tg-hero-slides .tg-hsl,thorne-home-page .tg-hero-slides .tg-hslm{animation:none}
   thorne-home-page .tg-hero-slides picture:first-of-type img{opacity:1}

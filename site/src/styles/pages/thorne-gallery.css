@@ -51,6 +51,11 @@ thorne-gallery .insp-grid{ padding-bottom:72px; }
 thorne-gallery .g-hero{ position:relative; height:76vh; min-height:560px; overflow:hidden; background:#393533; }
 thorne-gallery .g-hero video{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 35%; opacity:0; transition:opacity .4s ease; }
 thorne-gallery .g-hero video.tg-vid-on{ opacity:1; }
+
+/* widescreen hero: matches the home slideshow frame (one-sixth taller than 76vh) */
+@media (min-width:1001px){
+  thorne-gallery .g-hero{ height:89vh; min-height:650px; }
+}
 thorne-gallery .g-scrim{ position:absolute; inset:0; background:linear-gradient(to bottom,rgba(35,32,30,.14),rgba(35,32,30,0) 45%); pointer-events:none; }
 thorne-gallery .g-h1{ position:absolute; top:var(--hero-top); left:var(--pad); right:var(--pad); margin:0; color:#FAF9F6; font-weight:300; line-height:1.22; letter-spacing:-.02em; font-size:clamp(27px,2.53vw,41px); }
 thorne-gallery .g-lead{ display:block; max-width:17em; font-weight:300; font-size:clamp(30px,4.2vw,68px); line-height:1.18; }
