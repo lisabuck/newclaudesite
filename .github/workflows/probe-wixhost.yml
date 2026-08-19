@@ -1,0 +1,28 @@
+name: Probe Wix host freshness
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check served HTML and engine JS on the Wix site host
+        run: |
+          BASE="https://thorne-gro-28d54700-yourwebnz.wix-site-host.com"
+          echo "===== home page headers"
+          curl -sSIL --max-time 30 "$BASE/" | grep -iE '^HTTP|cache-control|age:|etag|x-|content-type' || echo "FAILED"
+          echo "===== home page HTML markers (want f6409ff4 present, 89vh absent)"
+          curl -sSL --max-time 30 "$BASE/" -o home.html
+          grep -c "f6409ff4" home.html || echo "f6409ff4 NOT in home HTML"
+          grep -c "6ec394db6cdf402c8fe6b4cd8ca23e57~mv2.jpg/v1/fit/w_1920" home.html || echo "old slide 3 not in home HTML (good)"
+          grep -c "89vh" home.html || echo "no 89vh in home HTML (good)"
+          echo "===== projects page HTML markers (want 1a072536 absent)"
+          curl -sSL --max-time 30 "$BASE/projects" -o projects.html
+          grep -c "1a072536" projects.html || echo "placeholder NOT in projects HTML (good)"
+          echo "===== engine thorne-home-page54.js headers + version"
+          curl -sSIL --max-time 30 "$BASE/js/thorne-home-page54.js" | grep -iE '^HTTP|cache-control|age:|etag|content-length' || echo "FAILED"
+          curl -sSL --max-time 30 "$BASE/js/thorne-home-page54.js" | head -2
+          echo "===== engine GALLERY6.js headers + version"
+          curl -sSIL --max-time 30 "$BASE/js/GALLERY6.js" | grep -iE '^HTTP|cache-control|age:|etag|content-length' || echo "FAILED"
+          curl -sSL --max-time 30 "$BASE/js/GALLERY6.js" | head -1 | cut -c1-300
+          echo "===== done"
