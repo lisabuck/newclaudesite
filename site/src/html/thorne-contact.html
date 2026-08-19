@@ -46,6 +46,7 @@
         <label class="ct-lab" for="ct-msg">Tell us about your project</label>
         <textarea class="ct-in ct-ta" id="ct-msg" name="message" rows="5" placeholder="We&rsquo;d love to hear about your ideas for your project."></textarea>
       </div>
+      <label class="ct-check"><input type="checkbox" id="ct-news" name="newsletter"> <span>Please subscribe me to your newsletter</span></label>
       <p class="ct-err" id="ct-err" hidden>Please add your first name and a valid email address so we can reply.</p>
       <button class="ct-btn" type="submit">Send enquiry</button>
     </form>
@@ -73,7 +74,8 @@
     var body = 'Name: ' + v('ct-first') + ' ' + v('ct-last') + '\n'
       + 'Email: ' + email + '\n'
       + 'Phone: ' + v('ct-phone') + '\n'
-      + 'Project type: ' + type + '\n\n'
+      + 'Project type: ' + type + '\n'
+      + 'Newsletter: ' + (document.getElementById('ct-news').checked ? 'yes please' : 'no') + '\n\n'
       + v('ct-msg');
     window.location.href = 'mailto:info@thornegroup.co.nz'
       + '?subject=' + encodeURIComponent('Website enquiry - ' + type)
