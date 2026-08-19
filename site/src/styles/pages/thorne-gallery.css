@@ -280,8 +280,8 @@ thorne-gallery .g-strip2 a{border-bottom:1px solid rgba(250,249,246,.6);padding-
 thorne-gallery .feat{ margin:26px 0 44px; }
 thorne-gallery .feat-card{ position:relative; display:block; width:100%; border:0; cursor:pointer; background:#393533; overflow:hidden; text-align:left; padding:0; color:#FAF9F6; font-family:var(--f); }
 thorne-gallery .feat-frame{ display:block; position:relative; aspect-ratio:16/9; overflow:hidden; background:#393533; }
-thorne-gallery .feat-lay{ position:absolute; inset:0; display:flex; justify-content:center; gap:6px; background:#393533; transition:opacity .9s ease; }
+thorne-gallery .feat-lay{ position:absolute; inset:0; display:flex; justify-content:center; gap:10px; background:#FAF9F6; transition:opacity .9s ease; }
 thorne-gallery .feat-lay.feat-b{ opacity:0; }
 thorne-gallery .feat-lay .feat-one{ flex:1 1 100%; width:100%; height:100%; object-fit:cover; object-position:center 35%; display:block; }
-thorne-gallery .feat-lay .feat-cell{ flex:0 0 calc((100% - 12px)/3); height:100%; object-fit:cover; object-position:center; display:block; min-width:0; }
+thorne-gallery .feat-lay .feat-cell{ flex:0 0 calc((100% - 10px)/2); height:100%; object-fit:cover; object-position:center; display:block; min-width:0; }
 @media(max-width:750px){ thorne-gallery .feat{ margin:8px 0 30px; } thorne-gallery .feat-frame{ aspect-ratio:16/10; } }
