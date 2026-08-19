@@ -12,3 +12,5 @@
 - All copy in NZ English. No em dashes. Short declarative sentences. Never use "dream home", "vision", or luxury cliches.
 - Before finishing any visual work, run a Playwright audit at 13 breakpoints from 320px to 1920px.
 - The owner (Lisa) is not technical. Explain changes in plain English.
+- Deployment workflow: push changes to this repo first (Vercel preview at thornesite1234.vercel.app), then WAIT for Lisa to approve the preview before mirroring anything to lisabuck/thorne-group (the live Wix site). Never push to thorne-group without her explicit approval of that change on Vercel.
+- Cache busting: every engine script link in the .astro pages carries a version query (e.g. /js/thorne-home-page54.js?v=67, /js/GALLERY6.js?v=23). Whenever an engine's changelog version is bumped, bump its ?v= in every .astro that loads it, in both repos, or the Wix site host serves the hour-old cached copy to returning browsers. Rarely-changed helpers (lightdom-shim, fixlinks, etc.) sit at ?v=1 until edited.
