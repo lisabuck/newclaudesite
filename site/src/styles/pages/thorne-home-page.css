@@ -55,7 +55,3 @@ thorne-home-page .tg-hero-slides .tg-hslm{position:absolute;inset:0;width:100%;h
   thorne-home-page .tg-hero-slides picture:first-of-type img{opacity:1}
 }
 
-/* widescreen hero: one-sixth taller than the standard 76vh frame */
-@media (min-width:1001px){
-  thorne-home-page .tg-hero-frame{ height:89vh !important; min-height:650px !important; }
-}
