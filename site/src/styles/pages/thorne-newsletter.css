@@ -1,5 +1,5 @@
 /* Monthly E-Newsletter sign-up page - Graya-style layout in Thorne house style */
-.tg-newsletter{ display:block; background:#FAF9F6; color:#393533; }
+.tg-newsletter{ display:block; background:#FAF9F6; color:#393533; --pad:56px; }
 .tg-newsletter .nl-shell{ max-width:1240px; margin:0 auto; padding:96px 56px 72px; }
 .tg-newsletter .nl-eyebrow{ display:block; font-size:14px; letter-spacing:.42em; text-transform:uppercase; color:#7a746e; margin-bottom:26px; }
 .tg-newsletter .nl-h1{ margin:0; font-weight:300; font-size:clamp(34px,3.37vw,55px); line-height:1.1; letter-spacing:-.02em; }
@@ -25,10 +25,12 @@
 .tg-newsletter .nl-card-p{ margin:16px 0 0; font-size:19px; line-height:1.75; color:#54504c; }
 
 @media (max-width:1000px){
+  .tg-newsletter{ --pad:32px; }
   .tg-newsletter .nl-shell{ padding:72px 32px 56px; }
   .tg-newsletter .nl-cards{ gap:32px; }
 }
 @media (max-width:750px){
+  .tg-newsletter{ --pad:24px; }
   .tg-newsletter .nl-shell{ padding:56px 24px 44px; }
   .tg-newsletter .nl-row{ grid-template-columns:1fr; }
   .tg-newsletter .nl-btn{ width:100%; text-align:center; }
@@ -36,5 +38,16 @@
   .tg-newsletter .nl-rule{ margin:48px 0 44px; }
 }
 @media (max-width:430px){
+  .tg-newsletter{ --pad:20px; }
   .tg-newsletter .nl-shell{ padding:48px 20px 40px; }
 }
+
+/* footer - house standard */
+.tg-newsletter .tg-foot{ padding:72px var(--pad) 56px; }
+.tg-newsletter .tg-foot-row{ max-width:1280px; margin:0 auto; border-top:1px solid #c8c3bb; padding-top:36px; display:flex; justify-content:space-between; align-items:center; gap:32px; flex-wrap:wrap; font-size:14px; font-weight:400; letter-spacing:.22em; text-transform:uppercase; }
+.tg-newsletter .tg-foot a{ color:#393533; text-decoration:none; }
+.tg-newsletter .tg-foot a:hover{ color:#7a746e; }
+.tg-newsletter .tg-foot-l a{ color:#7a746e; border-bottom:1px solid #c8c3bb; padding-bottom:3px; }
+.tg-newsletter .tg-foot-r{ display:flex; gap:16px 32px; align-items:center; flex-wrap:wrap; }
+.tg-newsletter .tg-foot-trust{ max-width:1280px; margin-left:auto; margin-right:auto; }
+@media (max-width:750px){ .tg-newsletter .tg-foot-row{ font-size:15px; } }
