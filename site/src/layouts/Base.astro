@@ -7,8 +7,9 @@ interface Props {
   title: string;
   description: string;
   preloadImage?: string;
+  hideNewsletterButton?: boolean;
 }
-const { title, description, preloadImage } = Astro.props;
+const { title, description, preloadImage, hideNewsletterButton } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -121,5 +122,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     </main>
     <script is:inline defer src="/js/fixlinks.js?v=1"></script>
     <script is:inline defer src="/js/tg-countup.js?v=1"></script>
-  </body>
+      {!hideNewsletterButton && (
+      <a class="tg-news-cta" href="/newsletter">Monthly E-Newsletter</a>
+    )}
+</body>
 </html>

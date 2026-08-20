@@ -1,0 +1,80 @@
+<section class="nl-shell" data-screen-label="Newsletter sign-up">
+  <span class="nl-eyebrow">Monthly E-Newsletter</span>
+  <h1 class="nl-h1">Exclusive insights</h1>
+  <p class="nl-intro">Register your details to receive information and updates available exclusively to subscribers.</p>
+
+  <!-- FORM HANDLER: interim behaviour opens the visitor's email app pre-filled.
+       Wix partner agency: replace the submit handler below with the Wix Forms /
+       CRM submission when wiring up Wix Headless. -->
+  <form class="nl-form" id="tg-news-form" novalidate data-screen-label="Newsletter form">
+    <div class="nl-row">
+      <div class="nl-field">
+        <label class="nl-lab" for="nl-first">First name</label>
+        <input class="nl-in" id="nl-first" name="first-name" type="text" autocomplete="given-name" placeholder="First name" required>
+      </div>
+      <div class="nl-field">
+        <label class="nl-lab" for="nl-email">Email address</label>
+        <input class="nl-in" id="nl-email" name="email" type="email" autocomplete="email" placeholder="Email address" required>
+      </div>
+    </div>
+    <p class="nl-err" id="nl-err" hidden>Please add your first name and a valid email address.</p>
+    <button class="nl-btn" type="submit">Subscribe</button>
+    <p class="nl-note">No pressure. Unsubscribe any time.</p>
+  </form>
+
+  <div class="nl-rule" aria-hidden="true"></div>
+
+  <div class="nl-cards">
+    <div class="nl-card">
+      <img class="nl-img" src="https://static.wixstatic.com/media/b2375c_2a5049314f0143b5be37e2795d924a61~mv2.jpg/v1/fit/w_800,h_900,q_85,enc_auto/b2375c_2a5049314f0143b5be37e2795d924a61~mv2.jpg" alt="Aerial view of an upcoming Thorne Group development" loading="lazy" decoding="async">
+      <span class="nl-num">0 1</span>
+      <h2 class="nl-card-h">Upcoming Developments</h2>
+      <p class="nl-card-p">Enjoy early access to upcoming properties and developments before they are publicly released.</p>
+    </div>
+    <div class="nl-card">
+      <img class="nl-img" src="https://static.wixstatic.com/media/b2375c_67a900f106aa4abab5633e28ffba025d~mv2.jpg/v1/fit/w_800,h_900,q_85,enc_auto/b2375c_67a900f106aa4abab5633e28ffba025d~mv2.jpg" alt="Interior detail from a Thorne Group home" loading="lazy" decoding="async">
+      <span class="nl-num">0 2</span>
+      <h2 class="nl-card-h">Inspiration and Information</h2>
+      <p class="nl-card-p">Be the first to preview inspiration from our homes, alongside tips and insights into parts of the process people do not often get to see.</p>
+    </div>
+    <div class="nl-card">
+      <img class="nl-img" src="https://static.wixstatic.com/media/b2375c_94ec95f6cd244c20bdc406cfe631cc7b~mv2.jpg/v1/fit/w_800,h_900,q_85,enc_auto/b2375c_94ec95f6cd244c20bdc406cfe631cc7b~mv2.jpg" alt="Thorne Group project under construction" loading="lazy" decoding="async">
+      <span class="nl-num">0 3</span>
+      <h2 class="nl-card-h">Current Projects</h2>
+      <p class="nl-card-p">Keep up to date on progress on selected projects under construction, with exclusive behind-the-scenes access into how they are coming together.</p>
+    </div>
+  </div>
+</section>
+
+<script>
+(function () {
+  var f = document.getElementById('tg-news-form');
+  if (!f) return;
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var v = function (id) { return (document.getElementById(id).value || '').trim(); };
+    var err = document.getElementById('nl-err');
+    var email = v('nl-email');
+    if (!v('nl-first') || !email || email.indexOf('@') < 1) { err.hidden = false; return; }
+    err.hidden = true;
+    var body = 'Please subscribe me to the Monthly E-Newsletter.\n\n'
+      + 'First name: ' + v('nl-first') + '\n'
+      + 'Email: ' + email;
+    window.location.href = 'mailto:info@thornegroup.co.nz'
+      + '?subject=' + encodeURIComponent('Monthly E-Newsletter sign-up')
+      + '&body=' + encodeURIComponent(body);
+  });
+})();
+</script>
+
+<footer class="tg-foot" data-screen-label="Footer">
+  <div class="tg-foot-trust" style="font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:#7a746e;margin:0 0 22px">Registered Master Builders &middot; Award-winning Architectural Builders &middot; Tauranga, Bay of Plenty</div>
+  <div class="tg-foot-row">
+    <div class="tg-foot-l"><a href="/privacy-statement">Privacy statement</a></div>
+    <div class="tg-foot-r">
+      <a href="https://www.facebook.com/thornegroup">Facebook</a>
+      <a href="https://www.linkedin.com/company/thorne-group">LinkedIn</a>
+      <a href="https://www.instagram.com/thornegroup">Instagram</a>
+    </div>
+  </div>
+</footer>
