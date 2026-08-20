@@ -17,6 +17,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
+    {/* TEMPORARY pre-launch shield: remove this one line (in both repos) when
+        thornegroup.co.nz is connected, so search engines start indexing. */}
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
@@ -26,6 +29,32 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_NZ" />
     {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
+    <script type="application/ld+json" set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'LocalBusiness',
+      '@id': 'https://www.thornegroup.co.nz/#business',
+      name: 'Thorne Group',
+      description: 'Award-winning architectural builders in Tauranga and the Bay of Plenty. Registered Master Builders. New homes, renovations and development collaborations.',
+      url: 'https://www.thornegroup.co.nz',
+      telephone: '+64 7 575 5555',
+      email: 'info@thornegroup.co.nz',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Unit 1, 41 Newton Street',
+        addressLocality: 'Mount Maunganui',
+        addressRegion: 'Bay of Plenty',
+        postalCode: '3116',
+        addressCountry: 'NZ',
+      },
+      areaServed: ['Tauranga', 'Mount Maunganui', 'Bay of Plenty'],
+      memberOf: { '@type': 'Organization', name: 'Registered Master Builders Association of New Zealand' },
+      award: 'Most Trusted Architectural Builder, Bay of Plenty (five years running)',
+      sameAs: [
+        'https://www.facebook.com/thornegroup',
+        'https://www.linkedin.com/company/thorne-group',
+        'https://www.instagram.com/thornegroup',
+      ],
+    })} />
   </head>
   <body>
     <div id="tg-preloader" aria-hidden="true">
