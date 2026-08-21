@@ -14,6 +14,8 @@ thorne-gallery .cta-link{ display:inline-block; padding:6px 0 8px; }
 thorne-gallery .cta-link span{ display:inline-block; transition:transform .3s ease; }
 thorne-gallery .cta-link:hover span{ transform:translateX(6px); }
 thorne-gallery .shell{ width:100%; max-width:var(--max); margin:0 auto; padding:0 var(--pad); }
+/* widescreen: half gutters for the projects content */
+@media (min-width:1001px){ thorne-gallery .shell{ padding-left:calc(var(--pad)/2); padding-right:calc(var(--pad)/2); } }
 thorne-gallery .hero{ text-align:center; padding:110px var(--pad) 84px; }
 thorne-gallery .hero .eyebrow{ display:block; font-size:14px; letter-spacing:.42em; text-transform:uppercase; color:var(--mid); margin-bottom:30px; }
 thorne-gallery .hero h1{ font-weight:300; font-size:clamp(42px,6vw,84px); line-height:1.02; letter-spacing:-.025em; max-width:14em; margin:0 auto; }
