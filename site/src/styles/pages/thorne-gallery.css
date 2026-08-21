@@ -14,8 +14,8 @@ thorne-gallery .cta-link{ display:inline-block; padding:6px 0 8px; }
 thorne-gallery .cta-link span{ display:inline-block; transition:transform .3s ease; }
 thorne-gallery .cta-link:hover span{ transform:translateX(6px); }
 thorne-gallery .shell{ width:100%; max-width:var(--max); margin:0 auto; padding:0 var(--pad); }
-/* widescreen: half gutters for the projects content */
-@media (min-width:1001px){ thorne-gallery .shell{ padding-left:calc(var(--pad)/2); padding-right:calc(var(--pad)/2); } }
+/* widescreen: quarter gutters for the projects content */
+@media (min-width:1001px){ thorne-gallery .shell{ padding-left:calc(var(--pad)/4); padding-right:calc(var(--pad)/4); } }
 thorne-gallery .hero{ text-align:center; padding:110px var(--pad) 84px; }
 thorne-gallery .hero .eyebrow{ display:block; font-size:14px; letter-spacing:.42em; text-transform:uppercase; color:var(--mid); margin-bottom:30px; }
 thorne-gallery .hero h1{ font-weight:300; font-size:clamp(42px,6vw,84px); line-height:1.02; letter-spacing:-.025em; max-width:14em; margin:0 auto; }
@@ -188,6 +188,11 @@ thorne-gallery .covers{ display:grid; grid-template-columns:1fr 1fr; gap:44px 28
 thorne-gallery .card{ cursor:pointer; }
 thorne-gallery .card .pic{ aspect-ratio:4/3; overflow:hidden; background:var(--tint); }
 thorne-gallery .card .pic img{ width:100%; height:100%; object-fit:cover; object-position:center 35%; transition:transform .5s ease; }
+/* widescreen: cards widen with the quarter gutters but the preview keeps the
+   height it had at full gutters ((shell - pad - column gap)/2 at 4:3) */
+@media (min-width:1001px){
+  thorne-gallery .card .pic{ aspect-ratio:auto; height:calc((min(var(--max),100vw) - var(--pad) - 28px)*0.375); }
+}
 thorne-gallery .card:hover .pic img,thorne-gallery .card:focus-visible .pic img{ transform:scale(1.04); }
 thorne-gallery .card:focus-visible{ outline:1px solid var(--wg); outline-offset:6px; }
 thorne-gallery .card-row{ display:flex; align-items:baseline; gap:16px; padding:18px 0 0; }
@@ -280,7 +285,7 @@ thorne-gallery .g-strip2 a{border-bottom:1px solid rgba(250,249,246,.6);padding-
 
 /* featured project header under the hero */
 thorne-gallery .feat{ margin:26px 0 44px; }
-@media (min-width:1001px){ thorne-gallery .feat{ margin-left:calc(var(--pad)/-2); margin-right:calc(var(--pad)/-2); } }
+@media (min-width:1001px){ thorne-gallery .feat{ margin-left:calc(var(--pad)/-4); margin-right:calc(var(--pad)/-4); } }
 thorne-gallery .feat-card{ position:relative; display:block; width:100%; border:0; cursor:pointer; background:#393533; overflow:hidden; text-align:left; padding:0; color:#FAF9F6; font-family:var(--f); }
 thorne-gallery .feat-frame{ display:block; position:relative; aspect-ratio:16/9; overflow:hidden; background:#393533; }
 thorne-gallery .feat-lay{ position:absolute; inset:0; display:flex; justify-content:center; gap:10px; background:#FAF9F6; transition:opacity .9s ease; }
@@ -288,3 +293,6 @@ thorne-gallery .feat-lay.feat-b{ opacity:0; }
 thorne-gallery .feat-lay .feat-one{ flex:1 1 100%; width:100%; height:100%; object-fit:cover; object-position:center 35%; display:block; }
 thorne-gallery .feat-lay .feat-cell{ flex:0 0 calc((100% - 10px)/2); height:100%; object-fit:cover; object-position:center; display:block; min-width:0; }
 @media(max-width:750px){ thorne-gallery .feat{ margin:8px 0 30px; } thorne-gallery .feat-frame{ aspect-ratio:16/10; } }
+/* widescreen: the featured slideshow keeps its width but drops a quarter of its
+   height (16:9 -> 64:27) so paired portraits read closer to square */
+@media (min-width:1001px){ thorne-gallery .feat-frame{ aspect-ratio:64/27; } }
