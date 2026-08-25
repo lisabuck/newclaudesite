@@ -1,0 +1,28 @@
+name: Fetch team profile photos
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the team profile photos as the pages deliver them
+        run: |
+          mkdir -p diagnostics/teamphotos
+          for id in \
+            b2375c_94cab1eab4734e5e8985d242180835f1 \
+            b2375c_2e352a4f12864992a65830214bc8aaf7 \
+            b2375c_6a68e61757b94727ae9c83051b78dd16 \
+            b2375c_f33c1c7091654b6cb8df1efcc8c3aec5 \
+            b2375c_e138e1f0149b4dad975e83cc3b65a731; do
+            short=$(echo "$id" | cut -c1-16)
+            curl -sSL --max-time 60 -o "diagnostics/teamphotos/${short}.jpg" \
+              "https://static.wixstatic.com/media/${id}~mv2.jpg/v1/fit/w_800,h_1000,q_85,enc_auto/${id}~mv2.jpg" || echo "FAILED $id"
+          done
+          ls -la diagnostics/teamphotos/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-teamphotos
+          git add diagnostics/teamphotos
+          git commit -m "Diagnostic copies of the team profile photos"
+          git push -f origin diag-teamphotos
