@@ -2,7 +2,8 @@
    The element scripts re-render their original markup (with dead "#" links),
    so this runs after them and rewires anchors by their visible text.
    Only anchors whose href is "#", empty, or a bare "/contact" are touched;
-   tel:, mailto: and full https:// links are left alone. */
+   tel:, mailto: and full https:// links are left alone.
+   v2: Facebook / LinkedIn / Instagram links open in a new tab. */
 (function () {
   'use strict';
 
@@ -66,6 +67,12 @@
     for (var i = 0; i < anchors.length; i++) {
       var a = anchors[i];
       var raw = a.getAttribute('href');
+      /* social links leave the site, so they open in a new tab */
+      if (raw && /^https:\/\/(www\.)?(facebook|linkedin|instagram)\.com\//.test(raw)) {
+        a.setAttribute('target', '_blank');
+        a.setAttribute('rel', 'noopener');
+        continue;
+      }
       /* team profile pages still live on the current Wix site */
       if (raw && raw.indexOf('/our-team/') === 0) {
         a.setAttribute('href', 'https://www.thornegroup.co.nz' + raw);
