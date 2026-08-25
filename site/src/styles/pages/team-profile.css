@@ -3,8 +3,11 @@
 .tg-profile *{ box-sizing:border-box; }
 .tg-profile img{ max-width:100%; display:block; }
 .tg-profile .tp-shell{ max-width:1280px; margin:0 auto; padding:140px var(--pad) 0; }
+.tg-profile .tp-nav{ display:flex; justify-content:space-between; align-items:baseline; gap:14px 28px; flex-wrap:wrap; }
 .tg-profile .tp-back{ display:inline-block; font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; color:#7a746e; text-decoration:none; border-bottom:1px solid #c8c3bb; padding-bottom:4px; }
 .tg-profile .tp-back:hover{ color:#393533; border-bottom-color:#393533; }
+.tg-profile .tp-next{ display:inline-block; font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; color:#7a746e; text-decoration:none; border-bottom:1px solid #c8c3bb; padding-bottom:4px; }
+.tg-profile .tp-next:hover{ color:#393533; border-bottom-color:#393533; }
 .tg-profile .tp-grid{ display:grid; grid-template-columns:minmax(0,5fr) minmax(0,7fr); gap:clamp(40px,6vw,88px); align-items:start; margin-top:44px; }
 .tg-profile .tp-photo{ position:relative; height:0; padding-bottom:125%; overflow:hidden; background:#F2F0ED; }
 .tg-profile .tp-photo img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center 20%; }
