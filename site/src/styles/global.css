@@ -69,3 +69,8 @@ img, video { max-width: 100%; }
 @media(max-width:750px){ .tg-badge{ height:72px !important; } .tg-marquee>div{ gap:26px !important; padding-right:26px !important; } }
 @media(max-width:430px){ .tg-badge{ height:62px !important; } }
 @media(prefers-reduced-motion:reduce){ .tg-marquee{ animation:none !important; } }
+
+/* the footer award banner hugs the contact box and trust line more tightly
+   (per Lisa) - the home page's own mid-page banner keeps its spacing */
+.tg-badges:has(+ .tg-foot, + footer){ padding:20px 0 !important; margin-top:-30px; margin-bottom:-30px; }
+@media(max-width:750px){ .tg-badges:has(+ .tg-foot, + footer){ margin-top:-22px; margin-bottom:-22px; } }
