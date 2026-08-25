@@ -1,0 +1,36 @@
+name: Fetch new master build badges
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  badges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the new award badge PNGs
+        run: |
+          mkdir -p diagnostics/newbadges
+          for id in \
+            b2375c_9220ce9953254abbb5d68e76027e5d07 \
+            b2375c_10b36686e3d146578870dfb4deb50f4b \
+            b2375c_bd3fa594e6f44deda8f3c6693e685636 \
+            b2375c_8af70fcceadc46509cce2cff568ffd3b \
+            b2375c_f672d5d2291f4ce386548e268aa911bc \
+            b2375c_0ff13e0e644440f8acac79fad27892a3 \
+            b2375c_c322442fd16845b19b5e6db4266ba6fa \
+            b2375c_d589b981db1a4041af90394e5e5e7105 \
+            b2375c_dfcdeed59631491aaa47594bfdb71472 \
+            b2375c_665dfee3b9fe4d378b0128ac0b7ef8c6 \
+            b2375c_6441b54831c944a39c0a3119a34609cb \
+            b2375c_cd2ddb43e608429caf2e6426c7ce5493 \
+            b2375c_9ea7a03bb2d14d89bd8f7fb482228648; do
+            short=$(echo "$id" | cut -c1-16)
+            curl -sSL --max-time 60 -o "diagnostics/newbadges/${short}.png" \
+              "https://static.wixstatic.com/media/${id}~mv2.png/v1/fit/w_500,h_500,q_90,enc_auto/${id}~mv2.png" || echo "FAILED $id"
+          done
+          ls -la diagnostics/newbadges/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-newbadges
+          git add diagnostics/newbadges
+          git commit -m "Diagnostic copies of the new award badges"
+          git push -f origin diag-newbadges
