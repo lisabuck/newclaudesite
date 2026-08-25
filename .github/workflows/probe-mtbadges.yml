@@ -1,0 +1,25 @@
+name: Fetch delivered Most Trusted badges
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  badges:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the Most Trusted badges exactly as the page serves them
+        run: |
+          mkdir -p diagnostics/mtbadges
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/9a5de73b.png" "https://static.wixstatic.com/media/b2375c_9a5de73ba7274435bef2b5b87eb9215b~mv2.png/v1/crop/x_1413,y_984,w_7160,h_6823/v1/fit/w_420,h_400,q_85,enc_auto/b2375c_9a5de73ba7274435bef2b5b87eb9215b~mv2.png" || echo "FAILED 9a5de73b"
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/255564a9.png" "https://static.wixstatic.com/media/b2375c_255564a965944c63978ac2372dbf2c3b~mv2.png" || echo "FAILED 255564a9"
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/f0613e5d.png" "https://static.wixstatic.com/media/b2375c_f0613e5ddc6a4800b1ceb4282a0d8f73~mv2.png" || echo "FAILED f0613e5d"
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/7427a4e6.png" "https://static.wixstatic.com/media/b2375c_7427a4e688c24769bb8bc738412a9286~mv2.png" || echo "FAILED 7427a4e6"
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/f57bb793.png" "https://static.wixstatic.com/media/b2375c_f57bb793acdf41559a700e61c1de773c~mv2.png" || echo "FAILED f57bb793"
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/dbcdade7.png" "https://static.wixstatic.com/media/b2375c_dbcdade7477649ea82cd56d37965ae2f~mv2.png" || echo "FAILED dbcdade7"
+          curl -sSL --max-time 60 -o "diagnostics/mtbadges/5f45418d.png" "https://static.wixstatic.com/media/b2375c_5f45418dea224e1d80516fde55aa08ae~mv2.png/v1/crop/x_25,y_201,w_1021,h_822/v1/fit/w_520,h_420,q_85,enc_auto/b2375c_5f45418dea224e1d80516fde55aa08ae~mv2.png" || echo "FAILED 5f45418d"
+          ls -la diagnostics/mtbadges/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-mtbadges
+          git add diagnostics/mtbadges
+          git commit -m "Diagnostic copies of the delivered Most Trusted badges"
+          git push -f origin diag-mtbadges
