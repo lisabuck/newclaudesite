@@ -210,18 +210,15 @@ thorne-testimonials .voices.tg-collapsed .card-grid .t-card:nth-child(n+10){ dis
 thorne-testimonials .tg-showall{ display:block; margin:30px auto 0; font-family:inherit; font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; background:#393533; color:#FAF9F6; border:0; padding:18px 40px; cursor:pointer; }
 thorne-testimonials .tg-showall:hover{ opacity:.88; }
 
-/* every box lines up: a strict grid with equal-height rows (per Lisa);
-   videos stretch to fill their box so rows stay flush */
+/* every box lines up square (per Lisa): a strict grid where each card and
+   video wants a 1:1 box; a row only grows past square when a testimonial's
+   content needs the room (e.g. expanded), and the whole row grows together */
 thorne-testimonials .card-grid{ display:grid; column-count:auto; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; align-items:stretch; }
-thorne-testimonials .card-grid .t-card{ display:flex; width:auto; margin:0; }
-thorne-testimonials .card-grid .v-item{ display:flex; flex-direction:column; min-height:0; }
-thorne-testimonials .card-grid .v-item video{ flex:1; height:100%; min-height:360px; aspect-ratio:auto; object-fit:cover; }
+thorne-testimonials .card-grid .t-card{ display:flex; width:auto; margin:0; aspect-ratio:1/1; }
+thorne-testimonials .card-grid .v-item{ display:flex; flex-direction:column; min-height:0; aspect-ratio:1/1; }
+thorne-testimonials .card-grid .v-item video{ flex:1; height:100%; min-height:0; aspect-ratio:auto; object-fit:cover; }
 @media(max-width:1024px){ thorne-testimonials .card-grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media(max-width:750px){
-  thorne-testimonials .card-grid{ grid-template-columns:1fr; }
-  /* single column: each video shows at its natural square, no row to match */
-  thorne-testimonials .card-grid .v-item video{ flex:none; height:auto; min-height:0; aspect-ratio:1/1; }
-}
+@media(max-width:750px){ thorne-testimonials .card-grid{ grid-template-columns:1fr; } }
 
 /* independent reviews link under the testimonial list */
 thorne-testimonials .tg-morelink{ margin:34px 0 0; }
