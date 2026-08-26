@@ -6,7 +6,7 @@ jobs:
     steps:
       - name: HEAD each video URL variant
         run: |
-          for id in 2d7300_c560a684bb6243b681a77bea074e6b7e 2d7300_a07f6fc366ed4d9b96eaf379c1ec483d 2d7300_a1ae0b5df9e749af8fb59ecb594b62b6 2d7300_94e1f64339b044b793f7f6f49d583e4b b2375c_3a79bf6af0b142849d433120e26c273d b2375c_c1605eaf859c4845bc83b8ce65316cdb b2375c_cf236920ed4f45ecb584bc7cae45af24 b2375c_f55445e24e8046c1aac7644b0e9760c9; do
+          for id in 2d7300_57de4fa6f4c347d9be051b864eeb239a 2d7300_0941bdd5cb5947a9ac45a47b1a294214 2d7300_2050fec2bec64617997f8e0cbadd1d4b 2d7300_3edb608e7bfb4eed890a74fd954d986d 2d7300_c560a684bb6243b681a77bea074e6b7e 2d7300_a07f6fc366ed4d9b96eaf379c1ec483d 2d7300_a1ae0b5df9e749af8fb59ecb594b62b6 2d7300_94e1f64339b044b793f7f6f49d583e4b b2375c_3a79bf6af0b142849d433120e26c273d b2375c_c1605eaf859c4845bc83b8ce65316cdb b2375c_cf236920ed4f45ecb584bc7cae45af24 b2375c_f55445e24e8046c1aac7644b0e9760c9; do
             for res in 1080p 720p 480p; do
               code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "https://video.wixstatic.com/video/${id}/${res}/mp4/file.mp4")
               echo "RESULT ${id} ${res} ${code}"
