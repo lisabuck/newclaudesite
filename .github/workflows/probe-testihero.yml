@@ -1,0 +1,21 @@
+name: Fetch testimonials hero photo
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  photo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the testimonials hero photo at delivery size
+        run: |
+          mkdir -p diagnostics/testihero
+          id=b2375c_b957bc0c5287498b8943fe0cc9d51e19
+          curl -sSL --max-time 60 -o "diagnostics/testihero/hero.jpg" \
+            "https://static.wixstatic.com/media/${id}~mv2.jpg/v1/fit/w_1200,h_1200,q_85,enc_auto/${id}~mv2.jpg" || echo "FAILED $id"
+          ls -la diagnostics/testihero/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-testihero
+          git add diagnostics/testihero
+          git commit -m "Diagnostic copy of the testimonials hero photo"
+          git push -f origin diag-testihero
