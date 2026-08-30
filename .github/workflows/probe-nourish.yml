@@ -1,0 +1,23 @@
+name: Fetch Nourish article data
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  nourish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch the three Nourish articles via the WordPress JSON feed
+        run: |
+          mkdir -p diagnostics/nourish
+          for slug in rebuild-or-renovate-we-ask-thorne-group an-expansive-life-on-a-compact-site building-relationships-before-building-homes; do
+            curl -sSL --max-time 60 -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36" \
+              "https://nourishmagazine.co.nz/wp-json/wp/v2/posts?slug=${slug}&_fields=title,excerpt,jetpack_featured_media_url,link" \
+              -o "diagnostics/nourish/${slug}.json" || echo "FAILED $slug"
+            head -c 300 "diagnostics/nourish/${slug}.json"; echo
+          done
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-nourish
+          git add diagnostics/nourish
+          git commit -m "Diagnostic copies of the Nourish article data"
+          git push -f origin diag-nourish
