@@ -1,0 +1,146 @@
+name: Fetch inspiration thumbnails
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  thumbs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download small copies of every inspiration photo to measure aspect ratios
+        run: |
+          mkdir -p diagnostics/inspothumbs
+          for f in \
+            b2375c_93e99626c86d48fcb2602e553e8506e2~mv2.jpg \
+            b2375c_fffe106f4dc840279b5b5666a8208921~mv2.jpg \
+            b2375c_efd20b4c21f34d4fa326ba8467483557~mv2.jpg \
+            b2375c_0641290a02ad4627a1234e7f2de8dbd6~mv2.jpg \
+            b2375c_17cb0371c85f47b890b95162f422390b~mv2.jpg \
+            b2375c_651ecfa9dbb84e67be7ff5f4a77e2a89~mv2.jpg \
+            b2375c_21ef023ea83b4d93b97d98eb880b9773~mv2.jpg \
+            b2375c_746a348c458a47b8938697c77f389aa3~mv2.jpg \
+            b2375c_83a4097cba7b4eef939040a91e2e4e78~mv2.jpg \
+            b2375c_e58c85c21261421aab729833c2295143~mv2.jpg \
+            b2375c_86717c20221d4974aa03b03ccd08db1f~mv2.jpg \
+            b2375c_b4389652324e44968c8007655ae8fb61~mv2.jpg \
+            b2375c_c47ebecdf08a4aefb24bd323ee85680d~mv2.jpg \
+            b2375c_f3154e14443545b8b1f5507701cee568~mv2.jpg \
+            b2375c_05f346de397a4f09960a89bacb479949~mv2.jpg \
+            b2375c_5dd46f20e11a45a099540f21a12a8028~mv2.jpg \
+            b2375c_73975807a49041d5b100153ef0b8984a~mv2.jpg \
+            b2375c_a4833ad8c7d144548aad2163cf977a0c~mv2.jpg \
+            b2375c_32a6cd1603924c50a5104f41dc67cb07~mv2.jpg \
+            b2375c_c0ff1fa55d6440b6a296889b8823f8b8~mv2.jpg \
+            b2375c_cdae597c6dd04cfe9c821225a85a9477~mv2.jpg \
+            b2375c_ae3b2962f53a4ed09e6374fea134c69a~mv2.jpg \
+            b2375c_bb2c620827a94534bb079509efb60edc~mv2.jpg \
+            b2375c_e9976799b04f43f786b169743d64df26~mv2.jpg \
+            b2375c_7cd86d36b5564fe8b608d277e8018fa3~mv2.jpg \
+            b2375c_745c8c057e0c4c7b9f0ef7e1963e5677~mv2.jpg \
+            b2375c_6f90a1e7b6044d73af903335c5814cf7~mv2.jpg \
+            b2375c_4ab4dea1e9ae4d2f8c7193ee997318b6~mv2.gif \
+            b2375c_e76899d9875945b29d82d9e9a9c0d787~mv2.jpg \
+            b2375c_0c6929c6bfd342e09eda2b58face6d9f~mv2.jpg \
+            b2375c_0580775bf6d4448c95a65af6111e4be9~mv2.jpg \
+            b2375c_6a17241412194563b97d8e8830dcfb44~mv2.jpg \
+            b2375c_967b9fc237b444739b9f3332321a0ab3~mv2.jpg \
+            b2375c_4ba2755b449a4d589ebb102edce48428~mv2.jpg \
+            b2375c_59821a40d7324acaa684c081e32eaa55~mv2.jpg \
+            b2375c_fcfb822e392d4b23b14c95bef61a6133~mv2.jpg \
+            b2375c_ff9de4103a84443a85cb3dfea8e40cbf~mv2.jpg \
+            b2375c_55ccecb353a64d32901747dc2b7ab56b~mv2.jpg \
+            b2375c_7f4bf022489f4eb4b7b480183af4380a~mv2.jpg \
+            b2375c_dff97d4bb77549f1a05624e02793924f~mv2.jpg \
+            b2375c_c2da7fdeb8f441b2ad11cc1c994605c5~mv2.jpg \
+            b2375c_73535edeb10949c28dc699ce86a8bed9~mv2.jpg \
+            b2375c_96e37f61e4cf4bfd8de29e99ee91bd37~mv2.jpg \
+            b2375c_18c3875c7aee4477b42e73588c872c19~mv2.jpg \
+            b2375c_d3041ab7a3a64123930eea3cc0e28355~mv2.jpg \
+            b2375c_9273fccd93b749ea90aef186eac070fe~mv2.jpg \
+            b2375c_f9a1ce4f26604c15afb60e7420572e31~mv2.jpg \
+            b2375c_2d1c8701490e46b7b2345a4cffc27024~mv2.jpg \
+            b2375c_bb0a76dbed2c4d16b6ed4afa685d54e7~mv2.jpg \
+            b2375c_f574c978d24f46979fd8ad50e819a3ff~mv2.jpg \
+            b2375c_9aaab16307354d79ba467e55b930ab5c~mv2.jpg \
+            b2375c_0c11db81419c427e9466d33382715e48~mv2.jpg \
+            b2375c_b59ef5ce6775470c8105b9bf28291b41~mv2.jpg \
+            b2375c_7e52e4ab6d624e42b8bc54a7f832d551~mv2.jpg \
+            b2375c_b93e690c5c2e4afeb5a8accb50c48d62~mv2.jpg \
+            b2375c_370f212303e94772b2c88f9401a17784~mv2.jpg \
+            b2375c_f3a73c9c22924bad871ad587268a7fc4~mv2.jpg \
+            b2375c_66dc17ac110040ee90213d7fce9ccb18~mv2.jpg \
+            b2375c_7d46a35a46b94b73b13c4ced89114c0f~mv2.jpg \
+            b2375c_bcb7302f65584046a1be1874cfa75520~mv2.jpg \
+            b2375c_49991ca98b134f38867c018ab4ad1476~mv2.jpg \
+            b2375c_cba9bb63594f4b35981af06bcd940ba2~mv2.jpg \
+            b2375c_b8204d1204744d558414572517965403~mv2.jpg \
+            b2375c_b4186c06002e4046834ba2c25f379eff~mv2.jpg \
+            b2375c_7d1b5ad1edab460f99d9e74093126a3c~mv2.jpg \
+            b2375c_b246622950be4d338c3680a27cf17ccf~mv2.jpg \
+            b2375c_a15c6ea3bffc41ff8db3c6d28fd61491~mv2.jpg \
+            b2375c_bb08d38e9d324263a1d917e441228b08~mv2.jpg \
+            b2375c_b08c81bdb2a649e98359a34605d5c72e~mv2.jpg \
+            b2375c_c60593b68f6144ca8b5d0527614016c3~mv2.jpg \
+            b2375c_e13b1d5152024e358543fbc96ea6c2ff~mv2.jpg \
+            b2375c_b94561363e0f44e484078a28ca506196~mv2.jpg \
+            b2375c_f890a04c03c4406697d70a54ce1b7625~mv2.jpg \
+            b2375c_7387837f2f7146ae8c627275cf17d26f~mv2.jpg \
+            b2375c_db28c8b974a94df4882096befd1cca17~mv2.jpg \
+            b2375c_e4cef35687a3485a8d9d1235360e9f64~mv2.jpg \
+            b2375c_389a0c4807da45979a4fc7b4b2d3d1ed~mv2.jpg \
+            b2375c_12a58db866004ab3b394586ae7596f65~mv2.jpg \
+            b2375c_c8ee2609fcd94389959c440b8cbe73ed~mv2.jpg \
+            b2375c_8a476afd4e764d00b1ba7fe0f9ca1df3~mv2.jpg \
+            b2375c_84ac34988dee42428c0edf37d3b11710~mv2.jpg \
+            b2375c_f19e687a492446cf96fb893da90e3a97~mv2.jpg \
+            b2375c_48558aa8aea44dcbbb5478e2b65248e2~mv2.jpg \
+            b2375c_edad375579354951a210efb36adc33a7~mv2.jpg \
+            b2375c_3a8c5d6a802242cd9114fc2a8600bdfe~mv2.jpg \
+            b2375c_0bc86de34e3143f4a2bf7136c0ad68b3~mv2.jpg \
+            b2375c_ad75be9e4cd34bfa8a5703bc65ca71e4~mv2.jpg \
+            b2375c_e3d6b769195b4ec79726b04d180308e2~mv2.jpg \
+            b2375c_b48e1418a1264d9986983c99882264f2~mv2.jpg \
+            b2375c_c425991232e5401c8985a3624028f29f~mv2.jpg \
+            b2375c_edcda05d70c14dd08ae93ab543ab8735~mv2.jpg \
+            b2375c_45586ebd65b34472847e387f61b2ee23~mv2.jpg \
+            b2375c_74a3e8dcf298416f9d128666d5e9bb6d~mv2.jpg \
+            b2375c_fa69c6e50ffb444ba666c01f3507bbbe~mv2.jpg \
+            b2375c_e865e819f17c4a3b9c0cffeaa60bae6b~mv2.jpg \
+            b2375c_542b5acbed4c488bbec42533a55273d3~mv2.jpg \
+            b2375c_7626a6708e9846a78c81ff26771a6a47~mv2.jpg \
+            b2375c_5718c48df8b14becb23a48fbf0be0a66~mv2.jpg \
+            b2375c_01b290d21f8944c9b91f0fde81133eb1~mv2.jpeg \
+            b2375c_bed709fa297e4e10af01f3aaec89fd32~mv2.jpg \
+            b2375c_8890868336834c1ea1ed7ef53ec7dccd~mv2.jpg \
+            b2375c_350532e1275a424c95206beed31942d2~mv2.jpg \
+            b2375c_dee84d66de4d44aeadcd3ca24c9594dc~mv2.jpg \
+            b2375c_55ab2b4e8d5e41f686c40db145387e95~mv2.jpg \
+            b2375c_664c6fe60e934f10b7e1396936916e6f~mv2.jpg \
+            b2375c_0d804b14b8044611aca0f78f63150aa0~mv2.jpg \
+            b2375c_4e34bf212f914f08bb02d1287044cd98~mv2.jpg \
+            b2375c_bd72ffa4017b44bb98bab56a37b9291c~mv2.jpg \
+            b2375c_5f6787cb44a540d68c317ce33a2ef9ae~mv2.jpg \
+            b2375c_b6d497534ac9498ea0968266ea77a52c~mv2.jpg \
+            b2375c_dd37231036314fa7a82eebfec5947fbb~mv2.jpg \
+            b2375c_9865a7c447cf42dbb53775d376acedae~mv2.jpg \
+            b2375c_d11bbfc6be27483d8b4b9c1b600f24a5~mv2.jpg \
+            b2375c_ccce882d09c14e65b0426db9b9e788a8~mv2.jpg \
+            b2375c_6bf8e41e8438488dbb26113849321afe~mv2.jpg \
+            b2375c_7f01b1caa598478cb98660efb02a6a4a~mv2.jpg \
+            b2375c_38455492530e45b389a6b33e38bbd47d~mv2.jpg \
+            b2375c_c97d38f225314f44ac8ca4f91ccae283~mv2.jpg \
+            b2375c_6385ba1d74c040048217d05a22f81b7f~mv2.jpg \
+            b2375c_68faa66e85354254bbb6137584b91cd3~mv2.jpg \
+            b2375c_e1ea3cc1eba74ce6b9c7d512d9d27eb6~mv2.jpg \
+            b2375c_76762acc6c4e4c97908662aeb5830614~mv2.jpg; do
+            short=$(echo "$f" | cut -c8-23)
+            ext="${f##*.}"
+            curl -sSL --max-time 60 -o "diagnostics/inspothumbs/${short}.${ext}" \
+              "https://static.wixstatic.com/media/${f}/v1/fit/w_120,h_120,q_80,enc_auto/t.${ext}" || echo "FAILED $f"
+          done
+          ls diagnostics/inspothumbs/ | wc -l
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-inspothumbs
+          git add diagnostics/inspothumbs
+          git commit -m "Diagnostic thumbnails of the inspiration photos"
+          git push -f origin diag-inspothumbs
