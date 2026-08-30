@@ -132,7 +132,8 @@ jobs:
             b2375c_6385ba1d74c040048217d05a22f81b7f~mv2.jpg \
             b2375c_68faa66e85354254bbb6137584b91cd3~mv2.jpg \
             b2375c_e1ea3cc1eba74ce6b9c7d512d9d27eb6~mv2.jpg \
-            b2375c_76762acc6c4e4c97908662aeb5830614~mv2.jpg; do
+            b2375c_76762acc6c4e4c97908662aeb5830614~mv2.jpg \
+            b2375c_aecb19fc24f9447d9c0af8f3a8cc6dda~mv2.jpg; do
             short=$(echo "$f" | cut -c8-23)
             ext="${f##*.}"
             curl -sSL --max-time 60 -o "diagnostics/inspothumbs/${short}.${ext}" \
