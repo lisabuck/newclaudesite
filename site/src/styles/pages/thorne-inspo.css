@@ -7,7 +7,7 @@
 .tg-inspo{ display:block; background:#FAF9F6; color:#393533; font-family:'Metric','Helvetica Neue',Helvetica,Arial,sans-serif; font-weight:400; -webkit-font-smoothing:antialiased; --pad:56px; }
 .tg-inspo *{ box-sizing:border-box; }
 .tg-inspo img{ max-width:100%; display:block; }
-.tg-inspo .in-shell{ max-width:1280px; margin:0 auto; padding:140px var(--pad) 0; }
+.tg-inspo .in-shell{ max-width:1280px; margin:0 auto; padding:140px calc(var(--pad)/2) 0; }
 .tg-inspo .in-back{ display:inline-block; font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; color:#7a746e; text-decoration:none; border-bottom:1px solid #c8c3bb; padding-bottom:4px; }
 .tg-inspo .in-back:hover{ color:#393533; border-bottom-color:#393533; }
 .tg-inspo .in-kick{ display:block; margin-top:44px; font-size:14px; font-weight:400; letter-spacing:.26em; text-transform:uppercase; color:#7a746e; }
