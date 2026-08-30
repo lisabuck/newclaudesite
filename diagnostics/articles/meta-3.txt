@@ -1,0 +1,8 @@
+URL: https://www.abodemagazine.co.nz/home/2025/10/29/refreshed-memories
+<title>Refreshed memories &mdash; Abode Magazine
+property="og:title" content="Refreshed memories &mdash; Abode Magazine"
+property="og:description" content="Thoughtful design by Herriot Melhuish O’Neill Architects honours a bygone bach on a Bay of Plenty beachfront."
+name="description" content=" Thoughtful design by Herriot Melhuish O’Neill Architects honours a bygone bach on a Bay of Plenty beachfront. "
+property="og:image" content="http://static1.squarespace.com/static/577e099a5016e18715ddc511/577e0aaeff7c5018d6ee8a94/69016a456778621ac49a515e/1762709443075/H11.jpg?format=1500w"
+IMG: http://static1.squarespace.com/static/577e099a5016e18715ddc511/577e0aaeff7c5018d6ee8a94/69016a456778621ac49a515e/1762709443075/H11.jpg?format=1500w
+diagnostics/articles/img-3: RIFF (little-endian) data, Web/P image

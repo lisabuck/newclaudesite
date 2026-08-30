@@ -1,0 +1,8 @@
+URL: https://homestyle.co.nz/home-by-thorne-group-and-gezellig-interiors/
+<title>homestyle | New Mt Maunganui home by Thorne Group &amp; Gezellig Interiors
+property="og:title" content="A striking yet homely abode by Thorne Group and Gezellig Interiors"
+property="og:description" content="With a sophisticated mid-century influence, it&#039;s a very, very, very fine house, but to the people who live here, it simply feels like home."
+name="description" content="With a sophisticated mid-century influence, it&#039;s a very, very, very fine house, but to the people who live here, it simply feels like home."
+property="og:image" content="https://homestyle.co.nz/wp-content/uploads/Homestyle_OceanBeach_0479_RT_CMYK.jpg"
+IMG: https://homestyle.co.nz/wp-content/uploads/Homestyle_OceanBeach_0479_RT_CMYK.jpg
+diagnostics/articles/img-2: JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, progressive, precision 8, 940x1409, components 3

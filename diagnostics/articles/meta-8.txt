@@ -1,0 +1,7 @@
+URL: https://www.sunlive.co.nz/news/281881-locally-owned-and-winning.html
+<title>SunLive - Locally owned and winning - The Bay's News First
+property="og:description" content="Locally owned and winning"
+name="description" content=""
+property="og:image" content="https://cdn.sunlive.co.nz/images/sunlive/Thorne-Group-2148-CSs.jpg"
+IMG: https://cdn.sunlive.co.nz/images/sunlive/Thorne-Group-2148-CSs.jpg
+diagnostics/articles/img-8: JPEG image data, JFIF standard 1.01, aspect ratio, density 1x1, segment length 16, baseline, precision 8, 685x457, components 3

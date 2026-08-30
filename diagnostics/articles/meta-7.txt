@@ -1,0 +1,7 @@
+URL: https://www.sunlive.co.nz/news/281905-bop-businesses-clean-up-at-awards.html
+<title>SunLive - BOP businesses clean up at awards - The Bay's News First
+property="og:description" content="BOP businesses clean up at awards"
+name="description" content=""
+property="og:image" content="https://cdn.sunlive.co.nz/images/sunlive/Barrett-Homes-2148-001.jpg"
+IMG: https://cdn.sunlive.co.nz/images/sunlive/Barrett-Homes-2148-001.jpg
+diagnostics/articles/img-7: JPEG image data, Exif standard: [TIFF image data, little-endian, direntries=1, copyright=j.joe.94@outlook.com], progressive, precision 8, 685x457, components 3
