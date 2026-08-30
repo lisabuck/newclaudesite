@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-articles.html?raw';
+import '../../styles/pages/thorne-articles.css';
+---
+<Base
+  title="In the News | Thorne Group"
+  description="Press coverage of Thorne Group: magazine features on our homes and renovations, interviews and award news from Tauranga and the Bay of Plenty."
+>
+  <div class="tg-articles" set:html={body}></div>
+</Base>
