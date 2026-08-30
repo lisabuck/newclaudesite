@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-inspo-outdoor-entertaining.html?raw';
+import '../../styles/pages/thorne-inspo.css';
+---
+<Base
+  title="Outdoor Entertaining Inspiration | Thorne Group"
+  description="Outdoor entertaining inspiration from Thorne Group homes. Ideas for outdoor rooms, fireplaces, louvres and covered living areas."
+>
+  <div class="tg-inspo" set:html={body}></div>
+</Base>

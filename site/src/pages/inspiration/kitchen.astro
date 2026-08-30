@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-inspo-kitchen.html?raw';
+import '../../styles/pages/thorne-inspo.css';
+---
+<Base
+  title="Kitchen Inspiration | Thorne Group"
+  description="Kitchen inspiration from Thorne Group homes across Tauranga and the Bay of Plenty. Ideas for layouts, joinery, sculleries and finishes."
+>
+  <div class="tg-inspo" set:html={body}></div>
+</Base>

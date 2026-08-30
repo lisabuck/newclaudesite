@@ -1,0 +1,11 @@
+---
+import Base from '../../layouts/Base.astro';
+import body from '../../html/thorne-inspo-built-in-furniture.html?raw';
+import '../../styles/pages/thorne-inspo.css';
+---
+<Base
+  title="Built in Furniture Inspiration | Thorne Group"
+  description="Built in furniture inspiration from Thorne Group homes. Ideas for window seats, wardrobes, shelving, desks and custom joinery."
+>
+  <div class="tg-inspo" set:html={body}></div>
+</Base>
