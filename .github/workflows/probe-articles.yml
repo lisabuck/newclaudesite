@@ -1,0 +1,52 @@
+name: Fetch article metadata
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  articles:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch each article page's title, description and picture
+        run: |
+          mkdir -p diagnostics/articles
+          i=0
+          fetch() {
+            i=$((i+1))
+            url="$1"
+            html=$(curl -sSL --max-time 60 -A "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36" "$url" || echo "")
+            {
+              echo "URL: $url"
+              echo "$html" | tr '\n' ' ' | grep -o '<title>[^<]*' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'property="og:title"[^>]*content="[^"]*"' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'content="[^"]*"[^>]*property="og:title"' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'property="og:description"[^>]*content="[^"]*"' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'content="[^"]*"[^>]*property="og:description"' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'name="description"[^>]*content="[^"]*"' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'property="og:image"[^>]*content="[^"]*"' | head -1
+              echo "$html" | tr '\n' ' ' | grep -o 'content="[^"]*"[^>]*property="og:image"' | head -1
+            } > "diagnostics/articles/meta-$i.txt"
+            img=$(grep -o 'og:image[^>]*content="[^"]*"' "diagnostics/articles/meta-$i.txt" | grep -o 'content="[^"]*"' | head -1 | sed 's/content="//;s/"$//')
+            if [ -z "$img" ]; then
+              img=$(grep -o 'content="[^"]*"[^>]*property="og:image"' "diagnostics/articles/meta-$i.txt" | grep -o 'content="[^"]*"' | head -1 | sed 's/content="//;s/"$//')
+            fi
+            echo "IMG: $img" >> "diagnostics/articles/meta-$i.txt"
+            if [ -n "$img" ]; then
+              curl -sSL --max-time 60 -A "Mozilla/5.0" -o "diagnostics/articles/img-$i" "$img" || echo "IMG FAILED" >> "diagnostics/articles/meta-$i.txt"
+              file "diagnostics/articles/img-$i" >> "diagnostics/articles/meta-$i.txt" || true
+            fi
+          }
+          fetch "https://nourishmagazine.co.nz/rebuild-or-renovate-we-ask-thorne-group/"
+          fetch "https://homestyle.co.nz/home-by-thorne-group-and-gezellig-interiors/"
+          fetch "https://www.abodemagazine.co.nz/home/2025/10/29/refreshed-memories"
+          fetch "https://nourishmagazine.co.nz/an-expansive-life-on-a-compact-site/"
+          fetch "https://archipro.co.nz/project/pukehina-house-herriot-melhuish-oneill-architects-ltd"
+          fetch "https://nourishmagazine.co.nz/building-relationships-before-building-homes/"
+          fetch "https://www.sunlive.co.nz/news/281905-bop-businesses-clean-up-at-awards.html"
+          fetch "https://www.sunlive.co.nz/news/281881-locally-owned-and-winning.html"
+          ls -la diagnostics/articles/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-articles
+          git add diagnostics/articles
+          git commit -m "Diagnostic copies of the press article metadata and pictures"
+          git push -f origin diag-articles
