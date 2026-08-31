@@ -1,0 +1,32 @@
+name: Fetch partner logos
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  logos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the About page partner logos
+        run: |
+          mkdir -p diagnostics/partnerlogos
+          for f in \
+            b2375c_03a6d1bb3482470a9b12811781c97b7c~mv2.png \
+            b2375c_e1f4edda4b4a4ddfa812528a73fcdd1c~mv2.png \
+            b2375c_3cbe6b85f92847b6a4e75cb97349b10b~mv2.jpg \
+            b2375c_d8d74e4d040f46ed947909ff907a8a1e~mv2.jpg \
+            b2375c_b451e2f368b54896b1a760e4e34b12b9~mv2.jpg \
+            b2375c_e91a5f827c79400b87dd23b8be523b2b~mv2.jpg \
+            b2375c_a5be84c4d2464775a91dab5183f3268c~mv2.jpg \
+            b2375c_6766175073124cbe8153708099590503~mv2.jpg; do
+            short=$(echo "$f" | cut -c8-15)
+            ext="${f##*.}"
+            curl -sSL --max-time 60 -o "diagnostics/partnerlogos/${short}.${ext}" \
+              "https://static.wixstatic.com/media/${f}/v1/fit/w_300,h_300,q_85,enc_auto/l.${ext}" || echo "FAILED $f"
+          done
+          ls -la diagnostics/partnerlogos/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-partnerlogos
+          git add diagnostics/partnerlogos
+          git commit -m "Diagnostic copies of the partner logos"
+          git push -f origin diag-partnerlogos
