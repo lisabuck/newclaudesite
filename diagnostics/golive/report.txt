@@ -1,0 +1,12 @@
+PAGE / status=200 robots=[none] title=[Most Trusted Architectural Builder Tauranga | Thorne Group]
+PAGE /projects status=200 robots=[none] title=[Architect Designed Homes | Tauranga | Thorne Group]
+PAGE /about status=200 robots=[none] title=[About Thorne Group | Architectural Builders | Tauranga]
+PAGE /contact status=200 robots=[none] title=[Contact | Thorne Group]
+PAGE /about/articles status=200 robots=[none] title=[In the News | Thorne Group]
+PAGE /inspiration/kitchen status=200 robots=[none] title=[Kitchen Inspiration | Thorne Group]
+PAGE /no-such-page-check status=404 robots=[none] title=[Page Not Found | Thorne Group]
+REDIRECT /thewhy 301 -> https://www.thornegroup.co.nz/about
+REDIRECT /portfolio/country-home 404 -> 
+REDIRECT /gallery/oceanbeach-road 404 -> 
+REDIRECT /post/anything 404 -> 
+APEX / 301 -> https://www.thornegroup.co.nz/
