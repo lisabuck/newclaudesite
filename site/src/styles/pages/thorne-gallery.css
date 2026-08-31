@@ -64,7 +64,7 @@ thorne-gallery .g-lead{ display:block; max-width:17em; font-weight:300; font-siz
 thorne-gallery .g-strip2{ position:absolute; left:var(--pad); right:var(--pad); bottom:var(--hero-bot); display:flex; align-items:center; gap:22px; color:#FAF9F6; font-size:15px; font-weight:400; letter-spacing:.28em; text-transform:uppercase; flex-wrap:wrap; }
 thorne-gallery .g-strip2 .g-sep{ opacity:.55; }
 thorne-gallery .g-svc-lb{ flex-basis:100%; font-size:14px; letter-spacing:.3em; opacity:.75; margin-bottom:2px; }
-@keyframes gFade{ 0%{opacity:0} 3.3%{opacity:1} 20%{opacity:1} 26.7%{opacity:0} 100%{opacity:0} }
+@keyframes gFade{ 0%{opacity:0} .5%{opacity:1} 26.7%{opacity:1} 27.7%{opacity:0} 100%{opacity:0} }
 thorne-gallery .fp-head{ text-align:center; padding:80px 24px 0; }
 thorne-gallery .fp-head h2{ font-weight:300; font-size:clamp(30px,3.4vw,46px); letter-spacing:-.025em; color:#393533; }
 thorne-gallery .svc-links{ display:flex; gap:18px; justify-content:center; align-items:center; margin-top:20px; }

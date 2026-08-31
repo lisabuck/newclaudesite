@@ -10,9 +10,9 @@ thorne-why-tabs a { color:var(--wg); text-decoration:none; }
 thorne-why-tabs a:hover { color:var(--mid); }
 thorne-why-tabs strong { font-weight:500; }
 thorne-why-tabs h1,thorne-why-tabs h2,thorne-why-tabs h3,thorne-why-tabs p { margin:0; }
-@keyframes tgSlide6 { 0%{opacity:0} 2.8%{opacity:1} 16.7%{opacity:1} 19.5%{opacity:0} 100%{opacity:0} }
-@keyframes tgSlide8 { 0%{opacity:0} 1.8%{opacity:1} 12.5%{opacity:1} 14.3%{opacity:0} 100%{opacity:0} }
-@keyframes tgSlide5 { 0%{opacity:0} 3.3%{opacity:1} 20%{opacity:1} 23.3%{opacity:0} 100%{opacity:0} }
+@keyframes tgSlide6 { 0%{opacity:0} .5%{opacity:1} 19.5%{opacity:1} 20.5%{opacity:0} 100%{opacity:0} }
+@keyframes tgSlide8 { 0%{opacity:0} .5%{opacity:1} 14.3%{opacity:1} 15.3%{opacity:0} 100%{opacity:0} }
+@keyframes tgSlide5 { 0%{opacity:0} .5%{opacity:1} 23.3%{opacity:1} 24.3%{opacity:0} 100%{opacity:0} }
 @keyframes tgLogoCycle { 0%{opacity:0} 2.8%{opacity:1} 16.7%{opacity:1} 19.5%{opacity:0} 100%{opacity:0} }
 @keyframes tgLogoCycleVar { 0%{opacity:0} 1.4%{opacity:1} 8.35%{opacity:1} 9.75%{opacity:0} 100%{opacity:0} }
 
@@ -122,7 +122,7 @@ thorne-why-tabs .wh-hlead{line-height:1.15}
 thorne-why-tabs .wh-hero-kicker{letter-spacing:.22em!important;font-weight:500!important;text-shadow:0 1px 14px rgba(35,32,30,.5)!important}
 }
 
-@keyframes tgSlideWhy{0%{opacity:0}2.14%{opacity:1}14.29%{opacity:1}16.43%{opacity:0}100%{opacity:0}}
+@keyframes tgSlideWhy{0%{opacity:0}.5%{opacity:1}16.43%{opacity:1}17.43%{opacity:0}100%{opacity:0}}
 
 /* service links in the hero strip read as links */
 thorne-why-tabs .wh-strip a{border-bottom:1px solid rgba(250,249,246,.6);padding-bottom:4px}

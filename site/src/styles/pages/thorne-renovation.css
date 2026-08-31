@@ -220,8 +220,8 @@ thorne-renovation .rn-reveal .rn-p2 .tg-reno-afterwrap,
 thorne-renovation .rn-reveal .rn-p2 .tg-reno-after,
 thorne-renovation .rn-reveal .rn-p2 .tg-reno-divider,
 thorne-renovation .rn-reveal .rn-p2 .tg-reno-lab{ animation-delay:12s; }
-@keyframes rnPair1{ 0%,45%{opacity:1} 52%,94%{opacity:0} 100%{opacity:1} }
-@keyframes rnPair2{ 0%,45%{opacity:0} 52%,94%{opacity:1} 100%{opacity:0} }
+@keyframes rnPair1{ 0%,46%{opacity:1} 47%,100%{opacity:0} }
+@keyframes rnPair2{ 0%,45%{opacity:0} 45.5%,100%{opacity:1} }
 @keyframes rnRevWrap{ 0%,12.5%{transform:translateX(-100%)} 25%,45.8%{transform:translateX(0)} 50%,100%{transform:translateX(-100%)} }
 @keyframes rnRevImg{ 0%,12.5%{transform:translateX(100%)} 25%,45.8%{transform:translateX(0)} 50%,100%{transform:translateX(100%)} }
 @keyframes rnRevLabB{ 0%,12.5%{opacity:1} 18%,100%{opacity:0} }

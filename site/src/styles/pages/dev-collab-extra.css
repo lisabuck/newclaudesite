@@ -1,7 +1,7 @@
 /* Development Collaborations page: square sliders + rhythm + mobile stacking */
-@keyframes tgSlidedevA{0%{opacity:0}6%{opacity:1}33.33%{opacity:1}39.33%{opacity:0}100%{opacity:0}}
-@keyframes tgSlidedevB{0%{opacity:0}9%{opacity:1}50%{opacity:1}59%{opacity:0}100%{opacity:0}}
-@keyframes tgSlidedevC{0%{opacity:0}6%{opacity:1}33.33%{opacity:1}39.33%{opacity:0}100%{opacity:0}}
+@keyframes tgSlidedevA{0%{opacity:0}.5%{opacity:1}39.33%{opacity:1}40.33%{opacity:0}100%{opacity:0}}
+@keyframes tgSlidedevB{0%{opacity:0}.5%{opacity:1}59%{opacity:1}60%{opacity:0}100%{opacity:0}}
+@keyframes tgSlidedevC{0%{opacity:0}.5%{opacity:1}39.33%{opacity:1}40.33%{opacity:0}100%{opacity:0}}
 /* bands sit flush like the other pages; the photo/text alternation gives the rhythm */
 @media(max-width:750px){
 thorne-home-page .dev-sq-band{display:flex!important;flex-direction:column;align-items:stretch!important}

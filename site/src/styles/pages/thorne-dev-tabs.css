@@ -1,8 +1,8 @@
 thorne-dev-tabs{display:block}
 
 thorne-dev-tabs{display:block;background:#FAF9F6;font-family:'Metric','Helvetica Neue',Arial,sans-serif;font-weight:400;color:#54504c;-webkit-font-smoothing:antialiased;--pad:56px;--hero-top:64px;--hero-bot:44px}thorne-dev-tabs *{box-sizing:border-box;margin:0;padding:0}thorne-dev-tabs img,thorne-dev-tabs video{max-width:100%}thorne-dev-tabs a{color:#393533}thorne-dev-tabs a:hover{color:#7a746e}thorne-dev-tabs a.tg-btn:hover{color:#FAF9F6;opacity:.88}thorne-dev-tabs strong{font-weight:500}thorne-dev-tabs h1,thorne-dev-tabs h2,thorne-dev-tabs h3,thorne-dev-tabs p{margin:0}thorne-dev-tabs .cta-link{display:inline-block;padding:6px 0 8px}thorne-dev-tabs .cta-link span{display:inline-block;transition:transform .3s ease}thorne-dev-tabs .cta-link:hover span{transform:translateX(6px)}thorne-dev-tabs .tg-hero-h1{right:var(--pad)}
-@keyframes tgSlide4{0%{opacity:0}4%{opacity:1}25%{opacity:1}29%{opacity:0}100%{opacity:0}}
-@keyframes tgSlide2{0%{opacity:0}8%{opacity:1}50%{opacity:1}58%{opacity:0}100%{opacity:0}}
+@keyframes tgSlide4{0%{opacity:0}.5%{opacity:1}29%{opacity:1}30%{opacity:0}100%{opacity:0}}
+@keyframes tgSlide2{0%{opacity:0}.5%{opacity:1}58%{opacity:1}59%{opacity:0}100%{opacity:0}}
 thorne-dev-tabs .tg-lead{max-width:1440px;margin:0 auto;padding:64px var(--pad) 8px}
 thorne-dev-tabs .tg-lead p{font-size:clamp(24px,2.35vw,38px);font-weight:300;line-height:1.32;letter-spacing:-.02em;color:#393533;max-width:38em}
 thorne-dev-tabs .tg-lead p strong{font-weight:500}
