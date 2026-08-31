@@ -18,9 +18,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
-    {/* TEMPORARY pre-launch shield: remove this one line (in both repos) when
-        thornegroup.co.nz is connected, so search engines start indexing. */}
-    <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <meta property="og:type" content="website" />
