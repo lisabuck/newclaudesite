@@ -1,0 +1,36 @@
+name: Measure Palm Springs photos
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  measure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download each photo at the slideshow's delivery size and raw
+        run: |
+          mkdir -p diagnostics/palmsprings
+          for id in \
+            e27c3934634f49528ff2bd563a4b7298 \
+            fc85b4e547d54d19b03bcaf8007e0d66 \
+            cea7d900ece64f96b4b77f3a57cb0dde \
+            caffe0a1a723404ebd32b7a491e34864 \
+            3ea5584658e74eb7a4aac5d3140e8a5e \
+            de3600cba9594f2d9ee7c648889ebc77 \
+            be7cb8b6f0bd4a56b430c378fe05d1ad \
+            3f7c02d9b3d9445090edecbcad1bf5ce \
+            50cf60d599c249dbbb8e2d775b9f2d05 \
+            51be2c6c392841c8bfdf0a62e2fa1772 \
+            ea8407f8926b48af9995a7429dfd152f; do
+            short=$(echo "$id" | cut -c1-8)
+            curl -sSL --max-time 60 -o "diagnostics/palmsprings/${short}-fit.jpg" \
+              "https://static.wixstatic.com/media/b2375c_${id}~mv2.jpg/v1/fit/w_1800,h_1800,q_85,enc_auto/p.jpg" || echo "FIT FAILED $id"
+          done
+          curl -sSL --max-time 60 -o "diagnostics/palmsprings/gif-raw.gif" \
+            "https://static.wixstatic.com/media/b2375c_4e88eab6b4224deabea50bc97f1ea60a~mv2.gif" || echo "GIF FAILED"
+          ls -la diagnostics/palmsprings/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-palmsprings
+          git add diagnostics/palmsprings
+          git commit -m "Diagnostic copies of the Palm Springs photos at delivery size"
+          git push -f origin diag-palmsprings
