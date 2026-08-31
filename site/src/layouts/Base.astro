@@ -125,5 +125,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       {!hideNewsletterButton && (
       <a class="tg-news-cta" href="/newsletter">E-Newsletter</a>
     )}
+    <script is:inline>
+      /* lift the pinned E-Newsletter button clear of the footer social links
+         once the visitor reaches the bottom of the page */
+      (function () {
+        var b = document.querySelector('.tg-news-cta'); if (!b) return;
+        function place () {
+          var gap = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+          b.classList.toggle('tg-news-up', gap < 96);
+        }
+        window.addEventListener('scroll', place, { passive: true });
+        window.addEventListener('resize', place);
+        place();
+      })();
+    </script>
 </body>
 </html>
