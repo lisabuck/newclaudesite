@@ -1,0 +1,23 @@
+name: Fetch the sharing image candidate
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  photo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download the sharing image at original and card size
+        run: |
+          mkdir -p diagnostics/ogimage
+          id=b2375c_5f56ac352c78400c82cdc283069c432f
+          curl -sSL --max-time 60 -o "diagnostics/ogimage/full.jpg" \
+            "https://static.wixstatic.com/media/${id}~mv2.jpg/v1/fit/w_1600,h_1600,q_85,enc_auto/${id}~mv2.jpg" || echo "FAILED full $id"
+          curl -sSL --max-time 60 -o "diagnostics/ogimage/card.jpg" \
+            "https://static.wixstatic.com/media/${id}~mv2.jpg/v1/fill/w_1200,h_630,q_85,enc_auto/${id}~mv2.jpg" || echo "FAILED card $id"
+          ls -la diagnostics/ogimage/
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-ogimage
+          git add diagnostics/ogimage
+          git commit -m "Diagnostic copies of the sharing image candidate"
+          git push -f origin diag-ogimage
