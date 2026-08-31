@@ -29,6 +29,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_NZ" />
+    <meta property="og:image" content="https://static.wixstatic.com/media/b2375c_5f56ac352c78400c82cdc283069c432f~mv2.jpg/v1/fill/w_1200,h_630,q_85,enc_auto/b2375c_5f56ac352c78400c82cdc283069c432f~mv2.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="An architectural home with a pool, built by Thorne Group" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://static.wixstatic.com/media/b2375c_5f56ac352c78400c82cdc283069c432f~mv2.jpg/v1/fill/w_1200,h_630,q_85,enc_auto/b2375c_5f56ac352c78400c82cdc283069c432f~mv2.jpg" />
     {preloadImage && <link rel="preload" as="image" href={preloadImage} fetchpriority="high" />}
     <script type="application/ld+json" set:html={JSON.stringify({
       '@context': 'https://schema.org',
