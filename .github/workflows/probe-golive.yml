@@ -1,0 +1,32 @@
+name: Check the live site after go-live
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch live pages and redirect samples
+        run: |
+          mkdir -p diagnostics/golive
+          out=diagnostics/golive/report.txt
+          : > "$out"
+          for p in / /projects /about /contact /about/articles /inspiration/kitchen /no-such-page-check; do
+            code=$(curl -s -o /tmp/body.html -w '%{http_code}' --max-time 30 -L "https://www.thornegroup.co.nz$p")
+            robots=$(grep -io 'name="robots"[^>]*' /tmp/body.html | head -1)
+            title=$(grep -io '<title>[^<]*' /tmp/body.html | head -1 | cut -c8-90)
+            echo "PAGE $p status=$code robots=[${robots:-none}] title=[$title]" >> "$out"
+          done
+          for old in /thewhy /portfolio/country-home /gallery/oceanbeach-road /post/anything; do
+            line=$(curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}' --max-time 30 "https://www.thornegroup.co.nz$old")
+            echo "REDIRECT $old $line" >> "$out"
+          done
+          apex=$(curl -s -o /dev/null -w '%{http_code} -> %{redirect_url}' --max-time 30 "https://thornegroup.co.nz/")
+          echo "APEX / $apex" >> "$out"
+          cat "$out"
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-golive
+          git add diagnostics/golive
+          git commit -m "Go-live check of the live domain"
+          git push -f origin diag-golive
