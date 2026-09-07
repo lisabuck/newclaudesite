@@ -9,13 +9,16 @@ import '../styles/pages/thorne-gallery.css';
 >
   <thorne-gallery set:html={body}></thorne-gallery>
   <script is:inline defer src="/js/lightdom-shim.js?v=1"></script>
-  <script is:inline defer src="/js/GALLERY6.js?v=42"></script>
+  <script is:inline defer src="/js/GALLERY6.js?v=43"></script>
   <script is:inline defer>
 /* open-from-hash: /projects#on-the-dunes opens that project's slideshow */
 (function () {
   function openFromHash() {
     var want = decodeURIComponent(location.hash.slice(1)).replace(/-/g, ' ').toLowerCase().trim();
     if (!want) return;
+    /* renamed projects: old links keep working */
+    var ALIASES = { 'north face': 'coastal sanctuary' };
+    if (ALIASES[want]) want = ALIASES[want];
     var el = document.querySelector('thorne-gallery');
     if (!el) return;
     var card = Array.prototype.slice.call(el.querySelectorAll('.card')).find(function (c) {
