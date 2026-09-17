@@ -5,12 +5,13 @@ permissions:
 jobs:
   play:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
       - name: Install Playwright Chromium
-        run: npm i -s playwright@1.47.2 && npx playwright install --with-deps chromium
+        run: npm i -s playwright@1.47.2 && npx playwright install --with-deps chrome
       - name: Load live pages and inspect the hero videos
         run: |
           mkdir -p diagnostics/videoplay
@@ -20,16 +21,16 @@ jobs:
           const out = [];
           for (const mode of ['default', 'no-gesture-flag']) {
             const args = mode === 'no-gesture-flag' ? ['--autoplay-policy=no-user-gesture-required'] : [];
-            const b = await chromium.launch({ args });
+            const b = await chromium.launch({ channel: 'chrome', args });
             for (const path of ['/projects', '/about/team', '/services/renovations']) {
               const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
               const pg = await ctx.newPage();
               const console_ = []; pg.on('console', m => { if (m.type()==='error'||m.type()==='warning') console_.push(m.text().slice(0,160)); });
               const failed = []; pg.on('requestfailed', r => { if (/video\.wixstatic/.test(r.url())) failed.push(r.url().slice(0,90)+' '+(r.failure()?.errorText||'')); });
               const vids = []; pg.on('response', r => { if (/video\.wixstatic/.test(r.url())) vids.push(r.status()+' '+r.url().slice(0,90)); });
-              const resp = await pg.goto('https://www.thornegroup.co.nz'+path, { waitUntil: 'load', timeout: 60000 });
+              let resp; try { resp = await pg.goto('https://www.thornegroup.co.nz'+path, { waitUntil: 'load', timeout: 60000 }); } catch(e){ out.push({mode,path,error:'goto failed: '+e.message.slice(0,120)}); await ctx.close(); continue; }
               const csp = resp.headers()['content-security-policy'] || '(none)';
-              await pg.waitForTimeout(6000);
+              await pg.waitForTimeout(8000);
               const st = await pg.evaluate(() => [...document.querySelectorAll('video')].map(v => {
                 const cs = getComputedStyle(v); const r = v.getBoundingClientRect();
                 return { src: (v.currentSrc||v.src||(v.querySelector('source')||{}).src||'').slice(-60), autoplay: v.autoplay, muted: v.muted, mutedAttr: v.hasAttribute('muted'),
@@ -37,7 +38,7 @@ jobs:
                   error: v.error ? v.error.code+':'+v.error.message : null, opacity: cs.opacity, display: cs.display, visibility: cs.visibility, w: Math.round(r.width), h: Math.round(r.height), classes: v.className, parent: v.parentElement.className };
               }));
               let playResult = null;
-              try { playResult = await pg.evaluate(async () => { const v=document.querySelector('video'); if(!v) return 'no video'; try { await v.play(); return 'play() ok, paused='+v.paused; } catch(e){ return 'play() rejected: '+e.name+' '+e.message; } }); } catch(e){ playResult='eval error '+e.message; }
+              try { playResult = await pg.evaluate(async () => { const v=document.querySelector('video'); if(!v) return 'no video'; const t=new Promise(r=>setTimeout(()=>r('play() still pending after 8s: readyState='+v.readyState+' net='+v.networkState+' buffered='+(v.buffered.length?v.buffered.end(0).toFixed(1):'none')),8000)); try { return await Promise.race([v.play().then(()=>'play() ok, paused='+v.paused+' t='+v.currentTime.toFixed(2)), t]); } catch(e){ return 'play() rejected: '+e.name+' '+e.message; } }); } catch(e){ playResult='eval error '+e.message; }
               out.push({ mode, path, status: resp.status(), csp: csp.slice(0,300), videos: st, playResult, videoResponses: vids.slice(0,6), failed, console: console_.slice(0,8) });
               await ctx.close();
             }
