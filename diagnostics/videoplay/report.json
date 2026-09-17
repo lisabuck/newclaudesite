@@ -1,0 +1,200 @@
+[
+  {
+    "mode": "default",
+    "path": "/projects",
+    "status": 200,
+    "csp": "(none)",
+    "videos": [
+      {
+        "src": "eo/b2375c_16393d3133b2416a86184e8968f01af5/720p/mp4/file.mp4",
+        "autoplay": true,
+        "muted": true,
+        "mutedAttr": true,
+        "playsinline": true,
+        "paused": false,
+        "readyState": 4,
+        "networkState": 1,
+        "currentTime": 8.01,
+        "error": null,
+        "opacity": "1",
+        "display": "block",
+        "visibility": "visible",
+        "w": 1440,
+        "h": 801,
+        "classes": "tg-vid-on",
+        "parent": "g-hero"
+      }
+    ],
+    "playResult": "play() ok, paused=false t=8.02",
+    "videoResponses": [
+      "206 https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/720p/mp4/file.mp"
+    ],
+    "failed": [],
+    "console": []
+  },
+  {
+    "mode": "default",
+    "path": "/about/team",
+    "status": 200,
+    "csp": "(none)",
+    "videos": [
+      {
+        "src": "o/2d7300_3edb608e7bfb4eed890a74fd954d986d/1080p/mp4/file.mp4",
+        "autoplay": true,
+        "muted": true,
+        "mutedAttr": true,
+        "playsinline": true,
+        "paused": false,
+        "readyState": 4,
+        "networkState": 1,
+        "currentTime": 7.98,
+        "error": null,
+        "opacity": "1",
+        "display": "block",
+        "visibility": "visible",
+        "w": 1440,
+        "h": 684,
+        "classes": "",
+        "parent": "wh-video"
+      }
+    ],
+    "playResult": "play() ok, paused=false t=7.98",
+    "videoResponses": [
+      "206 https://video.wixstatic.com/video/2d7300_3edb608e7bfb4eed890a74fd954d986d/1080p/mp4/file.m"
+    ],
+    "failed": [],
+    "console": []
+  },
+  {
+    "mode": "default",
+    "path": "/services/renovations",
+    "status": 200,
+    "csp": "(none)",
+    "videos": [
+      {
+        "src": "o/2d7300_2050fec2bec64617997f8e0cbadd1d4b/1080p/mp4/file.mp4",
+        "autoplay": true,
+        "muted": true,
+        "mutedAttr": true,
+        "playsinline": true,
+        "paused": false,
+        "readyState": 4,
+        "networkState": 1,
+        "currentTime": 7.93,
+        "error": null,
+        "opacity": "1",
+        "display": "block",
+        "visibility": "visible",
+        "w": 1440,
+        "h": 684,
+        "classes": "",
+        "parent": "hero-frame"
+      }
+    ],
+    "playResult": "play() ok, paused=false t=7.94",
+    "videoResponses": [
+      "206 https://video.wixstatic.com/video/2d7300_2050fec2bec64617997f8e0cbadd1d4b/1080p/mp4/file.m"
+    ],
+    "failed": [],
+    "console": []
+  },
+  {
+    "mode": "no-gesture-flag",
+    "path": "/projects",
+    "status": 200,
+    "csp": "(none)",
+    "videos": [
+      {
+        "src": "eo/b2375c_16393d3133b2416a86184e8968f01af5/720p/mp4/file.mp4",
+        "autoplay": true,
+        "muted": true,
+        "mutedAttr": true,
+        "playsinline": true,
+        "paused": false,
+        "readyState": 4,
+        "networkState": 1,
+        "currentTime": 7.99,
+        "error": null,
+        "opacity": "1",
+        "display": "block",
+        "visibility": "visible",
+        "w": 1440,
+        "h": 801,
+        "classes": "tg-vid-on",
+        "parent": "g-hero"
+      }
+    ],
+    "playResult": "play() ok, paused=false t=8.00",
+    "videoResponses": [
+      "206 https://video.wixstatic.com/video/b2375c_16393d3133b2416a86184e8968f01af5/720p/mp4/file.mp"
+    ],
+    "failed": [],
+    "console": []
+  },
+  {
+    "mode": "no-gesture-flag",
+    "path": "/about/team",
+    "status": 200,
+    "csp": "(none)",
+    "videos": [
+      {
+        "src": "o/2d7300_3edb608e7bfb4eed890a74fd954d986d/1080p/mp4/file.mp4",
+        "autoplay": true,
+        "muted": true,
+        "mutedAttr": true,
+        "playsinline": true,
+        "paused": false,
+        "readyState": 4,
+        "networkState": 1,
+        "currentTime": 8.11,
+        "error": null,
+        "opacity": "1",
+        "display": "block",
+        "visibility": "visible",
+        "w": 1440,
+        "h": 684,
+        "classes": "",
+        "parent": "wh-video"
+      }
+    ],
+    "playResult": "play() ok, paused=false t=8.11",
+    "videoResponses": [
+      "206 https://video.wixstatic.com/video/2d7300_3edb608e7bfb4eed890a74fd954d986d/1080p/mp4/file.m"
+    ],
+    "failed": [],
+    "console": []
+  },
+  {
+    "mode": "no-gesture-flag",
+    "path": "/services/renovations",
+    "status": 200,
+    "csp": "(none)",
+    "videos": [
+      {
+        "src": "o/2d7300_2050fec2bec64617997f8e0cbadd1d4b/1080p/mp4/file.mp4",
+        "autoplay": true,
+        "muted": true,
+        "mutedAttr": true,
+        "playsinline": true,
+        "paused": false,
+        "readyState": 4,
+        "networkState": 1,
+        "currentTime": 8.14,
+        "error": null,
+        "opacity": "1",
+        "display": "block",
+        "visibility": "visible",
+        "w": 1440,
+        "h": 684,
+        "classes": "",
+        "parent": "hero-frame"
+      }
+    ],
+    "playResult": "play() ok, paused=false t=8.14",
+    "videoResponses": [
+      "206 https://video.wixstatic.com/video/2d7300_2050fec2bec64617997f8e0cbadd1d4b/1080p/mp4/file.m"
+    ],
+    "failed": [],
+    "console": []
+  }
+]
