@@ -1,12 +1,43 @@
-name: Probe testimonial video renditions
+name: Check hero video files
 on: workflow_dispatch
+permissions:
+  contents: write
 jobs:
-  probe:
+  check:
     runs-on: ubuntu-latest
     steps:
-      - name: HEAD check
+      - uses: actions/checkout@v4
+      - name: HEAD every hero video at 1080p and 720p
         run: |
-          for u in "https://static.wixstatic.com/media/b2375c_6ec394db6cdf402c8fe6b4cd8ca23e57~mv2.jpg/v1/fit/w_1920,h_1200,q_85,enc_auto/slide.jpg" "https://static.wixstatic.com/media/b2375c_6ec394db6cdf402c8fe6b4cd8ca23e57~mv2.jpg"; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$u")
-            echo "RESULT ${code} $u"
+          mkdir -p diagnostics/videos
+          out=diagnostics/videos/report.txt
+          : > "$out"
+          check() { # label id
+            for r in 1080p 720p 480p; do
+              code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 40 -I "https://video.wixstatic.com/video/$2/$r/mp4/file.mp4")
+              len=$(curl -s -o /dev/null -w '%{size_download}' --max-time 40 -r 0-1023 "https://video.wixstatic.com/video/$2/$r/mp4/file.mp4")
+              echo "$1 $2 $r -> HTTP $code (first-KB bytes: $len)" >> "$out"
+            done
+          }
+          check PROJECTS-live-oldaccount b2375c_16393d3133b2416a86184e8968f01af5
+          check TEAM-live-copy          2d7300_3edb608e7bfb4eed890a74fd954d986d
+          check TEAM-original           b2375c_d49aca6a808a46c88d5d44760c275f89
+          check HOME-live-copy          2d7300_57de4fa6f4c347d9be051b864eeb239a
+          check HOME-original           b2375c_21806773dfdf469e9cae33fb78db017b
+          check RENO-live-copy          2d7300_2050fec2bec64617997f8e0cbadd1d4b
+          check RENO-original           b2375c_df9b73d3d5ec49aa869cd18eb94855a1
+          check DEVTABS-live-copy       2d7300_0941bdd5cb5947a9ac45a47b1a294214
+          check TESTI-film-live-copy    2d7300_94e1f64339b044b793f7f6f49d583e4b
+          check TESTI-film-original     b2375c_f55445e24e8046c1aac7644b0e9760c9
+          check TESTI-david-original    b2375c_3a79bf6af0b142849d433120e26c273d
+          echo "--- live page checks ---" >> "$out"
+          for p in /projects /about/team; do
+            curl -s --max-time 40 -L "https://www.thornegroup.co.nz$p" -o /tmp/page.html
+            echo "PAGE $p video tags: $(grep -o '<video[^>]*>' /tmp/page.html | head -2 | tr '\n' ' ') srcs: $(grep -o 'video\.wixstatic\.com/video/[a-z0-9_]*/[0-9a-z]*' /tmp/page.html | sort -u | tr '\n' ' ')" >> "$out"
           done
+          cat "$out"
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-videos
+          git add diagnostics/videos
+          git commit -m "Diagnostic check of hero video files"
+          git push -f origin diag-videos
