@@ -1,23 +1,31 @@
 # thornegroup.co.nz - all crawlers welcome, including AI search
+# /documents/ holds unlisted files shared by link only - not for search results
 User-agent: *
 Allow: /
+Disallow: /documents/
 
 User-agent: GPTBot
 Allow: /
+Disallow: /documents/
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /documents/
 
 User-agent: Claude-Web
 Allow: /
+Disallow: /documents/
 
 User-agent: PerplexityBot
 Allow: /
+Disallow: /documents/
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /documents/
 
 User-agent: CCBot
 Allow: /
+Disallow: /documents/
 
 Sitemap: https://www.thornegroup.co.nz/sitemap.xml
