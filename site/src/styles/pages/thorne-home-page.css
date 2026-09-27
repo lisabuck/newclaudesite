@@ -5,20 +5,23 @@ thorne-home-page .tg-reno-pair{animation:36s ease infinite both}
 thorne-home-page .tg-reno-p1{animation-name:tgRenoG1}
 thorne-home-page .tg-reno-p2{opacity:0;animation-name:tgRenoG2}
 thorne-home-page .tg-reno-p3{opacity:0;animation-name:tgRenoG3}
-thorne-home-page .tg-reno-afterwrap{position:absolute;inset:0;overflow:hidden;transform:translateX(-100%);will-change:transform;animation:tgRenoWrap 36s cubic-bezier(.45,.05,.55,.95) infinite both}thorne-home-page .tg-reno-afterwrap .tg-reno-after{transform:translateX(100%);will-change:transform;animation:tgRenoImg 36s cubic-bezier(.45,.05,.55,.95) infinite both}thorne-home-page .tg-reno-p2 .tg-reno-afterwrap,thorne-home-page .tg-reno-p2 .tg-reno-after,thorne-home-page .tg-reno-p2 .tg-reno-divider,thorne-home-page .tg-reno-p2 .tg-reno-lab{animation-delay:12s}thorne-home-page .tg-reno-p3 .tg-reno-afterwrap,thorne-home-page .tg-reno-p3 .tg-reno-after,thorne-home-page .tg-reno-p3 .tg-reno-divider,thorne-home-page .tg-reno-p3 .tg-reno-lab{animation-delay:24s}
+thorne-home-page .tg-reno-afterwrap{position:absolute;inset:0;overflow:hidden;transform:translateX(-100%);will-change:transform;animation:tgRenoWrap 36s cubic-bezier(.45,.05,.55,.95) infinite both}thorne-home-page .tg-reno-afterwrap .tg-reno-after{transform:translateX(100%);will-change:transform;animation:tgRenoImg 36s cubic-bezier(.45,.05,.55,.95) infinite both}thorne-home-page .tg-reno-p1 .tg-reno-afterwrap,thorne-home-page .tg-reno-p1 .tg-reno-after,thorne-home-page .tg-reno-p1 .tg-reno-divider,thorne-home-page .tg-reno-p1 .tg-reno-lab{animation-delay:-2s}thorne-home-page .tg-reno-p2 .tg-reno-afterwrap,thorne-home-page .tg-reno-p2 .tg-reno-after,thorne-home-page .tg-reno-p2 .tg-reno-divider,thorne-home-page .tg-reno-p2 .tg-reno-lab{animation-delay:10s}thorne-home-page .tg-reno-p3 .tg-reno-afterwrap,thorne-home-page .tg-reno-p3 .tg-reno-after,thorne-home-page .tg-reno-p3 .tg-reno-divider,thorne-home-page .tg-reno-p3 .tg-reno-lab{animation-delay:22s}
 thorne-home-page .tg-reno-divider{position:absolute;top:0;bottom:0;right:0;width:2px;background:#FAF9F6;box-shadow:0 0 14px rgba(35,32,30,.5);opacity:0;animation:tgRenoDiv 36s ease infinite both}
 thorne-home-page .tg-reno-lab-b{animation:tgRenoLabB 36s ease infinite both}
 thorne-home-page .tg-reno-lab-a{opacity:0;animation:tgRenoLabA 36s ease infinite both}
-@keyframes tgRenoG1{0%,34.3%{opacity:1}35.3%,100%{opacity:0}}
-@keyframes tgRenoG2{0%,33.3%{opacity:0}33.8%,67.6%{opacity:1}68.6%,100%{opacity:0}}
-@keyframes tgRenoG3{0%,66.7%{opacity:0}67.2%,100%{opacity:1}}
-/* Each home gets a third of the 36s loop (12s): hold before 1.5s, sweep to after
-   4s, hold after 2.5s, sweep back 3.7s at the same pace, settle on before 0.3s,
-   then the next home cuts in on its own before photo. */
-@keyframes tgRenoWrap{0%,4.2%{transform:translateX(-100%)}15.3%,22.2%{transform:translateX(0)}32.5%,100%{transform:translateX(-100%)}}@keyframes tgRenoImg{0%,4.2%{transform:translateX(100%)}15.3%,22.2%{transform:translateX(0)}32.5%,100%{transform:translateX(100%)}}
-@keyframes tgRenoLabB{0%,4.6%{opacity:1}6.4%{opacity:0}31.2%{opacity:0}33%,100%{opacity:1}}
-@keyframes tgRenoLabA{0%,5%{opacity:0}6.8%{opacity:1}30.8%{opacity:1}32.6%,100%{opacity:0}}
-@keyframes tgRenoDiv{0%,3.9%{opacity:0}4.5%{opacity:1}15%{opacity:1}16%{opacity:0}21.5%{opacity:0}22.4%{opacity:1}32.2%{opacity:1}33%,100%{opacity:0}}
+/* Homes hand over with a 1.2s crossfade: the incoming home fades in ON TOP of the
+   outgoing one (still fully opaque), so the background never shows. Home 3 to
+   home 1 is the top layer fading out over an already-opaque home 1. */
+@keyframes tgRenoG1{0%,31.11%{opacity:1}31.6%{opacity:0}94.1%{opacity:0}94.44%,100%{opacity:1}}
+@keyframes tgRenoG2{0%,27.78%{opacity:0}31.11%,64.44%{opacity:1}64.9%,100%{opacity:0}}
+@keyframes tgRenoG3{0%,61.11%{opacity:0}64.44%,94.44%{opacity:1}97.78%,100%{opacity:0}}
+/* Each home gets a third of the 36s loop (12s): hold before 2.5s (the crossfade
+   from the previous home lands inside this rest), sweep to after 4s, hold after
+   2s, sweep back 3.5s at the same pace, then crossfade to the next home. */
+@keyframes tgRenoWrap{0%,6.9%{transform:translateX(-100%)}18.1%,23.6%{transform:translateX(0)}33.3%,100%{transform:translateX(-100%)}}@keyframes tgRenoImg{0%,6.9%{transform:translateX(100%)}18.1%,23.6%{transform:translateX(0)}33.3%,100%{transform:translateX(100%)}}
+@keyframes tgRenoLabB{0%,7.3%{opacity:1}9.1%{opacity:0}31.8%{opacity:0}33.3%,100%{opacity:1}}
+@keyframes tgRenoLabA{0%,7.7%{opacity:0}9.5%{opacity:1}31.4%{opacity:1}33.2%,100%{opacity:0}}
+@keyframes tgRenoDiv{0%,6.6%{opacity:0}7.2%{opacity:1}17.8%{opacity:1}18.8%{opacity:0}22.9%{opacity:0}23.8%{opacity:1}33%{opacity:1}33.4%,100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){
 thorne-home-page .tg-reno-pair,thorne-home-page .tg-reno-afterwrap,thorne-home-page .tg-reno-afterwrap .tg-reno-after,thorne-home-page .tg-reno-lab{animation:none}
 thorne-home-page .tg-reno-afterwrap{transform:none}thorne-home-page .tg-reno-afterwrap .tg-reno-after{transform:none}
