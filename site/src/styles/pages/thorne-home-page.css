@@ -71,3 +71,12 @@ thorne-home-page .tg-hero-slides .tg-hslm{position:absolute;inset:0;width:100%;h
    hence !important. Both labels share the spot; they swap by opacity. */
 thorne-home-page .tg-reno-lab{left:24px!important;top:24px!important;right:auto!important;bottom:auto!important;padding:16px 26px!important;font-size:18px!important;font-weight:500!important;letter-spacing:.3em!important;background:rgba(57,53,51,.92)!important;box-shadow:0 2px 14px rgba(35,32,30,.25)}
 @media(max-width:750px){thorne-home-page .tg-reno-lab{left:14px!important;top:14px!important;padding:12px 18px!important;font-size:15px!important;letter-spacing:.26em!important}}
+
+/* Renovations band: a third shorter on wide screens (700px -> 467px, per Lisa).
+   The reveal photo fills whatever height the band has, so only the band and
+   the photo box's own minimum need to change. */
+@media(min-width:1001px){
+  thorne-home-page .tg-band[data-screen-label="Renovations band"]{min-height:467px!important}
+  thorne-home-page .tg-band[data-screen-label="Renovations band"] .tg-reno{min-height:0!important}
+  thorne-home-page .tg-band[data-screen-label="Renovations band"] .tg-band-copy{padding-top:48px!important;padding-bottom:48px!important}
+}
