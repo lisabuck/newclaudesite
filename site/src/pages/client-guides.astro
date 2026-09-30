@@ -9,7 +9,13 @@ const plain = (items: string[], pad = 7) => items.map((i) => `<div class="row p$
 const list = (label: string, rows: string, two = false) =>
   `<div class="keep"><div class="lab">${label}</div><div class="rows${two ? ' two' : ''}">${rows}</div></div>`;
 const sec = (n: string, t: string) => `<div class="sec"><span class="num">${n}</span><h2>${t}</h2></div>`;
-const ph = (ratio: string, label: string, cls = '') => `<div class="ph ${cls}" style="aspect-ratio:${ratio}"><span>Photo: ${label}</span></div>`;
+/* photo box: Wix image id (with ~mv2.ext), frame ratio, optional class, focal point, width to fetch, alt text */
+const pic = (id: string, ratio: string, cls = '', pos = '50% 50%', w = 2000, alt = '', eager = false) =>
+  `<div class="pic ${cls}" style="aspect-ratio:${ratio}"><img src="https://static.wixstatic.com/media/${id}/v1/fit/w_${w},h_${w},q_85,enc_auto/${id.split('~')[0]}.jpg" alt="${alt}"${eager ? '' : ' loading="lazy"'} decoding="async" style="object-position:${pos}" /></div>`;
+const SP = ['b2375c_8bbca8c9f80f4f63a4c4bfe524b4d332~mv2.jpg','b2375c_7011ba2af4de4308a55fe8428fc46dc0~mv2.jpg','b2375c_e98349cfb4384c588d60a3ca341b615e~mv2.jpg','b2375c_23ae6ed789444a75902be78c94efd4d7~mv2.jpg','b2375c_b5280dc7dedd4f828b0b1717787c96fe~mv2.jpg','b2375c_cf00601b832b400abd33ce3c867db035~mv2.jpg'];
+const SP_POS = ['50% 45%','50% 50%','50% 50%','50% 55%','50% 50%','50% 50%'];
+const CLIENTS = ['b2375c_6d2b8634be9a421aae598a55a619c98d~mv2.jpg','b2375c_b80ed9ea382346689ab930fecbeadd4f~mv2.jpg','b2375c_03851cc5e1eb4f5e894c81c2503b7042~mv2.jpg','b2375c_c6bf1e0449ac4287b89abec228227045~mv2.jpg','b2375c_07f1a86e43aa4786bb3ed0fe7e891c7a~mv2.jpg','b2375c_975f406b66cc452eb7a9c7031afb8bec~mv2.jpeg'];
+const CL_POS = ['50% 40%','50% 35%','50% 30%','50% 40%','50% 35%','50% 40%'];
 
 const g1s1 = ['Establish your total project budget, not just the build budget','Cost-check the initial concept','Consider an elemental estimate from an independent quantity surveyor','Involve an experienced builder early','Agree when pricing will be reviewed as the plans develop','Leave enough flexibility to make changes if the estimate is too high'];
 const g1s2 = ['Ground conditions and foundations','Existing services or upgrades','Excavation and earthworks','Demolition','Retaining','Coastal exposure','Site access','Flood or natural hazard requirements','Drainage and stormwater','Crane, scaffolding and delivery access'];
@@ -96,6 +102,10 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .dark strong{color:#FAF9F6}
     .ph{position:relative;overflow:hidden;background:#F2F0ED;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px}
     .ph span{font-weight:400;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e}
+    .pic{overflow:hidden;background:#F2F0ED}
+    .pic img{width:100%;height:100%;object-fit:cover;display:block}
+    .pic.ruled{border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
+    .pic.ruleb{border-bottom:1px solid #c8c3bb}
     .ph.ruled{border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
     .pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:14px}
     .pair{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:24px}
@@ -144,7 +154,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <p class="lead">The earlier construction costs are considered, the more opportunity there is to keep the brief and budget aligned.</p>
       <p class="sm">Waiting until detailed architectural and engineering drawings are complete can mean significant fees have already been spent before discovering the home is over budget.</p>
     </div>
-    <Fragment set:html={ph('21/9', 'Aerial cover', 'ruled')} />
+    <Fragment set:html={pic('b2375c_c5ed6abd028143e49255a78721ddef76~mv2.jpg', '21/9', 'ruled', '50% 50%', 2000, '', true)} />
 
     <Fragment set:html={sec('01', 'Check the budget early')} />
     <div class="g2">
@@ -203,7 +213,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <h3 style="margin:0;font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-.02em">Design, buildability and cost, <strong>considered together</strong>.</h3>
         <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">Our involvement can begin before you have an architect or once early concepts are underway. Pricing is reviewed as the plans develop so you can make informed decisions before reaching the point of no return.</p>
       </div>
-      <Fragment set:html={ph('3/2', 'Gavin, Aaron and Peter', 'ruled')} />
+      <Fragment set:html={pic('b2375c_618f94572ecf441caf07f75db87c7b5d~mv2.jpg', '3/2', 'ruled', '50% 50%', 2000, 'Gavin, Aaron and Peter')} />
       <div class="team">
         <div><div class="eb" style="margin-bottom:10px">Construction</div><div class="who">Gavin</div><p>Works alongside architects to review construction methods, materials and detailing before they are locked in.</p></div>
         <div><div class="eb" style="margin-bottom:10px">Site</div><div class="who">Aaron</div><p>More than two decades of land development and construction experience. Identifies site issues that may affect feasibility and cost.</p></div>
@@ -220,7 +230,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <p class="lead">Two builders can price the same plans and return very different totals.</p>
       <p class="sm">Before assuming the lower price represents better value, understand <strong>what sits behind each number</strong>.</p>
     </div>
-    <Fragment set:html={ph('21/9', 'Plans cover', 'ruled')} />
+    <Fragment set:html={pic('b2375c_50c35f23740d479fa4cea38b82dc9da7~mv2.jpg', '21/9', 'ruled', '50% 50%', 2000, '', true)} />
 
     <Fragment set:html={sec('01', 'Are they pricing the same information?')} />
     <div class="g2">
@@ -235,8 +245,8 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <div class="dark"><div class="dq">A lower price can simply mean less has been allowed for.</div></div>
     </div>
     <div class="pair">
-      <Fragment set:html={ph('3/2', 'Site earthworks')} />
-      <Fragment set:html={ph('1/1', 'Site foundations')} />
+      <Fragment set:html={pic('b2375c_48a7283961114398a1fd66d31a0d0ff2~mv2.jpg', '3/2', '', '50% 55%', 1400)} />
+      <Fragment set:html={pic('b2375c_94fa16558d5f4ded9d4cf3b452f23072~mv2.jpg', '1/1', '', '50% 60%', 1000)} />
     </div>
 
     <Fragment set:html={sec('03', 'Compare the specification')} />
@@ -254,7 +264,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <Fragment set:html={list('Ask', box(g2s4))} />
     </div>
 
-    <div style="margin-top:40px"><Fragment set:html={ph('21/9', 'Coastal site', 'ruled')} /></div>
+    <div style="margin-top:40px"><Fragment set:html={pic('b2375c_b679a8bebf3d4fbfb324917d723cd909~mv2.jpg', '21/9', 'ruled', '50% 62%')} /></div>
     <Fragment set:html={sec('05', 'Look closely at site and structural costs').replace('class="sec"', 'class="sec flush"')} />
     <div class="g2">
       <div>
@@ -277,7 +287,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <div class="dq">A lower labour allowance only saves money if enough time has actually been allowed to build the home properly.</div>
       <p style="margin:16px 0 0;font-size:14px;line-height:1.8;color:#c8c3bb;max-width:40em">At Thorne Group, our foremen bring at least 20 years’ building experience and lead small, consistent site teams supported by project managers who are qualified builders.</p>
     </div>
-    <div style="margin-top:14px"><Fragment set:html={ph('21/9', 'Labour and joinery')} /></div>
+    <div style="margin-top:14px"><Fragment set:html={pic('b2375c_db725eaaf7774769a8237afbd1f9dc5b~mv2.jpg', '21/9', 'ruleb', '50% 45%')} /></div>
 
     <Fragment set:html={sec('07', 'Understand variations')} />
     <div class="g2">
@@ -346,7 +356,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">This home was completed for under $1 million and includes a number of upgraded features. Take some of these out and there is real scope to bring the cost down further.</p>
       </div>
       <div class="pics">
-        <Fragment set:html={['Exterior','Kitchen','Living','Bedroom','Study','Bathroom'].map((l) => ph('4/3', l)).join('')} />
+        <Fragment set:html={SP.map((id, k) => pic(id, '4/3', '', SP_POS[k], 900)).join('')} />
       </div>
       <div class="g2" style="margin-top:22px">
         <div class="lab">Included in this home</div>
@@ -372,7 +382,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <p class="sm">Price matters. So do the people, systems and business behind it.</p>
       </div>
       <div class="pics" style="padding:14px 0;border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb">
-        <Fragment set:html={[1,2,3,4,5,6].map((n) => ph('4/3', 'Client ' + n)).join('')} />
+        <Fragment set:html={CLIENTS.map((id, k) => pic(id, '4/3', '', CL_POS[k], 900)).join('')} />
       </div>
 
       <Fragment set:html={sec('01', 'Speak to previous and current clients')} />
