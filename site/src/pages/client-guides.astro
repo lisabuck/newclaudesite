@@ -76,14 +76,14 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .cg h1{margin:0;font-weight:300;font-size:clamp(36px,5vw,56px);line-height:1.1;letter-spacing:-.02em;color:#393533}
     .intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px 48px;align-items:end;margin:30px 0 34px;padding-top:24px;border-top:1px solid #393533}
     .lead{margin:0;font-weight:300;font-size:26px;line-height:1.3;letter-spacing:-.015em;color:#393533}
-    .intro .sm{margin:0;font-size:15px;line-height:1.9;color:#7a746e}
+    .intro .sm{margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
     .sec{display:flex;gap:20px;align-items:baseline;margin:40px 0 16px;padding-top:22px;border-top:1px solid #393533}
     .sec.flush{margin-top:24px;padding-top:0;border-top:0}
     .num{font-weight:400;font-size:14px;letter-spacing:.35em;color:#c8c3bb}
     .sec h2{margin:0;font-weight:300;font-size:28px;line-height:1.15;letter-spacing:-.02em;color:#393533}
     .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px 40px;align-items:start}
     .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:20px 32px;align-items:start}
-    .body{margin:0 0 14px;font-size:15px;line-height:2;color:#7a746e}
+    .body{margin:0 0 14px;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
     .body:last-child{margin-bottom:0}
     .say{margin:0;font-weight:300;font-size:20px;line-height:1.45;letter-spacing:-.01em;color:#393533}
     .lab{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e;margin:8px 0 10px}
@@ -123,14 +123,14 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .pics3{grid-template-columns:repeat(3,1fr)}
     @media (max-width:600px){ .pics3{grid-template-columns:repeat(2,1fr);gap:10px} }
     .pair{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:24px}
-    .note{margin:12px 0 0;font-size:14px;line-height:1.8;color:#7a746e}
+    .note{margin:12px 0 0;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
     .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));margin-top:32px;border-top:1px solid #393533}
     .team > div{padding:22px 28px}
     .team > div:first-child{padding-left:0}
     .team > div:last-child{padding-right:0}
     .team > div:not(:last-child){border-right:1px solid #c8c3bb}
     .team .who{font-weight:300;font-size:22px;line-height:1.2;letter-spacing:-.01em;color:#393533;margin-bottom:10px}
-    .team p{margin:0;font-size:14px;line-height:1.8;color:#7a746e}
+    .team p{margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
     .h3{margin:0 0 12px;font-weight:300;font-size:22px;line-height:1.3;letter-spacing:-.01em;color:#393533}
     .cta{margin-top:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
     .cg a.btn{display:inline-block;font-weight:400;font-size:14px;letter-spacing:.15em;text-transform:uppercase;color:#FAF9F6;background:#393533;padding:12px 28px;white-space:nowrap}
@@ -225,7 +225,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <div class="eb">How we approach it</div>
       <div class="g2" style="gap:20px 48px;align-items:end;margin-bottom:34px">
         <h3 style="margin:0;font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-.02em">Design, buildability and cost, <strong>considered together</strong>.</h3>
-        <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">Our involvement can begin before you have an architect or once early concepts are underway. Pricing is reviewed as the plans develop so you can make informed decisions before reaching the point of no return.</p>
+        <p style="margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#54504c">Our involvement can begin before you have an architect or once early concepts are underway. Pricing is reviewed as the plans develop so you can make informed decisions before reaching the point of no return.</p>
       </div>
       <Fragment set:html={pic('b2375c_618f94572ecf441caf07f75db87c7b5d~mv2.jpg', '3/2', 'ruled', '50% 50%', 2000, 'Gavin, Aaron and Peter')} />
       <div class="team">
@@ -299,7 +299,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     </div>
     <div class="dark wide">
       <div class="dq">A lower labour allowance only saves money if enough time has actually been allowed to build the home properly.</div>
-      <p style="margin:16px 0 0;font-size:14px;line-height:1.8;color:#c8c3bb;max-width:40em">At Thorne Group, our foremen bring at least 20 years’ building experience and lead small, consistent site teams supported by project managers who are qualified builders.</p>
+      <p style="margin:16px 0 0;font-weight:400;font-size:18px;line-height:1.75;color:#c8c3bb;max-width:40em">At Thorne Group, our foremen bring at least 20 years’ building experience and lead small, consistent site teams supported by project managers who are qualified builders.</p>
     </div>
     <div style="margin-top:14px"><Fragment set:html={pic('b2375c_db725eaaf7774769a8237afbd1f9dc5b~mv2.jpg', '21/9', 'ruleb', '50% 45%')} /></div>
 
@@ -337,7 +337,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <div class="dlab">The question we are often asked</div>
         <div class="lead" style="color:#FAF9F6">“Can you still build an architecturally designed home for around $1 million?”</div>
       </div>
-      <p style="margin:0;font-size:15px;line-height:1.9;color:#FAF9F6">It can be possible. But it depends heavily on the <strong>site, size, complexity, specification and how early costs are considered</strong>.</p>
+      <p style="margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#FAF9F6">It can be possible. But it depends heavily on the <strong>site, size, complexity, specification and how early costs are considered</strong>.</p>
     </div>
 
     <div class="g2" style="margin-top:36px">
@@ -357,9 +357,9 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       </div>
       <div>
         <h3 class="h3">Where costs can hide</h3>
-        <p style="margin:0 0 10px;font-size:14px;line-height:1.8;color:#7a746e">Some of the largest costs may never appear in the finished photographs.</p>
+        <p style="margin:0 0 10px;font-weight:400;font-size:18px;line-height:1.75;color:#54504c">Some of the largest costs may never appear in the finished photographs.</p>
         <div class="rows two" set:html={plain(cs2, 6)}></div>
-        <p style="margin:14px 0 0;font-size:14px;line-height:1.8;color:#7a746e">This is why early site and construction input matters. Aaron’s land development experience helps identify where a site may put pressure on the budget. Gavin and the construction team look at how to achieve the architectural intent with efficient structure, detailing and construction methods.</p>
+        <p style="margin:14px 0 0;font-weight:400;font-size:18px;line-height:1.75;color:#54504c">This is why early site and construction input matters. Aaron’s land development experience helps identify where a site may put pressure on the budget. Gavin and the construction team look at how to achieve the architectural intent with efficient structure, detailing and construction methods.</p>
       </div>
     </div>
 
@@ -367,7 +367,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
       <div class="lab" style="margin:0 0 14px">Example</div>
       <div class="g2" style="margin-bottom:24px">
         <h3 style="margin:0;font-weight:300;font-size:26px;line-height:1.2;letter-spacing:-.015em">Built for <strong>under $1 million</strong>, with upgrades.</h3>
-        <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">This home was completed for under $1 million and includes a number of upgraded features. Take some of these out and there is real scope to bring the cost down further.</p>
+        <p style="margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#54504c">This home was completed for under $1 million and includes a number of upgraded features. Take some of these out and there is real scope to bring the cost down further.</p>
       </div>
       <div class="car" data-imgs={JSON.stringify(SP.map((id) => `https://static.wixstatic.com/media/${id}/v1/fit/w_2000,h_2000,q_85,enc_auto/${id.split('~')[0]}.jpg`))}>
         <div class="car-frame">
@@ -418,9 +418,9 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <div class="g2">
           <div>
             <div class="dlab" style="letter-spacing:.3em;margin-bottom:8px">Previous clients</div>
-            <p style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#FAF9F6">“Excluding upgrades or changes you specifically requested, how closely did your final build cost match the original estimate?”</p>
+            <p style="margin:0 0 18px;font-weight:400;font-size:18px;line-height:1.75;color:#FAF9F6">“Excluding upgrades or changes you specifically requested, how closely did your final build cost match the original estimate?”</p>
             <div class="dlab" style="letter-spacing:.3em;margin-bottom:8px">Current clients</div>
-            <p style="margin:0;font-size:15px;line-height:1.8;color:#FAF9F6">“How is your latest projected build cost tracking against the original estimate?”</p>
+            <p style="margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#FAF9F6">“How is your latest projected build cost tracking against the original estimate?”</p>
           </div>
           <div>
             <div class="dlab" style="letter-spacing:.3em;margin-bottom:8px">Then ask</div>
@@ -428,8 +428,8 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
           </div>
         </div>
         <div class="g2" style="margin-top:24px;padding-top:18px;border-top:1px solid #7a746e">
-          <p style="margin:0;font-size:14px;line-height:1.8;color:#c8c3bb"><strong>Why it matters.</strong> This gives you an indication of how accurately the builder prices, identifies risk and manages costs throughout construction.</p>
-          <p style="margin:0;font-size:14px;line-height:1.8;color:#c8c3bb">Make sure you know whether the client is referring to an early concept estimate, a pre-contract estimate or the final contract price.</p>
+          <p style="margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#c8c3bb"><strong>Why it matters.</strong> This gives you an indication of how accurately the builder prices, identifies risk and manages costs throughout construction.</p>
+          <p style="margin:0;font-weight:400;font-size:18px;line-height:1.75;color:#c8c3bb">Make sure you know whether the client is referring to an early concept estimate, a pre-contract estimate or the final contract price.</p>
         </div>
       </div>
 
