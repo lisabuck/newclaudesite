@@ -120,6 +120,8 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .pic.ruleb{border-bottom:1px solid #c8c3bb}
     .ph.ruled{border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
     .pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:14px}
+    .pics3{grid-template-columns:repeat(3,1fr)}
+    @media (max-width:600px){ .pics3{grid-template-columns:repeat(2,1fr);gap:10px} }
     .pair{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:24px}
     .note{margin:12px 0 0;font-size:14px;line-height:1.8;color:#7a746e}
     .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));margin-top:32px;border-top:1px solid #393533}
@@ -399,8 +401,8 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <p class="lead">A building project can last many months, and your relationship with the builder often extends well beyond handover.</p>
         <p class="sm">Price matters. So do the people, systems and business behind it.</p>
       </div>
-      <div class="pics" style="padding:14px 0;border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb">
-        <Fragment set:html={CLIENTS.map((id, k) => pic(id, '4/3', '', CL_POS[k], 900)).join('')} />
+      <div class="pics pics3" style="padding:14px 0;border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb">
+        <Fragment set:html={CLIENTS.map((id, k) => pic(id, '4/3', '', CL_POS[k], 1200)).join('')} />
       </div>
 
       <Fragment set:html={sec('01', 'Speak to previous and current clients')} />
