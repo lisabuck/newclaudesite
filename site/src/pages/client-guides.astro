@@ -64,10 +64,17 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .cg-r1{padding-top:18px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
     .cg-logo{height:66px;max-width:none;margin-left:-20px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
     .cg-kick{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb}
-    .cg-tabs{padding-top:14px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
-    .cg-tabs::-webkit-scrollbar{display:none}
-    .cg-tab{cursor:pointer;background:none;border:0;border-bottom:2px solid transparent;padding:8px 0 14px;font-family:inherit;font-weight:400;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e;white-space:nowrap}
-    .cg-tab[aria-selected="true"]{color:#393533;border-bottom-color:#393533}
+    .cg-tabs{padding-top:16px;padding-bottom:16px;display:flex;gap:10px;flex-wrap:wrap}
+    .cg-tab{cursor:pointer;background:#FAF9F6;border:1px solid #c8c3bb;padding:14px 22px;font-family:inherit;font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#393533;white-space:nowrap;transition:background .2s ease,border-color .2s ease,color .2s ease}
+    .cg-tab:hover{border-color:#393533}
+    .cg-tab[aria-selected="true"]{background:#393533;border-color:#393533;color:#FAF9F6}
+    /* phones: the tabs stack full width, and the header scrolls away so it
+       does not take up the screen (choosing a tab jumps back to the top) */
+    @media (max-width:750px){
+      .cg-top{position:static}
+      .cg-tabs{flex-direction:column;gap:8px}
+      .cg-tab{white-space:normal;text-align:left;letter-spacing:.14em;padding:13px 18px}
+    }
     .cg-main{padding-top:56px;padding-bottom:80px}
     .cg-guide{padding-top:8px}
     .cg-guide[hidden]{display:none}
@@ -157,7 +164,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     </div>
     <div class="cg-wrap cg-tabs" role="tablist">
       <button class="cg-tab" type="button" role="tab" data-tab="01" aria-selected="true">01 · Before you price</button>
-      <button class="cg-tab" type="button" role="tab" data-tab="02" aria-selected="false">02 · Comparing quotes</button>
+      <button class="cg-tab" type="button" role="tab" data-tab="02" aria-selected="false">02 · Pricing Comparison Checklists</button>
       <button class="cg-tab" type="button" role="tab" data-tab="03" aria-selected="false">03 · Case study</button>
     </div>
   </div>
