@@ -173,7 +173,7 @@
         var w=new Image(); w.src=src;
         if(w.decode){ w.decode().catch(function(){}); }
         warmed[src]=w; warmKeys.push(src);
-        while(warmKeys.length>8){ delete warmed[warmKeys.shift()]; }
+        while(warmKeys.length>12){ delete warmed[warmKeys.shift()]; }
         return w;
       }
       function show(src){
@@ -190,7 +190,8 @@
         eb.textContent=p.eyebrow; tt.textContent=p.title;
         show(s.src);
         ct.textContent=(s.idx+1)+' of '+p.images.length;
-        warm(slides[(i+1)%slides.length].src); warm(slides[(i-1+slides.length)%slides.length].src);
+        /* preload three photos ahead and one behind so quick stepping never waits */
+        for(var a=1;a<=3;a++){ warm(slides[(i+a)%slides.length].src); } warm(slides[(i-1+slides.length)%slides.length].src);
         nproj.setAttribute('aria-label','Next project: '+PROJECTS[(s.pi+1)%N].title);
         pproj.setAttribute('aria-label','Previous project: '+PROJECTS[(s.pi-1+N)%N].title);
         thumbs.textContent='';
