@@ -62,7 +62,7 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .cg-top{position:sticky;top:0;z-index:5;background:#FAF9F6;border-bottom:1px solid #c8c3bb}
     .cg-wrap{max-width:1080px;margin:0 auto;padding-left:24px;padding-right:24px}
     .cg-r1{padding-top:18px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
-    .cg-logo{height:22px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
+    .cg-logo{height:66px;max-width:none;margin-left:-20px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
     .cg-kick{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb}
     .cg-tabs{padding-top:14px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
     .cg-tabs::-webkit-scrollbar{display:none}
@@ -137,6 +137,10 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .cg a.btn:hover{opacity:1}
     .cg-foot{border-top:1px solid #c8c3bb}
     .cg-foot .cg-wrap{padding-top:22px;padding-bottom:40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-weight:400;font-size:14px;letter-spacing:.15em;text-transform:uppercase;color:#7a746e}
+    /* logo sizes match the main site header */
+    @media (max-width:1000px){ .cg-logo{height:54px;margin-left:-17px} }
+    @media (max-width:750px){ .cg-logo{height:60px;margin-left:-19px} }
+    @media (max-width:430px){ .cg-logo{height:53px;margin-left:-16px} }
     @media (max-width:600px){
       .pair{grid-template-columns:1fr}
       .team > div{padding:22px 0 !important;border-right:0 !important}
