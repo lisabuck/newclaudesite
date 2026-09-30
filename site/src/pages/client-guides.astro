@@ -102,6 +102,18 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
     .dark strong{color:#FAF9F6}
     .ph{position:relative;overflow:hidden;background:#F2F0ED;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px}
     .ph span{font-weight:400;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e}
+    .car-frame{position:relative;aspect-ratio:3/2;overflow:hidden;background:#FAF9F6}
+    .car-slide{position:absolute;inset:0;display:flex;gap:14px;opacity:0;transition:opacity .9s ease}
+    .car-slide.on{opacity:1;z-index:1}
+    .car-slide img{flex:1 1 0;min-width:0;width:100%;height:100%;object-fit:cover;display:block;background:#F2F0ED}
+    .car-slide.lone{justify-content:center}
+    .car-slide.lone img{flex:0 0 calc((100% - 14px)/2)}
+    .car-ctrls{display:flex;justify-content:space-between;align-items:center;gap:16px;padding-top:14px}
+    .car-count{font-weight:400;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:#7a746e}
+    .car-btns{display:flex;gap:10px}
+    .car-b{font-family:inherit;font-size:22px;font-weight:300;line-height:1;width:56px;height:48px;background:none;border:1px solid #c8c3bb;color:#393533;cursor:pointer}
+    .car-b:hover{border-color:#393533;background:#393533;color:#FAF9F6}
+    @media (prefers-reduced-motion:reduce){ .car-slide{transition:none} }
     .pic{overflow:hidden;background:#F2F0ED}
     .pic img{width:100%;height:100%;object-fit:cover;display:block}
     .pic.ruled{border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
@@ -355,8 +367,14 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
         <h3 style="margin:0;font-weight:300;font-size:26px;line-height:1.2;letter-spacing:-.015em">Built for <strong>under $1 million</strong>, with upgrades.</h3>
         <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">This home was completed for under $1 million and includes a number of upgraded features. Take some of these out and there is real scope to bring the cost down further.</p>
       </div>
-      <div class="pics">
-        <Fragment set:html={SP.map((id, k) => pic(id, '4/3', '', SP_POS[k], 900)).join('')} />
+      <div class="car" data-imgs={JSON.stringify(SP.map((id) => `https://static.wixstatic.com/media/${id}/v1/fit/w_2000,h_2000,q_85,enc_auto/${id.split('~')[0]}.jpg`))}>
+        <div class="car-frame">
+          <div class="car-slide on"><img src={`https://static.wixstatic.com/media/${SP[0]}/v1/fit/w_2000,h_2000,q_85,enc_auto/${SP[0].split('~')[0]}.jpg`} alt="" loading="lazy" decoding="async" /></div>
+        </div>
+        <div class="car-ctrls">
+          <span class="car-count">1 of {SP.length}</span>
+          <span class="car-btns"><button class="car-b car-prev" type="button" aria-label="Previous photo">&larr;</button><button class="car-b car-next" type="button" aria-label="Next photo">&rarr;</button></span>
+        </div>
       </div>
       <div class="g2" style="margin-top:22px">
         <div class="lab">Included in this home</div>
@@ -464,6 +482,56 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
   tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.getAttribute('data-tab'), true); }); });
   var h = decodeURIComponent(location.hash.slice(1)).slice(0, 2);
   show(['01', '02', '03'].indexOf(h) !== -1 ? h : '01', false);
+})();
+</script>
+<script is:inline>
+/* example home slideshow: one landscape photo at a time, portrait photos
+   paired side by side (a lone portrait sits centred); arrows, swipe, and a gentle auto-advance that stops
+   once the visitor takes control */
+(function () {
+  var car = document.querySelector('.car'); if (!car) return;
+  var urls = JSON.parse(car.getAttribute('data-imgs') || '[]');
+  var frame = car.querySelector('.car-frame'), count = car.querySelector('.car-count');
+  var slides = [], i = 0, timer = null, left = urls.length, land = [];
+  var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function build() {
+    var groups = [], buf = [];
+    urls.forEach(function (u, k) {
+      if (land[k]) { if (buf.length) { groups.push(buf); buf = []; } groups.push([u]); groups[groups.length - 1].wide = true; }
+      else { buf.push(u); if (buf.length === 2) { groups.push(buf); buf = []; } }
+    });
+    if (buf.length) groups.push(buf);
+    frame.textContent = '';
+    slides = groups.map(function (g, k) {
+      var d = document.createElement('div'); d.className = 'car-slide' + (k === 0 ? ' on' : '') + (g.length === 1 && !g.wide ? ' lone' : '');
+      g.forEach(function (u) { var im = document.createElement('img'); im.src = u; im.alt = ''; im.decoding = 'async'; d.appendChild(im); });
+      frame.appendChild(d); return d;
+    });
+    i = 0; show(0);
+    if (!still && slides.length > 1) timer = setInterval(function () { show(i + 1); }, 5000);
+  }
+  function show(n) {
+    if (!slides.length) return;
+    i = (n + slides.length) % slides.length;
+    slides.forEach(function (d, k) { d.classList.toggle('on', k === i); });
+    count.textContent = (i + 1) + ' of ' + slides.length;
+  }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  car.querySelector('.car-prev').addEventListener('click', function () { stop(); show(i - 1); });
+  car.querySelector('.car-next').addEventListener('click', function () { stop(); show(i + 1); });
+  var tx = null, ty = null;
+  frame.addEventListener('touchstart', function (e) { var t = e.touches[0]; tx = t.clientX; ty = t.clientY; }, { passive: true });
+  frame.addEventListener('touchend', function (e) {
+    if (tx === null) return; var t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty; tx = ty = null;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) { stop(); show(dx < 0 ? i + 1 : i - 1); }
+  }, { passive: true });
+  /* check each photo's shape on a tiny copy, then lay out the slides */
+  urls.forEach(function (u, k) {
+    var im = new Image();
+    im.onload = function () { land[k] = im.naturalWidth >= im.naturalHeight; if (--left === 0) build(); };
+    im.onerror = function () { land[k] = true; if (--left === 0) build(); };
+    im.src = u.replace('w_2000,h_2000', 'w_100,h_100');
+  });
 })();
 </script>
 </body>
