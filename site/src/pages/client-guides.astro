@@ -495,12 +495,16 @@ const cs3 = ['The site','Floor area','Building shape','Structure','Specification
   var slides = [], i = 0, timer = null, left = urls.length, land = [];
   var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   function build() {
-    var groups = [], buf = [];
+    /* portraits pair with the next portrait in the list, even when landscapes
+       sit between them; the pair shows where the first one was */
+    var groups = [], used = [];
     urls.forEach(function (u, k) {
-      if (land[k]) { if (buf.length) { groups.push(buf); buf = []; } groups.push([u]); groups[groups.length - 1].wide = true; }
-      else { buf.push(u); if (buf.length === 2) { groups.push(buf); buf = []; } }
+      if (used[k]) return;
+      if (land[k]) { var g = [u]; g.wide = true; groups.push(g); return; }
+      var pair = [u];
+      for (var m = k + 1; m < urls.length; m++) { if (!land[m] && !used[m]) { pair.push(urls[m]); used[m] = true; break; } }
+      groups.push(pair);
     });
-    if (buf.length) groups.push(buf);
     frame.textContent = '';
     slides = groups.map(function (g, k) {
       var d = document.createElement('div'); d.className = 'car-slide' + (k === 0 ? ' on' : '') + (g.length === 1 && !g.wide ? ' lone' : '');
