@@ -1,0 +1,460 @@
+---
+/* Client guides: private page, shared by link only. Not in any menu, not in the
+   sitemap, and marked noindex so search engines leave it out. Photos are
+   placeholders (tinted boxes) until the real images are supplied. */
+import '../styles/fonts.css';
+
+const box = (items: string[]) => items.map((i) => `<div class="row box"><span class="mk"></span><span>${i}</span></div>`).join('');
+const plain = (items: string[], pad = 7) => items.map((i) => `<div class="row p${pad}">${i}</div>`).join('');
+const list = (label: string, rows: string, two = false) =>
+  `<div class="keep"><div class="lab">${label}</div><div class="rows${two ? ' two' : ''}">${rows}</div></div>`;
+const sec = (n: string, t: string) => `<div class="sec"><span class="num">${n}</span><h2>${t}</h2></div>`;
+const ph = (ratio: string, label: string, cls = '') => `<div class="ph ${cls}" style="aspect-ratio:${ratio}"><span>Photo: ${label}</span></div>`;
+
+const g1s1 = ['Establish your total project budget, not just the build budget','Cost-check the initial concept','Consider an elemental estimate from an independent quantity surveyor','Involve an experienced builder early','Agree when pricing will be reviewed as the plans develop','Leave enough flexibility to make changes if the estimate is too high'];
+const g1s2 = ['Ground conditions and foundations','Existing services or upgrades','Excavation and earthworks','Demolition','Retaining','Coastal exposure','Site access','Flood or natural hazard requirements','Drainage and stormwater','Crane, scaffolding and delivery access'];
+const g1s3 = ['Is the site comparable?','Is the architectural complexity similar?','Are the foundations similar?','Is the specification comparable?','Are garages and covered outdoor areas included?','Are site works included?','Does the figure include GST?','Is the level of cabinetry, glazing and finishes similar?'];
+const g1s4a = ['Architect','Structural engineer','Geotechnical engineer','Surveyor','Planner','Interior designer','Landscape designer','Quantity surveyor','Council and consenting fees'];
+const g1s4b = ['Council Requests for Information','Amendments after consent','Construction queries','Site observations','Additional detailing during construction'];
+const g1s4c = ['Landscaping','Driveways','Fencing and gates','Pools','Service connections','Window furnishings','Direct-purchased fittings or appliances'];
+const g1s5 = ['Structural systems','Construction methods','Material choices','Labour-intensive details','Alternative products','Areas worth investing in','Areas that can be simplified without compromising the architectural intent'];
+const g2s1 = ['Architectural drawing revisions','Electrical and lighting plans','Structural engineering','Cabinetry information','Geotechnical information','Product specifications','Interior schedules','Consent amendments'];
+const g2s2 = ['What is included?','What is specifically excluded?','What has been tagged out?','What will you supply directly?','What is another consultant or contractor expected to provide?','Are installation and labour included with supplied products?'];
+const g2s3 = ['Windows and glazing','Flooring and tiles','Cladding','Plumbing fittings','Roofing','Lighting','Insulation','Wardrobes','Heating and ventilation','Built-in cabinetry','Kitchen and cabinetry','Hardware','Benchtops','Painting','Appliances','Waterproofing'];
+const g2s4 = ['Which amounts are fixed?','Which are provisional sums?','Which are prime cost allowances?','What has each allowance been based on?','Is it realistic for the specification you want?','Is installation included?','What margin applies if the actual cost is higher?'];
+const g2s5 = ['Foundations','Complex roof structures','Piling','Drainage and stormwater','Ground improvement','Service connections','Retaining','Scaffolding','Excavation','Cranes','Structural steel','Temporary works','Large openings','Difficult access'];
+const g2s6 = ['How many labour hours have been allowed?','Is enough time included for the complexity of the home?','What mix of qualified builders and apprentices is assumed?','Who will actually work on the project?','How experienced is the foreman?','Has the team built similar homes?','What happens if more labour hours are required?'];
+const g2s6b = ['Complex junctions','Architectural stairs','Feature ceilings','Stonework','Detailed cladding','Level thresholds','Large openings','Specialist materials','Built-in furniture','Complex waterproofing'];
+const g2s7 = ['Will you receive the price before work proceeds?','Who can approve a variation?','What margin applies?','Are administration charges added?','Are labour rates clear?','How are changes recorded?','Can you see the effect on the total budget?'];
+const g2s8 = ['Tender requirements','Market rates','Inclusions and exclusions','Provisional sums','Unrealistically low allowances','Normalising the tenders','Clarifying differences before appointment'];
+const g2s9 = ['What is included','What is excluded','What remains uncertain','Whether allowances are realistic','Whether enough labour has been allowed','How changes will be approved','How costs will be reported','What you are realistically likely to pay'];
+const g3s1a = ['Did the final cost align with expectations?','How were additional costs handled?','Were budget updates clear?','How were problems dealt with?','Was communication consistent?','How was the aftercare?','Would you build with them again?'];
+const g3s1b = ['Is the build tracking to budget?','Are cost changes explained before work proceeds?','Do you receive regular updates?','Can you see how the programme is tracking?','Are the project manager and site team accessible?'];
+const g3q = ['Were there unexpected costs?','If costs increased, why?','Were they explained before work proceeded?','Were increases caused by requested upgrades, unforeseen site conditions or something missing from the original pricing?'];
+const g3s2 = ['Who is the project manager?','Are they a qualified builder?','How many comparable projects have they managed?','Who is the foreman?','How experienced are they?','How long has the team worked together?','Will the same people stay on the project?','Who makes decisions when problems arise?','Who is accountable for the budget?'];
+const g3s3 = ['Construction programme','Internal sign-offs','Client access to scheduling','Quality-control processes','Progress updates','Inspection records','Site photographs','Selection tracking','Budget reporting','Handover','Variation approvals','Aftercare'];
+const g3s4 = ['Years in business','Number of comparable homes completed','Experience of the leadership team','Financial management and governance','Relationships with trades and suppliers','Insurance','Warranties','Industry recognition','Aftercare','Who remains responsible if an issue arises after handover'];
+const cs1 = ['A well-finished architecturally designed home','A more compact, considered footprint','Quality kitchens and bathrooms','Good storage','Built-in cabinetry','Covered outdoor living','A considered material palette','Spending money where it has the greatest impact'];
+const cs2 = ['Foundations','Stormwater','Retaining','Service upgrades','Earthworks','Difficult site access','Structural steel','Complex detailing','Large openings','Additional labour'];
+const csEx = ['Built-in cabinetry throughout','Two covered outdoor living areas','Tiled walk-in shower','Engineered timber floors','Pitched feature ceiling','Stone benchtops','Timber-look feature panelling','Built-in study nook'];
+const cs3 = ['The site','Floor area','Building shape','Structure','Specification','Architectural detailing','Labour','The decisions made during design'];
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Client Guides | Thorne Group</title>
+  <style is:global>
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#FAF9F6;color:#393533;font-family:'Metric','Helvetica Neue',Helvetica,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+    .cg *{box-sizing:border-box}
+    .cg a{color:#393533;text-decoration:none}
+    .cg a:hover{opacity:.5}
+    .cg strong{font-weight:500;color:#393533}
+    .cg-top{position:sticky;top:0;z-index:5;background:#FAF9F6;border-bottom:1px solid #c8c3bb}
+    .cg-wrap{max-width:1080px;margin:0 auto;padding-left:24px;padding-right:24px}
+    .cg-r1{padding-top:18px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
+    .cg-logo{height:22px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
+    .cg-kick{font-weight:400;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb}
+    .cg-tabs{padding-top:14px;display:flex;gap:28px;overflow-x:auto;scrollbar-width:none}
+    .cg-tabs::-webkit-scrollbar{display:none}
+    .cg-tab{cursor:pointer;background:none;border:0;border-bottom:2px solid transparent;padding:8px 0 14px;font-family:inherit;font-weight:400;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e;white-space:nowrap}
+    .cg-tab[aria-selected="true"]{color:#393533;border-bottom-color:#393533}
+    .cg-main{padding-top:56px;padding-bottom:80px}
+    .cg-guide{padding-top:8px}
+    .cg-guide[hidden]{display:none}
+    .eb{font-weight:400;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb;margin-bottom:22px}
+    .eb span{color:#7a746e;letter-spacing:.25em}
+    .cg h1{margin:0;font-weight:300;font-size:clamp(36px,5vw,56px);line-height:1.1;letter-spacing:-.02em;color:#393533}
+    .intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px 48px;align-items:end;margin:30px 0 34px;padding-top:24px;border-top:1px solid #393533}
+    .lead{margin:0;font-weight:300;font-size:26px;line-height:1.3;letter-spacing:-.015em;color:#393533}
+    .intro .sm{margin:0;font-size:15px;line-height:1.9;color:#7a746e}
+    .sec{display:flex;gap:20px;align-items:baseline;margin:40px 0 16px;padding-top:22px;border-top:1px solid #393533}
+    .sec.flush{margin-top:24px;padding-top:0;border-top:0}
+    .num{font-weight:400;font-size:11px;letter-spacing:.35em;color:#c8c3bb}
+    .sec h2{margin:0;font-weight:300;font-size:28px;line-height:1.15;letter-spacing:-.02em;color:#393533}
+    .g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:20px 40px;align-items:start}
+    .g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:20px 32px;align-items:start}
+    .body{margin:0 0 14px;font-size:15px;line-height:2;color:#7a746e}
+    .body:last-child{margin-bottom:0}
+    .say{margin:0;font-weight:300;font-size:20px;line-height:1.45;letter-spacing:-.01em;color:#393533}
+    .lab{font-weight:400;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e;margin:8px 0 10px}
+    .rows{border-bottom:1px solid #c8c3bb}
+    .rows.two{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+    .row{border-top:1px solid #c8c3bb;font-size:14px;line-height:1.5;color:#393533}
+    .row.box{display:flex;gap:14px;align-items:flex-start;padding:9px 0}
+    .rows.two .row.box{gap:12px}
+    .row.p6{padding:6px 0}.row.p7{padding:7px 0}.row.p8{padding:8px 0}
+    .mk{flex:none;width:13px;height:13px;border:1px solid #7a746e;margin-top:4px}
+    .dark{background:#393533;color:#FAF9F6;padding:26px 28px 24px}
+    .dark.wide{padding:28px 32px;margin-top:24px}
+    .dark .dlab{font-weight:400;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb;margin-bottom:12px}
+    .dark .dq{font-weight:300;font-size:20px;line-height:1.45;letter-spacing:-.01em;color:#FAF9F6}
+    .dark.wide .dq{font-size:22px;max-width:34em}
+    .dark strong{color:#FAF9F6}
+    .ph{position:relative;overflow:hidden;background:#F2F0ED;display:flex;align-items:center;justify-content:center;text-align:center;padding:12px}
+    .ph span{font-weight:400;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e}
+    .ph.ruled{border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
+    .pics{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:14px}
+    .pair{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:24px}
+    .note{margin:12px 0 0;font-size:12px;line-height:1.8;color:#7a746e}
+    .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));margin-top:32px;border-top:1px solid #393533}
+    .team > div{padding:22px 28px}
+    .team > div:first-child{padding-left:0}
+    .team > div:last-child{padding-right:0}
+    .team > div:not(:last-child){border-right:1px solid #c8c3bb}
+    .team .who{font-weight:300;font-size:22px;line-height:1.2;letter-spacing:-.01em;color:#393533;margin-bottom:10px}
+    .team p{margin:0;font-size:14px;line-height:1.8;color:#7a746e}
+    .h3{margin:0 0 12px;font-weight:300;font-size:22px;line-height:1.3;letter-spacing:-.01em;color:#393533}
+    .cta{margin-top:40px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-wrap:wrap}
+    .cg a.btn{display:inline-block;font-weight:400;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#FAF9F6;background:#393533;padding:12px 28px;white-space:nowrap}
+    .cg a.btn:hover{opacity:1}
+    .cg-foot{border-top:1px solid #c8c3bb}
+    .cg-foot .cg-wrap{padding-top:22px;padding-bottom:40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-weight:400;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#7a746e}
+    @media (max-width:600px){
+      .pair{grid-template-columns:1fr}
+      .team > div{padding:22px 0 !important;border-right:0 !important}
+      .team > div + div{border-top:1px solid #c8c3bb}
+    }
+  </style>
+</head>
+<body>
+<div class="cg">
+  <div class="cg-top">
+    <div class="cg-wrap cg-r1">
+      <a href="https://www.thornegroup.co.nz"><img class="cg-logo" src="https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png" alt="Thorne Group" /></a>
+      <span class="cg-kick">Client guides</span>
+    </div>
+    <div class="cg-wrap cg-tabs" role="tablist">
+      <button class="cg-tab" type="button" role="tab" data-tab="01" aria-selected="true">01 · Before you price</button>
+      <button class="cg-tab" type="button" role="tab" data-tab="02" aria-selected="false">02 · Comparing quotes</button>
+      <button class="cg-tab" type="button" role="tab" data-tab="03" aria-selected="false">03 · Case study</button>
+    </div>
+  </div>
+
+  <main class="cg-wrap cg-main">
+
+  <!-- ===== Guide 01 ===== -->
+  <section class="cg-guide" data-guide="01">
+    <div class="eb">Client guide 01 <span>· Budget, site and design</span></div>
+    <h1>Before you <strong>price</strong>.</h1>
+    <div class="intro">
+      <p class="lead">The earlier construction costs are considered, the more opportunity there is to keep the brief and budget aligned.</p>
+      <p class="sm">Waiting until detailed architectural and engineering drawings are complete can mean significant fees have already been spent before discovering the home is over budget.</p>
+    </div>
+    <Fragment set:html={ph('21/9', 'Aerial cover', 'ruled')} />
+
+    <Fragment set:html={sec('01', 'Check the budget early')} />
+    <div class="g2">
+      <Fragment set:html={list('Before detailed drawings', box(g1s1))} />
+      <div class="dark">
+        <div class="dlab">The aim</div>
+        <div class="dq">Understand whether the home you want and the budget you have are reasonably aligned before the design becomes expensive to change.</div>
+      </div>
+    </div>
+
+    <Fragment set:html={sec('02', 'Understand your site')} />
+    <div class="g2">
+      <div>
+        <p class="body">Two similar homes can have very different costs because of the site.</p>
+        <p class="body">Some of the biggest project costs may never be visible once the home is finished.</p>
+      </div>
+      <Fragment set:html={list('Review', box(g1s2), true)} />
+    </div>
+
+    <Fragment set:html={sec('03', 'Be careful with square metre rates')} />
+    <div class="g2">
+      <div>
+        <p class="body">“What is your square metre rate?” is a common question, but it can be a poor way to estimate an individual architectural home.</p>
+        <p class="body">Registered quantity surveyor <strong>Nick Clements of YourQS</strong> analysed 468 residential projects and found considerable variation in square metre rates, including between similarly sized homes.</p>
+        <p class="body">He also notes that changing the shape and configuration of a home can create a 20 to 30% difference in the square metre rate, even when similar materials are used.</p>
+      </div>
+      <Fragment set:html={list('Before comparing $/m², ask', box(g1s3))} />
+    </div>
+    <div class="dark wide">
+      <div class="dlab">A better question</div>
+      <div class="dq">Can the home I want, on this site, at the level of finish I want, realistically be built within my budget?</div>
+    </div>
+    <p class="note">Research acknowledgement: Nick Clements, YourQS, <em>What’s Your Square Metre Rate?</em></p>
+
+    <Fragment set:html={sec('04', 'Allow for the full project cost')} />
+    <p class="body" style="margin-bottom:20px">The builder’s proposal may not cover your entire project.</p>
+    <div class="g3">
+      <Fragment set:html={list('Professional costs', plain(g1s4a))} />
+      <Fragment set:html={list('Check your architect’s agreement includes', box(g1s4b).replace(/row box/g, 'row box p7'))} />
+      <Fragment set:html={list('Other costs', plain(g1s4c))} />
+    </div>
+    <p class="say" style="margin-top:24px;max-width:34em">If it sits outside the builder’s proposal, it still needs to sit somewhere in your budget.</p>
+
+    <Fragment set:html={sec('05', 'Bring construction knowledge in earlier')} />
+    <div class="g2">
+      <div>
+        <p class="body">An alternative to waiting for completed plans is to involve your preferred builder during design. This allows the architect, engineer and builder to consider <strong>design, buildability and cost together</strong>.</p>
+        <p class="body">A small change to a detail can sometimes reduce structure, materials or labour considerably.</p>
+      </div>
+      <Fragment set:html={list('Review as the plans develop', plain(g1s5))} />
+    </div>
+
+    <div class="cg-guide" style="margin-top:40px">
+      <div class="eb">How we approach it</div>
+      <div class="g2" style="gap:20px 48px;align-items:end;margin-bottom:34px">
+        <h3 style="margin:0;font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-.02em">Design, buildability and cost, <strong>considered together</strong>.</h3>
+        <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">Our involvement can begin before you have an architect or once early concepts are underway. Pricing is reviewed as the plans develop so you can make informed decisions before reaching the point of no return.</p>
+      </div>
+      <Fragment set:html={ph('3/2', 'Gavin, Aaron and Peter', 'ruled')} />
+      <div class="team">
+        <div><div class="eb" style="margin-bottom:10px">Construction</div><div class="who">Gavin</div><p>Works alongside architects to review construction methods, materials and detailing before they are locked in.</p></div>
+        <div><div class="eb" style="margin-bottom:10px">Site</div><div class="who">Aaron</div><p>More than two decades of land development and construction experience. Identifies site issues that may affect feasibility and cost.</p></div>
+        <div><div class="eb" style="margin-bottom:10px">Cost</div><div class="who">Peter</div><p>Oversees the financial governance, reporting and cost-control systems behind the build.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Guide 02 ===== -->
+  <section class="cg-guide" data-guide="02" hidden>
+    <div class="eb">Client guide 02 <span>· What are you really comparing</span></div>
+    <h1>Same plans. <strong>Different prices.</strong></h1>
+    <div class="intro">
+      <p class="lead">Two builders can price the same plans and return very different totals.</p>
+      <p class="sm">Before assuming the lower price represents better value, understand <strong>what sits behind each number</strong>.</p>
+    </div>
+    <Fragment set:html={ph('21/9', 'Plans cover', 'ruled')} />
+
+    <Fragment set:html={sec('01', 'Are they pricing the same information?')} />
+    <div class="g2">
+      <p class="body">Even one later drawing revision can make two tenders difficult to compare.</p>
+      <Fragment set:html={list('Every builder should have', box(g2s1), true)} />
+    </div>
+
+    <Fragment set:html={sec('02', 'What is included and excluded?')} />
+    <p class="body" style="margin-bottom:6px">A short proposal may not tell you enough.</p>
+    <div class="g2">
+      <Fragment set:html={list('Check', box(g2s2))} />
+      <div class="dark"><div class="dq">A lower price can simply mean less has been allowed for.</div></div>
+    </div>
+    <div class="pair">
+      <Fragment set:html={ph('3/2', 'Site earthworks')} />
+      <Fragment set:html={ph('1/1', 'Site foundations')} />
+    </div>
+
+    <Fragment set:html={sec('03', 'Compare the specification')} />
+    <div class="g2">
+      <div>
+        <p class="body">The same heading does not necessarily mean the same product or quality.</p>
+        <p class="body">If an item has not been selected, compare the allowance.</p>
+      </div>
+      <Fragment set:html={list('Compare', plain(g2s3, 6), true)} />
+    </div>
+
+    <Fragment set:html={sec('04', 'Check provisional sums and allowances')} />
+    <div class="g2">
+      <p class="body">Low allowances can make an initial price look attractive, but the actual cost still needs to be paid later.</p>
+      <Fragment set:html={list('Ask', box(g2s4))} />
+    </div>
+
+    <div style="margin-top:40px"><Fragment set:html={ph('21/9', 'Coastal site', 'ruled')} /></div>
+    <Fragment set:html={sec('05', 'Look closely at site and structural costs').replace('class="sec"', 'class="sec flush"')} />
+    <div class="g2">
+      <div>
+        <p class="body">These can be some of the biggest differences between proposals.</p>
+        <p class="body">A large cost does not necessarily add floor area, which is another reason square metre comparisons can be misleading.</p>
+      </div>
+      <Fragment set:html={list('Review', plain(g2s5, 6), true)} />
+    </div>
+
+    <Fragment set:html={sec('06', 'Labour: what has actually been allowed?')} />
+    <div class="g2">
+      <div>
+        <p class="body">Labour is a major part of an architectural build. The hourly rate matters, but <strong>the skill level and number of hours allowed matter just as much</strong>.</p>
+        <p class="body" style="margin-bottom:20px">An experienced builder may have a higher hourly rate but can often work more efficiently, anticipate problems earlier and resolve difficult details more effectively.</p>
+        <Fragment set:html={list('Labour-intensive details', plain(g2s6b, 6), true).replace('<div class="lab">', '<div class="lab" style="margin-top:0">')} />
+      </div>
+      <Fragment set:html={list('Ask', box(g2s6))} />
+    </div>
+    <div class="dark wide">
+      <div class="dq">A lower labour allowance only saves money if enough time has actually been allowed to build the home properly.</div>
+      <p style="margin:16px 0 0;font-size:13px;line-height:1.8;color:#c8c3bb;max-width:40em">At Thorne Group, our foremen bring at least 20 years’ building experience and lead small, consistent site teams supported by project managers who are qualified builders.</p>
+    </div>
+    <div style="margin-top:14px"><Fragment set:html={ph('21/9', 'Labour and joinery')} /></div>
+
+    <Fragment set:html={sec('07', 'Understand variations')} />
+    <div class="g2">
+      <div>
+        <p class="body">Changes happen. What matters is how they are priced and approved.</p>
+        <p class="body">You should understand the cost of a decision <strong>before</strong> making it.</p>
+      </div>
+      <Fragment set:html={list('Ask', box(g2s7))} />
+    </div>
+
+    <Fragment set:html={sec('08', 'Consider an independent quantity surveyor')} />
+    <div class="g2">
+      <div>
+        <p class="body">If you tender, an independent QS can help make the proposals easier to compare.</p>
+        <p class="say">The goal is not simply to identify the lowest number. It is to understand why the numbers are different.</p>
+      </div>
+      <Fragment set:html={list('They can assist with', plain(g2s8))} />
+    </div>
+
+    <Fragment set:html={sec('09', 'Compare the likely final cost')} />
+    <div class="g2">
+      <Fragment set:html={list('Make sure you understand', box(g2s9))} />
+      <div class="dark"><div class="dq">The cheapest starting price is not necessarily the cheapest finished home.</div></div>
+    </div>
+  </section>
+
+  <!-- ===== Guide 03 ===== -->
+  <section class="cg-guide" data-guide="03" hidden>
+    <div class="eb">Client guide 03 <span>· Case study</span></div>
+    <h1 style="margin-bottom:28px">What do you get for <strong>$1 million</strong>?</h1>
+    <div class="dark g2" style="gap:20px 48px;align-items:end;padding:30px 34px">
+      <div>
+        <div class="dlab">The question we are often asked</div>
+        <div class="lead" style="color:#FAF9F6">“Can you still build an architecturally designed home for around $1 million?”</div>
+      </div>
+      <p style="margin:0;font-size:15px;line-height:1.9;color:#FAF9F6">It can be possible. But it depends heavily on the <strong>site, size, complexity, specification and how early costs are considered</strong>.</p>
+    </div>
+
+    <div class="g2" style="margin-top:36px">
+      <div>
+        <h3 class="h3">What can that budget achieve?</h3>
+        <p class="body">We have built hundreds of space-optimising homes under $1 million, many with feature ceilings, stone benchtops, built-in cabinetry and covered outdoor living. Today, the emphasis is on making every square metre work.</p>
+        <p class="say">The aim is not to make the home feel compromised. It is to be deliberate about where the money goes.</p>
+      </div>
+      <Fragment set:html={list('That can mean', plain(cs1, 8))} />
+    </div>
+
+    <div class="g2" style="margin-top:36px">
+      <div>
+        <h3 class="h3">Complexity can cost more than quality</h3>
+        <p class="body">A simpler form can free up budget without making the home feel basic. Reducing unnecessary corners, structural complexity or excessive material changes may allow more money to go into the things you experience every day.</p>
+        <p class="say">Less money hidden in structure, more money spent where you actually see and use it.</p>
+      </div>
+      <div>
+        <h3 class="h3">Where costs can hide</h3>
+        <p style="margin:0 0 10px;font-size:14px;line-height:1.8;color:#7a746e">Some of the largest costs may never appear in the finished photographs.</p>
+        <div class="rows two" set:html={plain(cs2, 6)}></div>
+        <p style="margin:14px 0 0;font-size:14px;line-height:1.8;color:#7a746e">This is why early site and construction input matters. Aaron’s land development experience helps identify where a site may put pressure on the budget. Gavin and the construction team look at how to achieve the architectural intent with efficient structure, detailing and construction methods.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:40px;padding-top:24px;border-top:1px solid #393533">
+      <div class="lab" style="margin:0 0 14px">Example</div>
+      <div class="g2" style="margin-bottom:24px">
+        <h3 style="margin:0;font-weight:300;font-size:26px;line-height:1.2;letter-spacing:-.015em">Built for <strong>under $1 million</strong>, with upgrades.</h3>
+        <p style="margin:0;font-size:15px;line-height:1.9;color:#7a746e">This home was completed for under $1 million and includes a number of upgraded features. Take some of these out and there is real scope to bring the cost down further.</p>
+      </div>
+      <div class="pics">
+        <Fragment set:html={['Exterior','Kitchen','Living','Bedroom','Study','Bathroom'].map((l) => ph('4/3', l)).join('')} />
+      </div>
+      <div class="g2" style="margin-top:22px">
+        <div class="lab">Included in this home</div>
+        <div class="rows two" set:html={plain(csEx)}></div>
+      </div>
+    </div>
+
+    <div class="g2" style="margin-top:40px;padding-top:24px;border-top:1px solid #393533">
+      <div>
+        <h3 class="h3" style="font-size:28px;line-height:1.15;letter-spacing:-.02em">The answer</h3>
+        <p class="body">An architecturally designed home around the $1 million mark can still be possible. But there is no universal square metre rate.</p>
+        <p class="body">Most importantly, <strong>it depends on how early these things are considered together</strong>.</p>
+        <p class="body">If you want to understand what your budget could realistically achieve, the best time to start that conversation is before the design is locked in.</p>
+      </div>
+      <Fragment set:html={list('It depends on', plain(cs3, 8))} />
+    </div>
+
+    <div style="margin-top:64px;padding-top:28px;border-top:1px solid #393533">
+      <div class="eb" style="margin-bottom:16px">Look beyond the quote</div>
+      <h2 style="margin:0;font-weight:300;font-size:40px;line-height:1.1;letter-spacing:-.02em">Choosing the <strong>builder</strong>.</h2>
+      <div class="intro">
+        <p class="lead">A building project can last many months, and your relationship with the builder often extends well beyond handover.</p>
+        <p class="sm">Price matters. So do the people, systems and business behind it.</p>
+      </div>
+      <div class="pics" style="padding:14px 0;border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb">
+        <Fragment set:html={[1,2,3,4,5,6].map((n) => ph('4/3', 'Client ' + n)).join('')} />
+      </div>
+
+      <Fragment set:html={sec('01', 'Speak to previous and current clients')} />
+      <p class="body" style="margin-bottom:16px;max-width:40em">Ask for <strong>a number of clients</strong>, not one carefully selected reference. Ideally speak to people who have completed similar projects and homeowners currently building.</p>
+      <div class="g2">
+        <Fragment set:html={list('Ask previous clients', box(g3s1a))} />
+        <Fragment set:html={list('Ask current clients', box(g3s1b))} />
+      </div>
+
+      <div class="dark" style="padding:32px 36px;margin-top:32px">
+        <div class="dlab" style="margin-bottom:14px">Essential question</div>
+        <div style="font-weight:300;font-size:26px;line-height:1.3;letter-spacing:-.02em;color:#FAF9F6;max-width:30em;margin-bottom:24px">How closely did the final build cost match the original estimate?</div>
+        <div class="g2">
+          <div>
+            <div class="dlab" style="letter-spacing:.3em;margin-bottom:8px">Previous clients</div>
+            <p style="margin:0 0 18px;font-size:15px;line-height:1.8;color:#FAF9F6">“Excluding upgrades or changes you specifically requested, how closely did your final build cost match the original estimate?”</p>
+            <div class="dlab" style="letter-spacing:.3em;margin-bottom:8px">Current clients</div>
+            <p style="margin:0;font-size:15px;line-height:1.8;color:#FAF9F6">“How is your latest projected build cost tracking against the original estimate?”</p>
+          </div>
+          <div>
+            <div class="dlab" style="letter-spacing:.3em;margin-bottom:8px">Then ask</div>
+            <div style="border-bottom:1px solid #7a746e" set:html={g3q.map((q) => `<div style="padding:7px 0;border-top:1px solid #7a746e;font-size:14px;line-height:1.5;color:#FAF9F6">${q}</div>`).join('')}></div>
+          </div>
+        </div>
+        <div class="g2" style="margin-top:24px;padding-top:18px;border-top:1px solid #7a746e">
+          <p style="margin:0;font-size:13px;line-height:1.8;color:#c8c3bb"><strong>Why it matters.</strong> This gives you an indication of how accurately the builder prices, identifies risk and manages costs throughout construction.</p>
+          <p style="margin:0;font-size:13px;line-height:1.8;color:#c8c3bb">Make sure you know whether the client is referring to an early concept estimate, a pre-contract estimate or the final contract price.</p>
+        </div>
+      </div>
+
+      <Fragment set:html={sec('02', 'Know who will actually build your home')} />
+      <div class="g2">
+        <div>
+          <p class="body">You are not simply choosing a company name.</p>
+          <p class="say">You are choosing the people making hundreds of decisions about your home.</p>
+        </div>
+        <Fragment set:html={list('Ask', box(g3s2))} />
+      </div>
+
+      <Fragment set:html={sec('03', 'Ask to see the systems')} />
+      <div class="g2">
+        <p class="body">Rather than simply asking whether communication and project management are good, ask to see how they work.</p>
+        <Fragment set:html={list('Review', plain(g3s3, 6), true)} />
+      </div>
+
+      <Fragment set:html={sec('04', 'Understand the business behind the builder')} />
+      <div class="g2">
+        <div>
+          <p class="body">For a major project, it is reasonable to understand who you are entrusting it to.</p>
+          <p class="body">Awards can provide another point of reference, but client experience, completed work and the systems behind the business matter too.</p>
+        </div>
+        <Fragment set:html={list('Review', box(g3s4))} />
+      </div>
+
+      <div class="cta">
+        <p style="margin:0;font-weight:300;font-size:22px;line-height:1.4;letter-spacing:-.01em">The earlier we talk, the more useful we can be.</p>
+        <a class="btn" href="https://www.thornegroup.co.nz">Talk to us early</a>
+      </div>
+    </div>
+  </section>
+
+  </main>
+  <footer class="cg-foot">
+    <div class="cg-wrap"><span>Thorne Group · Tauranga</span><a href="https://www.thornegroup.co.nz">thornegroup.co.nz</a></div>
+  </footer>
+</div>
+<script is:inline>
+/* tabs: #01 / #02 / #03 in the link opens that guide */
+(function () {
+  var tabs = document.querySelectorAll('.cg-tab'), guides = document.querySelectorAll('.cg-guide[data-guide]');
+  function show(id, scroll) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t.getAttribute('data-tab') === id ? 'true' : 'false'); });
+    guides.forEach(function (g) { g.hidden = g.getAttribute('data-guide') !== id; });
+    if (scroll) {
+      try { history.replaceState(null, '', '#' + id); } catch (e) {}
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+  tabs.forEach(function (t) { t.addEventListener('click', function () { show(t.getAttribute('data-tab'), true); }); });
+  var h = decodeURIComponent(location.hash.slice(1)).slice(0, 2);
+  show(['01', '02', '03'].indexOf(h) !== -1 ? h : '01', false);
+})();
+</script>
+</body>
+</html>
