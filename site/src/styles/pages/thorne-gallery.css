@@ -320,3 +320,25 @@ thorne-gallery .insp-card:hover .insp-lab{ color:#7a746e; }
   thorne-gallery .insp-kick{ font-size:15px; }
   thorne-gallery .insp-lab{ font-size:15px; }
 }
+
+/* Theatre v3: no auto-play and no interstitial; big obvious arrows on the photo,
+   thumb-sized photo / project buttons on phones (per Lisa). */
+thorne-gallery .th-arr{ position:absolute; top:50%; transform:translateY(-50%); z-index:5; width:60px; height:60px; border-radius:50%; border:1px solid rgba(250,249,246,.75); background:rgba(35,32,30,.55); color:#FAF9F6; font-family:var(--f); font-size:40px; font-weight:300; line-height:1; padding:0 0 5px; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .2s ease,color .2s ease; }
+thorne-gallery .th-arr-prev{ left:16px; }
+thorne-gallery .th-arr-next{ right:16px; }
+thorne-gallery .th-arr:hover,thorne-gallery .th-arr:focus-visible{ background:#FAF9F6; color:#23201e; }
+thorne-gallery .th-ctrls{ display:flex; flex-direction:column; align-items:stretch; justify-content:flex-start; gap:8px; }
+thorne-gallery .th-row{ display:flex; gap:8px; }
+thorne-gallery .th-row .th-b{ flex:1 1 0; width:auto; height:52px; font-size:13px; font-weight:500; letter-spacing:.12em; text-transform:uppercase; padding:0 8px; white-space:nowrap; }
+thorne-gallery .th-row-proj .th-b{ border-color:rgba(250,249,246,.9); }
+@media(min-width:751px){
+  thorne-gallery .th-ctrls{ padding:10px; }
+  thorne-gallery .th-row{ flex-direction:column; }
+  thorne-gallery .th-row-proj{ margin-top:6px; }
+  thorne-gallery .th-row .th-b{ flex:0 0 auto; height:46px; }
+}
+@media(max-width:750px){
+  thorne-gallery .th-arr{ display:none; }
+  thorne-gallery .th-ctrls{ padding:10px 12px 14px; gap:10px; }
+  thorne-gallery .th-row .th-b{ height:58px; font-size:15px; }
+}
