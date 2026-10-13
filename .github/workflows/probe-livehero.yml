@@ -1,0 +1,26 @@
+name: Probe live home hero in real Chrome
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  hero:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Install Playwright with Chrome
+        run: |
+          mkdir -p /tmp/p && cd /tmp/p && npm init -y >/dev/null && npm i playwright@1.47.2 >/dev/null
+          npx playwright install --with-deps chrome
+      - name: Load the live home page and watch the hero
+        run: node .github/probe/livehero.mjs
+        continue-on-error: true
+      - name: Save results
+        run: |
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-livehero
+          git add -f diagnostics/livehero || true
+          git commit -m "Live hero probe results" || true
+          git push -f origin diag-livehero
