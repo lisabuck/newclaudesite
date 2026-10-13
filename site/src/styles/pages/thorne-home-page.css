@@ -152,3 +152,6 @@ thorne-home-page .tg-reno-lab{left:24px!important;top:24px!important;right:auto!
    drops its top space so the gap below the badges matches the gap above
    them; the Development Collaborations band keeps its own - per Lisa */
 thorne-home-page .tg-services > .tg-band:first-child{padding-top:0!important}
+
+/* v77: single hero photo in place of the crossfade slideshow - per Lisa */
+thorne-home-page .tg-hero-slides .tg-hero-one{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 50%;display:block}
