@@ -181,3 +181,11 @@ thorne-home-page .tg-callbtn:hover{background:#FAF9F6;color:#393533}
   thorne-home-page .tg-callbtn{color:#FAF9F6;background:#393533;border-color:#393533}
   thorne-home-page .tg-callbtn:hover{background:#54504c;color:#FAF9F6}
 }
+/* v83: on tablets and computers the button reveals the numbers below it */
+thorne-home-page .tg-callnums{flex-basis:100%;width:0;min-width:100%;font-size:18px;line-height:1.6;color:#FAF9F6;text-shadow:0 1px 14px rgba(35,32,30,.45)}
+thorne-home-page .tg-callnums[hidden]{display:none}
+thorne-home-page .tg-callnums a{color:#FAF9F6;text-decoration:none;border-bottom:1px solid rgba(250,249,246,.6);white-space:nowrap}
+thorne-home-page .tg-callnums a:hover{border-bottom-color:#FAF9F6}
+thorne-home-page .tg-calllab2{font-size:14px;letter-spacing:.22em;text-transform:uppercase;opacity:.85}
+thorne-home-page .tg-callsep{margin:0 14px;opacity:.6}
+@media(max-width:750px){thorne-home-page .tg-callnums{display:none!important}}
