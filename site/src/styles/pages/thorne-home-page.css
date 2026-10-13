@@ -148,8 +148,7 @@ thorne-home-page .tg-reno-lab{left:24px!important;top:24px!important;right:auto!
   thorne-home-page .tg-cards > .tg-card:nth-child(n+4){display:none!important}
 }
 
-/* Architectural Homes band sits a little closer to the award badges so the
-   space below the badges looks the same as the space above them (the badge
-   artwork carries blank space at its foot) - per Lisa */
-thorne-home-page .tg-badges{padding-bottom:40px!important}
-@media(max-width:750px){thorne-home-page .tg-badges{padding-bottom:36px!important}}
+/* Architectural Homes band (first band, straight under the award badges)
+   drops its top space so the gap below the badges matches the gap above
+   them; the Development Collaborations band keeps its own - per Lisa */
+thorne-home-page .tg-services > .tg-band:first-child{padding-top:0!important}
