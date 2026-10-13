@@ -104,3 +104,29 @@ thorne-home-page .tg-reno-lab{left:24px!important;top:24px!important;right:auto!
   thorne-home-page .tg-band[data-screen-label="Renovations band"] .tg-reno{min-height:0!important}
   thorne-home-page .tg-band[data-screen-label="Renovations band"] .tg-band-copy{padding-top:48px!important;padding-bottom:48px!important}
 }
+
+/* Testimonial cards: three on show, each place swapping between two quotes
+   (1/4, 2/5, 3/6). One place changes every 3 seconds, never two at once:
+   place 1 at 3s, place 2 at 6s, place 3 at 9s, then round again (18s cycle,
+   1s soft crossfade). Tablets and phones stack the three places. */
+thorne-home-page .tg-cards > .tg-card:nth-child(1),thorne-home-page .tg-cards > .tg-card:nth-child(4){grid-column:1;grid-row:1}
+thorne-home-page .tg-cards > .tg-card:nth-child(2),thorne-home-page .tg-cards > .tg-card:nth-child(5){grid-column:2;grid-row:1}
+thorne-home-page .tg-cards > .tg-card:nth-child(3),thorne-home-page .tg-cards > .tg-card:nth-child(6){grid-column:3;grid-row:1}
+@media(max-width:1000px){
+  thorne-home-page .tg-cards{grid-template-columns:1fr!important}
+  thorne-home-page .tg-cards > .tg-card:nth-child(n){grid-column:1}
+  thorne-home-page .tg-cards > .tg-card:nth-child(2),thorne-home-page .tg-cards > .tg-card:nth-child(5){grid-row:2}
+  thorne-home-page .tg-cards > .tg-card:nth-child(3),thorne-home-page .tg-cards > .tg-card:nth-child(6){grid-row:3}
+}
+@keyframes tgTA{0%{opacity:1}5.56%{opacity:0}50%{opacity:0}55.56%{opacity:1}100%{opacity:1}}
+@keyframes tgTB{0%{opacity:0}5.56%{opacity:1}50%{opacity:1}55.56%{opacity:0}100%{opacity:0}}
+thorne-home-page .tg-cards > .tg-card:nth-child(1){animation:tgTA 18s linear 3s infinite both}
+thorne-home-page .tg-cards > .tg-card:nth-child(2){animation:tgTA 18s linear 6s infinite both}
+thorne-home-page .tg-cards > .tg-card:nth-child(3){animation:tgTA 18s linear 9s infinite both}
+thorne-home-page .tg-cards > .tg-card:nth-child(4){animation:tgTB 18s linear 3s infinite both}
+thorne-home-page .tg-cards > .tg-card:nth-child(5){animation:tgTB 18s linear 6s infinite both}
+thorne-home-page .tg-cards > .tg-card:nth-child(6){animation:tgTB 18s linear 9s infinite both}
+@media(prefers-reduced-motion:reduce){
+  thorne-home-page .tg-cards > .tg-card{animation:none!important}
+  thorne-home-page .tg-cards > .tg-card:nth-child(n+4){display:none!important}
+}
