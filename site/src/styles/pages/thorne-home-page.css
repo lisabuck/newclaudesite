@@ -169,3 +169,5 @@ thorne-home-page:not([data-hero-ready]) .tg-hero-slides img.tg-h1{opacity:1}
 thorne-home-page:not([data-arch-go]) .tg-band[data-screen-label="Architectural Homes band"] .tg-band-media img{animation-play-state:paused!important}
 /* v80: Architectural Homes band down to five slides (12.5s loop, same timing per photo) */
 @keyframes tgSlideArch5{0%{opacity:0}.7%{opacity:1}23%{opacity:1}24.4%{opacity:0}100%{opacity:0}}
+/* v81: Architectural Homes band at six slides (15s loop, same timing per photo) */
+@keyframes tgSlideArch6{0%{opacity:0}.58%{opacity:1}19.17%{opacity:1}20.33%{opacity:0}100%{opacity:0}}
