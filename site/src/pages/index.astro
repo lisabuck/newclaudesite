@@ -10,7 +10,25 @@ import '../styles/pages/thorne-home-page.css';
 >
   <thorne-home-page class="tg-home" set:html={body}></thorne-home-page>
   <script is:inline defer src="/js/lightdom-shim.js?v=1"></script>
-  <script is:inline defer src="/js/thorne-home-page54.js?v=76"></script>
+  <script is:inline defer src="/js/thorne-home-page54.js?v=78"></script>
+  <script is:inline>
+/* hero rotation starts only once every hero photo has arrived, so no slide
+   ever shows blank (the first photo holds still until then) */
+document.addEventListener('DOMContentLoaded', function () {
+  var host = document.querySelector('thorne-home-page'); if (!host) return;
+  function ready() { host.setAttribute('data-hero-ready', ''); }
+  var imgs = host.querySelectorAll('.tg-hero-slides img'), left = 0;
+  imgs.forEach(function (im) {
+    if (im.complete && im.naturalWidth) return;
+    left++;
+    function one() { if (--left === 0) ready(); }
+    im.addEventListener('load', one, { once: true });
+    im.addEventListener('error', one, { once: true });
+  });
+  if (left === 0) ready();
+  setTimeout(ready, 15000); /* very slow connection: start anyway */
+});
+  </script>
   <script is:inline defer>
 /* Project links on the home page open in a new tab, keeping home open. */
 window.addEventListener('load', function () {

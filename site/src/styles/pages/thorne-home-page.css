@@ -152,3 +152,13 @@ thorne-home-page .tg-reno-lab{left:24px!important;top:24px!important;right:auto!
    drops its top space so the gap below the badges matches the gap above
    them; the Development Collaborations band keeps its own - per Lisa */
 thorne-home-page .tg-services > .tg-band:first-child{padding-top:0!important}
+
+/* v78 hero rotation: five photos, 2.5s each (12.5s loop, same soft
+   crossfade). Until every hero photo has arrived the first photo holds
+   still, so a slide can never come up blank; the page script then sets
+   data-hero-ready on the element and the rotation starts - per Lisa */
+thorne-home-page .tg-hero-slides .tg-hsl,thorne-home-page .tg-hero-slides .tg-hslm{animation-name:tgHomeHero5;animation-duration:12.5s}
+@keyframes tgHomeHero5{0%{opacity:0}.4%{opacity:1}23.2%{opacity:1}24%{opacity:0}100%{opacity:0}}
+thorne-home-page:not([data-hero-ready]) .tg-hero-slides img{animation:none!important}
+thorne-home-page:not([data-hero-ready]) .tg-hero-slides img.tg-h1{opacity:1}
+@media(prefers-reduced-motion:reduce){thorne-home-page .tg-hero-slides img.tg-h1{opacity:1}}
