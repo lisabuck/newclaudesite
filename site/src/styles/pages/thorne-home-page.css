@@ -55,18 +55,18 @@ thorne-home-page .tg-hero-strip a{border-bottom:1px solid rgba(250,249,246,.6)!i
    the pinned E-Newsletter button): New Build filled, the others outlined */
 thorne-home-page .tg-hero-foot:has(.tg-hero-btns){align-items:flex-start!important}
 thorne-home-page .tg-hero-btns{justify-content:flex-start!important;gap:14px 18px!important;text-shadow:none!important;font-weight:400!important}
-thorne-home-page .tg-hero-btns a.tg-hb{display:inline-flex;align-items:center;gap:22px;padding:22px 28px!important;border:1px solid rgba(250,249,246,.85)!important;color:#FAF9F6;text-decoration:none;font-size:15px;letter-spacing:.28em;line-height:1.2;transition:background .2s ease,color .2s ease}
+thorne-home-page .tg-hero-btns a.tg-hb{display:inline-flex;align-items:center;gap:22px;padding:11px 28px!important;border:1px solid rgba(250,249,246,.85)!important;color:#FAF9F6;text-decoration:none;font-size:15px;letter-spacing:.28em;line-height:1.2;transition:background .2s ease,color .2s ease}
 thorne-home-page .tg-hero-btns a.tg-hb:hover{background:#FAF9F6;color:#393533}
 thorne-home-page .tg-hero-btns a.tg-hb-fill{background:#FAF9F6;color:#393533;border-color:#FAF9F6!important}
 thorne-home-page .tg-hero-btns a.tg-hb-fill:hover{background:#F2F0ED}
 thorne-home-page .tg-hero-btns a.tg-hb span{letter-spacing:0;font-size:18px}
 @media(max-width:1000px){
-  thorne-home-page .tg-hero-btns a.tg-hb{padding:18px 22px!important;font-size:14px;letter-spacing:.2em}
+  thorne-home-page .tg-hero-btns a.tg-hb{padding:9px 22px!important;font-size:14px;letter-spacing:.2em}
 }
 @media(max-width:750px){
   thorne-home-page .tg-hero-foot:has(.tg-hero-btns){align-items:stretch!important}
   thorne-home-page .tg-hero-btns{flex-direction:column!important;align-items:stretch!important;gap:10px!important}
-  thorne-home-page .tg-hero-btns a.tg-hb{justify-content:space-between;padding:16px 20px!important;letter-spacing:.16em}
+  thorne-home-page .tg-hero-btns a.tg-hb{justify-content:space-between;padding:10px 20px!important;min-height:44px;letter-spacing:.16em}
 }
 
 
