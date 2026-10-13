@@ -1,0 +1,23 @@
+name: Probe home hero rotation photos
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch each hero photo (status, size, small preview)
+        run: |
+          mkdir -p diagnostics/herorot
+          for id in b2375c_85010d213e844bfc858b75405bd2748f b2375c_94ec95f6cd244c20bdc406cfe631cc7b b2375c_32b03a59cf634e8c9764ec8b87363050 b2375c_f7a7a43fdbe643af9c2a2c61220bf472 b2375c_91a7c03830024dc29ecf151ea879dc00 b2375c_b26070a16e0346b9afcbc51e7cabebb3 b2375c_923772b1e59a4a9e9c140c236b6d6d89; do
+            for sz in w_1920,h_1200 w_2560,h_1600 w_1080,h_1440; do
+              code=$(curl -s -o /tmp/x -w '%{http_code} %{content_type} %{size_download}' "https://static.wixstatic.com/media/${id}~mv2.jpg/v1/fit/${sz},q_85,enc_auto/${id}~mv2.jpg")
+              echo "$id $sz -> $code" | tee -a diagnostics/herorot/report.txt
+            done
+            curl -s -o "diagnostics/herorot/${id:7:8}.jpg" "https://static.wixstatic.com/media/${id}~mv2.jpg/v1/fit/w_400,h_300,q_80,enc_auto/${id}~mv2.jpg"
+          done
+          ls -la diagnostics/herorot
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-herorot
+          git add diagnostics/herorot && git commit -m "Hero rotation photo probe results" && git push -f origin diag-herorot
