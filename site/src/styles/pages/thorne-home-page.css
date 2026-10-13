@@ -171,3 +171,13 @@ thorne-home-page:not([data-arch-go]) .tg-band[data-screen-label="Architectural H
 @keyframes tgSlideArch5{0%{opacity:0}.7%{opacity:1}23%{opacity:1}24.4%{opacity:0}100%{opacity:0}}
 /* v81: Architectural Homes band at six slides (15s loop, same timing per photo) */
 @keyframes tgSlideArch6{0%{opacity:0}.58%{opacity:1}19.17%{opacity:1}20.33%{opacity:0}100%{opacity:0}}
+/* v82: "Call Us for a Chat" button on the Architectural Homes band, beside
+   Find out more; dials the office in international format (+64) so it
+   also works from overseas phones - per Lisa */
+thorne-home-page .tg-arch-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:18px 32px}
+thorne-home-page .tg-callbtn{display:inline-block;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:#FAF9F6;text-decoration:none;border:1px solid #FAF9F6;padding:14px 24px;line-height:1.2;text-shadow:none;transition:background .2s ease,color .2s ease}
+thorne-home-page .tg-callbtn:hover{background:#FAF9F6;color:#393533}
+@media(max-width:750px){
+  thorne-home-page .tg-callbtn{color:#FAF9F6;background:#393533;border-color:#393533}
+  thorne-home-page .tg-callbtn:hover{background:#54504c;color:#FAF9F6}
+}
