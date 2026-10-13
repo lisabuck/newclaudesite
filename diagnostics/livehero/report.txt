@@ -1,0 +1,32 @@
+desktop t=0.00s ready=true 2d7300_6f2b2e52[op1.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop SRC 2d7300_6f2b2e52 https://static.wixstatic.com/media/2d7300_6f2b2e524ed14efb9ec098ec3b3e7bd1~mv2.jpg/v1/fit/w_1920,h_1200,q_85,enc_auto/2d7300_6f2b2e524ed14efb9ec098ec3b3e7bd1~mv
+desktop SRC 2d7300_1858c5f0 https://static.wixstatic.com/media/2d7300_1858c5f0cdd74555b4ff1eedc166ee51~mv2.jpg/v1/fit/w_1920,h_1200,q_85,enc_auto/2d7300_1858c5f0cdd74555b4ff1eedc166ee51~mv
+desktop SRC 2d7300_e161cd63 https://static.wixstatic.com/media/2d7300_e161cd63ede04ab2aaea2f4144fea4b8~mv2.jpg/v1/fit/w_1920,h_1200,q_85,enc_auto/2d7300_e161cd63ede04ab2aaea2f4144fea4b8~mv
+desktop SRC b2375c_f7a7a43f https://static.wixstatic.com/media/b2375c_f7a7a43fdbe643af9c2a2c61220bf472~mv2.jpg/v1/fit/w_1920,h_1200,q_85,enc_auto/b2375c_f7a7a43fdbe643af9c2a2c61220bf472~mv
+desktop t=1.25s ready=true 2d7300_6f2b2e52[op1.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=2.50s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op1.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=3.75s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op1.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=5.00s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op1.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=6.25s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op1.0 w1349]
+desktop t=7.50s ready=true 2d7300_6f2b2e52[op1.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=8.75s ready=true 2d7300_6f2b2e52[op1.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=10.00s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op1.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=11.25s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op1.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=12.50s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op1.0 w1000] b2375c_f7a7a43f[op0.0 w1349]
+desktop t=13.75s ready=true 2d7300_6f2b2e52[op0.0 w1440] 2d7300_1858c5f0[op0.0 w1440] 2d7300_e161cd63[op0.0 w1000] b2375c_f7a7a43f[op1.0 w1349]
+phone t=0.00s ready=false 2d7300_6f2b2e52[op1.0 w0 loading] b2375c_91a7c038[op0.0 w0 loading] b2375c_b26070a1[op0.0 w0 loading] 2d7300_88e55eea[op0.0 w0 loading]
+phone SRC 2d7300_6f2b2e52 
+phone SRC b2375c_91a7c038 
+phone SRC b2375c_b26070a1 
+phone SRC 2d7300_88e55eea 
+phone t=1.25s ready=true 2d7300_6f2b2e52[op1.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=2.50s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op1.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=3.75s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op1.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=5.00s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op1.0 w1080]
+phone t=6.25s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op1.0 w1080]
+phone t=7.50s ready=true 2d7300_6f2b2e52[op1.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=8.75s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op1.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=10.00s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op1.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=11.25s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op1.0 w960] 2d7300_88e55eea[op0.0 w1080]
+phone t=12.50s ready=true 2d7300_6f2b2e52[op0.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op1.0 w1080]
+phone t=13.75s ready=true 2d7300_6f2b2e52[op1.0 w1080] b2375c_91a7c038[op0.0 w1080] b2375c_b26070a1[op0.0 w960] 2d7300_88e55eea[op0.0 w1080]
