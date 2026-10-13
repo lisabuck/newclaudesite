@@ -126,7 +126,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <script is:inline defer src="/js/fixlinks.js?v=2"></script>
     <script is:inline defer src="/js/tg-countup.js?v=1"></script>
       {!hideNewsletterButton && (
-      <a class="tg-news-cta" href="/newsletter">E-Newsletter</a>
+      <a class="tg-news-cta" href="/newsletter" target="_blank" rel="noopener">E-Newsletter</a>
     )}
     <script is:inline>
       /* lift the pinned E-Newsletter button clear of the footer social links
