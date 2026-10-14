@@ -220,7 +220,7 @@ thorne-home-page .tg-bandbtn:hover{background:#393533;color:#FAF9F6}
   thorne-home-page .band-svc .tg-band-copy .tg-bandbtn{color:#FAF9F6;border-color:#FAF9F6;text-shadow:none}
   thorne-home-page .band-svc .tg-band-copy .tg-bandbtn:hover{background:#FAF9F6;color:#393533}
 }
-@media(max-width:750px){thorne-home-page .tg-bandbtn{letter-spacing:.16em;padding:13px 18px}}
+@media(max-width:750px){thorne-home-page .tg-bandbtn{letter-spacing:.16em;padding:13px 18px}thorne-home-page .tg-band-ctas-mix .tg-bandbtn{letter-spacing:.22em;padding:14px 24px;line-height:1.2}}
 /* Development Collaborations text gets the same see-through reading panel
    as the first band (tablets and computers) - per Lisa */
 @media(min-width:751px){
