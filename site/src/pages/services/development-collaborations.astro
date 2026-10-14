@@ -9,4 +9,16 @@ import '../../styles/pages/dev-collab-extra.css';
   description="Development collaborations across Tauranga and the Bay of Plenty. Land feasibility, subdividing guidance and joint venture builds with proven systems."
 >
   <thorne-home-page set:html={body}></thorne-home-page>
+  <script is:inline>
+/* "Call us for a chat": phones dial the office straight away; tablets and
+   computers show the office and Clare's numbers instead */
+document.addEventListener('click', function (e) {
+  var b = e.target.closest && e.target.closest('.nx-callbtn');
+  if (!b || window.matchMedia('(max-width:750px)').matches) return;
+  var nums = b.parentNode.querySelector('.nx-nums'); if (!nums) return;
+  e.preventDefault();
+  nums.hidden = !nums.hidden;
+  b.setAttribute('aria-expanded', nums.hidden ? 'false' : 'true');
+});
+  </script>
 </Base>
