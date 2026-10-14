@@ -189,3 +189,9 @@ thorne-home-page .tg-callnums a:hover{border-bottom-color:#FAF9F6}
 thorne-home-page .tg-calllab2{font-size:14px;letter-spacing:.22em;text-transform:uppercase;opacity:.85}
 thorne-home-page .tg-callsep{margin:0 14px;opacity:.6}
 @media(max-width:750px){thorne-home-page .tg-callnums{display:none!important}}
+/* v84: New Builds text sits on a soft see-through dark panel over the photo
+   so it reads clearly against bright slides (tablets and computers; phones
+   already show the text on the cream panel below the photo) - per Lisa */
+@media(min-width:751px){
+  thorne-home-page .tg-band[data-screen-label="Architectural Homes band"] .tg-band-copy{background:rgba(35,32,30,.58)!important;padding:34px 38px 36px!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+}
