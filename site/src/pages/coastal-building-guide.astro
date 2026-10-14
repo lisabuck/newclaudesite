@@ -47,6 +47,24 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
     .gb-count{min-width:150px;text-align:center;font-weight:400;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:#393533}
     .gb-dl{display:inline-flex;align-items:center;gap:12px;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#393533;border:1px solid #393533;padding:13px 22px}
     .gb a.gb-dl:hover{background:#393533;color:#FAF9F6}
+    .gb-zoom{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 20px;border:1px solid #393533;background:#FAF9F6;color:#393533;font:inherit;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer}
+    .gb-zoom:hover{background:#393533;color:#FAF9F6}
+    .gb-zi{width:14px;height:14px;border:2px solid currentColor;border-radius:50%;position:relative;display:inline-block}
+    .gb-zi::after{content:"";position:absolute;width:2px;height:7px;background:currentColor;right:-4px;bottom:-6px;transform:rotate(-45deg)}
+    .gb-zv{position:fixed;inset:0;z-index:2147483000;background:#23201e;display:flex;flex-direction:column}
+    .gb-zv[hidden]{display:none}
+    .gb-zbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;color:#FAF9F6;border-bottom:1px solid rgba(250,249,246,.15)}
+    .gb-zlab{font-weight:400;font-size:14px;letter-spacing:.24em;text-transform:uppercase;opacity:.85}
+    .gb-zbtns{display:flex;align-items:center;gap:10px}
+    .gb-zb{width:48px;height:48px;border:1px solid rgba(250,249,246,.7);background:none;color:#FAF9F6;font-size:26px;line-height:1;font-weight:300;cursor:pointer;font-family:inherit}
+    .gb-zb:hover{background:#FAF9F6;color:#23201e}
+    .gb-zb[disabled]{opacity:.3;cursor:default;background:none;color:#FAF9F6}
+    .gb-zpct{min-width:56px;text-align:center;font-weight:400;font-size:14px;letter-spacing:.12em;color:#FAF9F6}
+    .gb-zscroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;cursor:grab;touch-action:pan-x pan-y}
+    .gb-zscroll.drag{cursor:grabbing}
+    .gb-zpages{display:flex;margin:0 auto;padding:16px;gap:0;box-sizing:content-box}
+    .gb-zpages img{display:block;flex:1 1 0;min-width:0;width:100%;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
+    @media(max-width:750px){.gb-zlab{display:none}.gb-zbar{justify-content:flex-end}}
     .gb-hint{margin:10px 0 0;font-size:14px;color:#54504c;text-align:center}
     /* phones: one page at a time */
 .gb.tall{height:auto;min-height:100vh;min-height:100dvh}
@@ -77,9 +95,22 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
       <button class="gb-b gb-prev" type="button" aria-label="Previous page">&lsaquo;</button>
       <span class="gb-count" aria-live="polite">Cover</span>
       <button class="gb-b gb-next" type="button" aria-label="Next page">&rsaquo;</button>
+      <button class="gb-zoom" type="button" aria-label="Zoom in on this page"><span aria-hidden="true" class="gb-zi"></span>Zoom</button>
       <a class="gb-dl" href="/documents/coastal-building-guide.pdf" download>Download the PDF <span aria-hidden="true">&darr;</span></a>
     </div>
-    <p class="gb-hint">Tap or swipe the pages to turn them.</p>
+    <p class="gb-hint">Tap or swipe the pages to turn them. Use Zoom to read the detail.</p>
+  </div>
+  <div class="gb-zv" id="gb-zv" hidden role="dialog" aria-modal="true" aria-label="Zoomed page">
+    <div class="gb-zbar">
+      <span class="gb-zlab"></span>
+      <span class="gb-zbtns">
+        <button class="gb-zb gb-zout" type="button" aria-label="Zoom out">&minus;</button>
+        <span class="gb-zpct">100%</span>
+        <button class="gb-zb gb-zin" type="button" aria-label="Zoom in">+</button>
+        <button class="gb-zb gb-zx" type="button" aria-label="Close zoom">&times;</button>
+      </span>
+    </div>
+    <div class="gb-zscroll"><div class="gb-zpages"></div></div>
   </div>
 </div>
 <script is:inline>
@@ -204,7 +235,67 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
     if (tx === null) return; var t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty; tx = ty = null;
     if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.4) { e.preventDefault(); go(dx < 0 ? 1 : -1); }
   });
-  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(layout, 120); });
+  /* ---- zoom: the page (or spread) showing, in a full-screen viewer ---- */
+  var zv = document.getElementById('gb-zv'), zpages = zv.querySelector('.gb-zpages'), zscroll = zv.querySelector('.gb-zscroll');
+  var LEVELS = [1, 1.5, 2, 3], zl = 0, zshow = [];
+  function zsrc(i) { return '/documents/coastal-guide/z' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  function showing() {
+    if (single) return [sp];
+    if (turned === 0) return [0];
+    if (turned === L) return [N - 1];
+    return [2 * turned - 1, 2 * turned];
+  }
+  function zfit() {
+    /* level 1 = the whole page or spread fits the screen */
+    var w = zscroll.clientWidth - 32, h = zscroll.clientHeight - 32;
+    return Math.max(120, Math.floor(Math.min(w, h / ratio * zshow.length)) - 2); /* a hair under, so no scrollbar at 100% */
+  }
+  function zapply(keepCentre) {
+    var cx = 0.5, cy = 0.5;
+    if (keepCentre && zscroll.scrollWidth > 0) {
+      cx = (zscroll.scrollLeft + zscroll.clientWidth / 2) / zscroll.scrollWidth;
+      cy = (zscroll.scrollTop + zscroll.clientHeight / 2) / zscroll.scrollHeight;
+    }
+    zpages.style.width = Math.floor(zfit() * LEVELS[zl]) + 'px';
+    zv.querySelector('.gb-zpct').textContent = Math.round(LEVELS[zl] * 100) + '%';
+    zv.querySelector('.gb-zout').disabled = zl === 0;
+    zv.querySelector('.gb-zin').disabled = zl === LEVELS.length - 1;
+    zscroll.scrollLeft = cx * zscroll.scrollWidth - zscroll.clientWidth / 2;
+    zscroll.scrollTop = cy * zscroll.scrollHeight - zscroll.clientHeight / 2;
+  }
+  function zopen() {
+    zshow = showing(); zl = 0;
+    zpages.textContent = '';
+    zshow.forEach(function (i) {
+      var im = document.createElement('img'); im.alt = 'Page ' + (i + 1); im.draggable = false;
+      im.src = src(i);                       /* the page already loaded shows straight away */
+      var hi = new Image(); hi.onload = function () { im.src = hi.src; }; hi.src = zsrc(i); /* then swaps to the sharp copy */
+      zpages.appendChild(im);
+    });
+    zv.querySelector('.gb-zlab').textContent = zshow.length === 2 ? 'Pages ' + (zshow[0] + 1) + '–' + (zshow[1] + 1) : (zshow[0] === 0 ? 'Cover' : (zshow[0] === N - 1 ? 'Back cover' : 'Page ' + (zshow[0] + 1)));
+    zv.hidden = false; document.body.style.overflow = 'hidden';
+    zapply(false); zv.querySelector('.gb-zin').focus();
+  }
+  function zclose() { zv.hidden = true; document.body.style.overflow = ''; root.querySelector('.gb-zoom').focus(); }
+  function zstep(d) { var n = Math.max(0, Math.min(LEVELS.length - 1, zl + d)); if (n !== zl) { zl = n; zapply(true); } }
+  root.querySelector('.gb-zoom').addEventListener('click', zopen);
+  zv.querySelector('.gb-zin').addEventListener('click', function () { zstep(1); });
+  zv.querySelector('.gb-zout').addEventListener('click', function () { zstep(-1); });
+  zv.querySelector('.gb-zx').addEventListener('click', zclose);
+  /* double-click a zoomed page to zoom in a step (back to fit after the last) */
+  zpages.addEventListener('dblclick', function () { if (zl === LEVELS.length - 1) { zl = 0; zapply(false); } else zstep(1); });
+  /* drag to move around with a mouse; fingers scroll natively */
+  var dx0 = null, dy0, sl0, st0;
+  zscroll.addEventListener('mousedown', function (e) { dx0 = e.clientX; dy0 = e.clientY; sl0 = zscroll.scrollLeft; st0 = zscroll.scrollTop; zscroll.classList.add('drag'); e.preventDefault(); });
+  window.addEventListener('mousemove', function (e) { if (dx0 === null) return; zscroll.scrollLeft = sl0 - (e.clientX - dx0); zscroll.scrollTop = st0 - (e.clientY - dy0); });
+  window.addEventListener('mouseup', function () { dx0 = null; zscroll.classList.remove('drag'); });
+  document.addEventListener('keydown', function (e) {
+    if (zv.hidden) return;
+    if (e.key === 'Escape') zclose(); else if (e.key === '+' || e.key === '=') zstep(1); else if (e.key === '-') zstep(-1);
+    e.stopImmediatePropagation();
+  }, true);
+
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { layout(); if (!zv.hidden) zapply(true); }, 120); });
   layout();
 })();
 </script>
