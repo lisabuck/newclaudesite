@@ -65,6 +65,11 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
     .gb-zpages{display:flex;margin:0 auto;padding:16px;gap:0;box-sizing:content-box}
     .gb-zpages img{display:block;flex:1 1 0;min-width:0;width:100%;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
     @media(max-width:750px){.gb-zlab{display:none}.gb-zbar{justify-content:flex-end}}
+    .gb-ztip{margin:0;padding:12px 16px;text-align:center;font-size:15px;line-height:1.4;color:#FAF9F6;background:#2f2b28;border-top:1px solid rgba(250,249,246,.15)}
+    .gb-ztip kbd{display:inline-block;font:inherit;font-weight:500;font-size:14px;letter-spacing:.06em;padding:1px 8px;margin:0 2px;border:1px solid rgba(250,249,246,.7);border-radius:4px}
+    .gb-ztip b{font-weight:500}
+    .gb-ztip-t{display:none}
+    @media(hover:none){.gb-ztip-k{display:none}.gb-ztip-t{display:inline}}
     .gb-hint{margin:10px 0 0;font-size:14px;color:#54504c;text-align:center}
     /* phones: one page at a time */
 .gb.tall{height:auto;min-height:100vh;min-height:100dvh}
@@ -111,6 +116,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
       </span>
     </div>
     <div class="gb-zscroll"><div class="gb-zpages"></div></div>
+    <p class="gb-ztip"><span class="gb-ztip-k">Press <kbd>Esc</kbd> or <b>&times;</b> to close zoom and turn the page.</span><span class="gb-ztip-t">Tap <b>&times;</b> to close zoom and turn the page.</span></p>
   </div>
 </div>
 <script is:inline>
