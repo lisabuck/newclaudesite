@@ -1,0 +1,13 @@
+desktop pop-up markup present: true
+desktop CONSOLE Failed to load resource: the server responded with a status of 404 ()
+desktop t=5s {"hidden":true,"op":"0","cls":"tg-pop"}
+desktop t=20s {"hidden":true,"op":"0","cls":"tg-pop"}
+desktop t=29s {"hidden":true,"op":"0","cls":"tg-pop"}
+desktop t=32s {"hidden":false,"op":"1","cls":"tg-pop on"}
+desktop t=36s {"hidden":false,"op":"1","cls":"tg-pop on"}
+phone pop-up markup present: true
+phone t=5s {"hidden":true,"op":"0","cls":"tg-pop"}
+phone t=20s {"hidden":true,"op":"0","cls":"tg-pop"}
+phone t=29s {"hidden":true,"op":"0","cls":"tg-pop"}
+phone t=32s {"hidden":false,"op":"1","cls":"tg-pop on"}
+phone t=36s {"hidden":false,"op":"1","cls":"tg-pop on"}
