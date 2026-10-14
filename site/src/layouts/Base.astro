@@ -142,9 +142,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         place();
       })();
     </script>
-    <!-- Project updates pop-up: shows 30 seconds into a visit (not on the
-         newsletter or contact pages). Closing it keeps it away for 30 days;
-         signing up keeps it away for good. Sign-ups go to the Wix
+    <!-- Project updates pop-up: shows 30 seconds after each page opens (not
+         on the newsletter or contact pages), every time. Sign-ups go to the Wix
          "Newsletter Signup" form through the site's existing /api/contact
          connector; on the preview site (no connector) it says so instead. -->
     <div class="tg-pop" id="tg-pop" hidden data-form-id="">
@@ -186,14 +185,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         var pop = document.getElementById('tg-pop'); if (!pop) return;
         var path = location.pathname.replace(/\/+$/, '');
         if (/^\/(newsletter|contact)$/.test(path)) return;
-        var KEY = 'tgPopState', DAY = 86400000;
-        function get() { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } }
-        function set(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
-        var st = get();
-        /* the Vercel preview ignores the closed / signed-up memory so the
-           pop-up can be checked on every visit there */
-        var preview = /\.vercel\.app$/.test(location.hostname);
-        if (!preview && st && (st.done || (st.closed && Date.now() - st.closed < 30 * DAY))) return;
+        /* no memory of earlier visits: it appears 30 seconds into every page view - per Lisa */
         var lastFocus = null;
         function open() {
           if (document.querySelector('.tg-pop.on')) return;
@@ -202,15 +194,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           requestAnimationFrame(function () { pop.classList.add('on'); });
           setTimeout(function () { var f = document.getElementById('tg-pop-first'); if (f) f.focus({ preventScroll: true }); }, 60);
         }
-        function close(done) {
-          set(done ? { done: Date.now() } : { closed: Date.now() });
+        function close() {
           pop.classList.remove('on');
           setTimeout(function () { pop.hidden = true; }, 450);
           if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
         }
-        pop.querySelector('.tg-pop-x').addEventListener('click', function () { close(false); });
-        pop.addEventListener('click', function (e) { if (e.target === pop) close(false); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(false); });
+        pop.querySelector('.tg-pop-x').addEventListener('click', function () { close(); });
+        pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(); });
         var form = pop.querySelector('form'), msg = pop.querySelector('.tg-pop-msg'), btn = pop.querySelector('.tg-pop-btn');
         function say(t) { msg.textContent = t; msg.hidden = false; }
         form.addEventListener('submit', function (e) {
@@ -227,8 +218,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               if (!r.ok) throw new Error((r.b && r.b.error) || 'Something went wrong.');
               form.querySelectorAll('input,.tg-pop-btn,.tg-pop-lab').forEach(function (el) { el.hidden = true; });
               say('Thank you. We’ll keep you posted.');
-              set({ done: Date.now() });
-              setTimeout(function () { close(true); }, 3500);
+              setTimeout(function () { close(); }, 3500);
             })
             .catch(function (err) { say((err && err.message) || 'Something went wrong. Please try again or email info@thornegroup.co.nz.'); })
             .then(function () { btn.disabled = false; btn.textContent = 'Keep me updated'; });
