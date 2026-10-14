@@ -195,3 +195,7 @@ thorne-home-page .tg-callsep{margin:0 14px;opacity:.6}
 @media(min-width:751px){
   thorne-home-page .tg-band[data-screen-label="Architectural Homes band"] .tg-band-copy{background:rgba(35,32,30,.58)!important;padding:34px 38px 36px!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 }
+/* v85: small tagline under the New Builds title (same style as the hero tag line) */
+thorne-home-page .tg-band .tg-band-copy .tg-band-tag{margin:14px 0 0!important;font-size:14px!important;font-weight:400;line-height:1.7!important;letter-spacing:.22em;max-width:30em!important;text-transform:uppercase;color:#54504c}
+thorne-home-page .band-svc .tg-band-copy .tg-band-tag{color:#FAF9F6!important;opacity:.92;text-shadow:0 1px 14px rgba(35,32,30,.45)}
+@media(max-width:750px){thorne-home-page .band-svc .tg-band-copy .tg-band-tag{color:#54504c!important;text-shadow:none}}
