@@ -209,3 +209,15 @@ thorne-home-page .tg-band[data-screen-label="Architectural Homes band"] .tg-band
 /* v87: hero at five photos (dusk photo second): 12.5s loop, 2.5s each */
 thorne-home-page .tg-hero-slides .tg-hsl,thorne-home-page .tg-hero-slides .tg-hslm{animation-name:tgHomeHero5;animation-duration:12.5s}
 @keyframes tgHomeHero5{0%{opacity:0}.4%{opacity:1}23.2%{opacity:1}24%{opacity:0}100%{opacity:0}}
+/* v88: Renovations and Development Collaborations bands get two square
+   buttons in the same style as "Call Us for a Chat": outlined dark on the
+   light panels, outlined white where the text sits on the photo - per Lisa */
+thorne-home-page .tg-band-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:14px 16px}
+thorne-home-page .tg-bandbtn{display:inline-flex;align-items:center;gap:14px;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:#393533;text-decoration:none;border:1px solid #393533;padding:14px 24px;line-height:1.3;transition:background .2s ease,color .2s ease}
+thorne-home-page .tg-bandbtn span{letter-spacing:0}
+thorne-home-page .tg-bandbtn:hover{background:#393533;color:#FAF9F6}
+@media(min-width:751px){
+  thorne-home-page .band-svc .tg-band-copy .tg-bandbtn{color:#FAF9F6;border-color:#FAF9F6;text-shadow:none}
+  thorne-home-page .band-svc .tg-band-copy .tg-bandbtn:hover{background:#FAF9F6;color:#393533}
+}
+@media(max-width:750px){thorne-home-page .tg-bandbtn{letter-spacing:.16em;padding:13px 18px}}
