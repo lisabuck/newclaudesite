@@ -221,3 +221,12 @@ thorne-home-page .tg-bandbtn:hover{background:#393533;color:#FAF9F6}
   thorne-home-page .band-svc .tg-band-copy .tg-bandbtn:hover{background:#FAF9F6;color:#393533}
 }
 @media(max-width:750px){thorne-home-page .tg-bandbtn{letter-spacing:.16em;padding:13px 18px}}
+/* Development Collaborations text gets the same see-through reading panel
+   as the first band (tablets and computers) - per Lisa */
+@media(min-width:751px){
+  thorne-home-page .tg-band[data-screen-label="Development Collaborations band"] .tg-band-copy{background:rgba(35,32,30,.58)!important;padding:34px 38px 36px!important;-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);bottom:calc(clamp(44px,4.5vw,72px) + clamp(32px,4.5vw,76px))!important}
+}
+@media(min-width:751px) and (max-width:1000px){
+  thorne-home-page .tg-band[data-screen-label="Development Collaborations band"] .tg-band-copy{left:calc(clamp(20px,2.6vw,48px) + clamp(32px,4.5vw,76px))!important}
+  thorne-home-page .tg-band[data-screen-label="Development Collaborations band"] .tg-bandbtn{white-space:normal}
+}
