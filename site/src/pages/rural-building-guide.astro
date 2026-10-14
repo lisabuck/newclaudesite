@@ -1,12 +1,13 @@
 ---
-/* Coastal Building Guide: private flip-book page, shared by link only. Not in
+/* Rural Building Guide: private flip-book page, shared by link only. Not in
    any menu or the sitemap, and marked noindex. Page images and the PDF live
    in /documents/ (robots.txt keeps that folder out of search). On computers
    it opens like a book (cover, two-page spreads, back cover); on phones it
-   turns one page at a time. */
+   turns one page at a time. With an odd page count the book stops open at
+   the last spread (the final page is on the right). */
 import '../styles/fonts.css';
-const PAGES = 14;
-const pages = Array.from({ length: PAGES }, (_, i) => `/documents/coastal-guide/p${String(i + 1).padStart(2, '0')}.jpg`);
+const PAGES = 13;
+const pages = Array.from({ length: PAGES }, (_, i) => `/documents/rural-guide/p${String(i + 1).padStart(2, '0')}.jpg`);
 /* leaves for the book: each sheet has a front page and a back page */
 const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 * k], pages[2 * k + 1]]);
 ---
@@ -16,7 +17,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
-  <title>Coastal Building Guide | Thorne Group</title>
+  <title>Rural Building Guide | Thorne Group</title>
   <link rel="preload" as="image" href={pages[0]} />
   <style is:global>
     html,body{margin:0;height:100%}
@@ -83,11 +84,11 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
   <div class="gb-top">
     <div class="gb-wrap gb-r1">
       <a href="https://www.thornegroup.co.nz"><img class="gb-logo" src="https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png" alt="Thorne Group" /></a>
-      <span class="gb-kick">Coastal Building Guide</span>
+      <span class="gb-kick">Rural Building Guide</span>
     </div>
   </div>
   <div class="gb-stage">
-    <div class="gb-book" id="gb-book" aria-label="Coastal Building Guide, 14 pages" role="region">
+    <div class="gb-book" id="gb-book" aria-label="Rural Building Guide, 13 pages" role="region">
       <div class="gb-shade" aria-hidden="true"></div>
       {leaves.map(([front, back], k) => (
         <div class="gb-leaf" data-k={k}>
@@ -101,7 +102,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
       <span class="gb-count" aria-live="polite">Cover</span>
       <button class="gb-b gb-next" type="button" aria-label="Next page">&rsaquo;</button>
       <button class="gb-zoom" type="button" aria-label="Zoom in on this page"><span aria-hidden="true" class="gb-zi"></span>Zoom</button>
-      <a class="gb-dl" href="/documents/coastal-building-guide.pdf" download>Download the PDF <span aria-hidden="true">&darr;</span></a>
+      <a class="gb-dl" href="/documents/rural-building-guide.pdf" download>Download the PDF <span aria-hidden="true">&darr;</span></a>
     </div>
     <p class="gb-hint">Tap or swipe the pages to turn them. Use Zoom to read the detail.</p>
   </div>
@@ -123,12 +124,14 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
 (function () {
   var root = document.getElementById('gb'), book = document.getElementById('gb-book');
   var leaves = [].slice.call(book.querySelectorAll('.gb-leaf'));
-  var N = 14, L = leaves.length, ratio = 1553 / 1200;
+  var N = 13, L = leaves.length, ratio = 1553 / 1200;
+  var END = N % 2 ? L - 1 : L; /* odd page count: the last sheet stays put, its back is blank */
+  var BACK = N % 2 === 0;      /* only an even count ends on a lone back cover */
   var prevB = root.querySelector('.gb-prev'), nextB = root.querySelector('.gb-next'), count = root.querySelector('.gb-count');
   var single = null, busy = false, shade = book.querySelector('.gb-shade');
   var turned = 0; /* book mode: how many sheets have been turned */
   var sp = 0;     /* phone mode: which page is showing (0-based) */
-  function src(i) { return '/documents/coastal-guide/p' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  function src(i) { return '/documents/rural-guide/p' + String(i + 1).padStart(2, '0') + '.jpg'; }
   function warm(from) { for (var i = from; i < Math.min(N, from + 4); i++) { var im = new Image(); im.src = src(i); } }
 
   /* ---- book mode (tablets and computers) ---- */
@@ -143,11 +146,11 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
     /* one shadow, under whichever pages are showing */
     shade.style.left = turned === 0 ? '50%' : '0'; shade.style.right = turned === L ? '50%' : '0';
     count.textContent = turned === 0 ? 'Cover' : (turned === L ? 'Back cover' : 'Pages ' + (2 * turned) + '–' + (2 * turned + 1) + ' of ' + N);
-    prevB.disabled = turned === 0; nextB.disabled = turned === L;
+    prevB.disabled = turned === 0; nextB.disabled = turned === END;
     warm(2 * turned);
   }
   function turnBook(d) {
-    var t = Math.max(0, Math.min(L, turned + d)); if (t === turned) return;
+    var t = Math.max(0, Math.min(END, turned + d)); if (t === turned) return;
     var lf = leaves[d > 0 ? turned : turned - 1];
     turned = t; busy = true;
     paintBook();
@@ -164,7 +167,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
     el.appendChild(im); return el;
   }
   function labelSingle() {
-    count.textContent = sp === 0 ? 'Cover' : (sp === N - 1 ? 'Back cover' : 'Page ' + (sp + 1) + ' of ' + N);
+    count.textContent = sp === 0 ? 'Cover' : (BACK && sp === N - 1 ? 'Back cover' : 'Page ' + (sp + 1) + ' of ' + N);
     prevB.disabled = sp === 0; nextB.disabled = sp === N - 1;
   }
   function showSingle() {
@@ -198,7 +201,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
       } else {
         book.querySelectorAll('.gb-single').forEach(function (n) { n.remove(); });
         leaves.forEach(function (lf) { lf.style.display = ''; });
-        if (single !== null) turned = Math.min(L, Math.ceil(sp / 2));
+        if (single !== null) turned = Math.min(END, Math.ceil(sp / 2));
       }
       single = nowSingle;
       root.classList.toggle('single', single);
@@ -244,7 +247,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
   /* ---- zoom: the page (or spread) showing, in a full-screen viewer ---- */
   var zv = document.getElementById('gb-zv'), zpages = zv.querySelector('.gb-zpages'), zscroll = zv.querySelector('.gb-zscroll');
   var LEVELS = [1, 1.5, 2, 3], zl = 0, zshow = [];
-  function zsrc(i) { return '/documents/coastal-guide/z' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  function zsrc(i) { return '/documents/rural-guide/z' + String(i + 1).padStart(2, '0') + '.jpg'; }
   function showing() {
     if (single) return [sp];
     if (turned === 0) return [0];
@@ -278,7 +281,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
       var hi = new Image(); hi.onload = function () { im.src = hi.src; }; hi.src = zsrc(i); /* then swaps to the sharp copy */
       zpages.appendChild(im);
     });
-    zv.querySelector('.gb-zlab').textContent = zshow.length === 2 ? 'Pages ' + (zshow[0] + 1) + '–' + (zshow[1] + 1) : (zshow[0] === 0 ? 'Cover' : (zshow[0] === N - 1 ? 'Back cover' : 'Page ' + (zshow[0] + 1)));
+    zv.querySelector('.gb-zlab').textContent = zshow.length === 2 ? 'Pages ' + (zshow[0] + 1) + '–' + (zshow[1] + 1) : (zshow[0] === 0 ? 'Cover' : (BACK && zshow[0] === N - 1 ? 'Back cover' : 'Page ' + (zshow[0] + 1)));
     zv.hidden = false; document.body.style.overflow = 'hidden';
     zapply(false); zv.querySelector('.gb-zin').focus();
   }
