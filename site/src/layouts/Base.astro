@@ -190,7 +190,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         function get() { try { return JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { return null; } }
         function set(v) { try { localStorage.setItem(KEY, JSON.stringify(v)); } catch (e) {} }
         var st = get();
-        if (st && (st.done || (st.closed && Date.now() - st.closed < 30 * DAY))) return;
+        /* the Vercel preview ignores the closed / signed-up memory so the
+           pop-up can be checked on every visit there */
+        var preview = /\.vercel\.app$/.test(location.hostname);
+        if (!preview && st && (st.done || (st.closed && Date.now() - st.closed < 30 * DAY))) return;
         var lastFocus = null;
         function open() {
           if (document.querySelector('.tg-pop.on')) return;
