@@ -230,3 +230,10 @@ thorne-home-page .tg-bandbtn:hover{background:#393533;color:#FAF9F6}
   thorne-home-page .tg-band[data-screen-label="Development Collaborations band"] .tg-band-copy{left:calc(clamp(20px,2.6vw,48px) + clamp(32px,4.5vw,76px))!important}
   thorne-home-page .tg-band[data-screen-label="Development Collaborations band"] .tg-bandbtn{white-space:normal}
 }
+/* v89: Renovations and Development Collaborations CTAs laid out like the first band's
+   (underlined link, then square button, same spacing) - per Lisa */
+thorne-home-page .tg-band-ctas-mix{gap:18px 32px}
+@media(max-width:750px){
+  thorne-home-page .tg-band-ctas-mix .tg-bandbtn{background:#393533;color:#FAF9F6;border-color:#393533}
+  thorne-home-page .tg-band-ctas-mix .tg-bandbtn:hover{background:#54504c}
+}
