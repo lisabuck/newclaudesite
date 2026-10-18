@@ -237,3 +237,19 @@ thorne-home-page .tg-band-ctas-mix{gap:18px 32px}
   thorne-home-page .tg-band-ctas-mix .tg-bandbtn{background:#393533;color:#FAF9F6;border-color:#393533}
   thorne-home-page .tg-band-ctas-mix .tg-bandbtn:hover{background:#54504c}
 }
+/* v90: Call / Email / Learn more - the same three square buttons on every
+   services band. Dark filled on the light panels (all phones, and the
+   Renovations band); outlined white where the text sits on a photo
+   (Architectural Homes and Development Collaborations on tablets and
+   computers). Call keeps the number reveal on tablets and computers - per Lisa */
+thorne-home-page .tg-cta3{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+thorne-home-page .tg-c3b{display:inline-flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;line-height:1.2;text-decoration:none;text-shadow:none;white-space:nowrap;padding:14px 24px;color:#FAF9F6;background:#393533;border:1px solid #393533;transition:background .2s ease,color .2s ease,border-color .2s ease}
+thorne-home-page .tg-c3b:hover{color:#FAF9F6;background:#54504c;border-color:#54504c}
+@media(min-width:751px){
+  thorne-home-page .band-svc .tg-c3b{color:#FAF9F6;background:transparent;border-color:#FAF9F6}
+  thorne-home-page .band-svc .tg-c3b:hover{color:#393533;background:#FAF9F6;border-color:#FAF9F6}
+}
+thorne-home-page .tg-band:not(.band-svc) .tg-callnums{color:#393533;text-shadow:none}
+thorne-home-page .tg-band:not(.band-svc) .tg-callnums a{color:#393533;border-bottom-color:rgba(57,53,51,.5)}
+thorne-home-page .tg-band:not(.band-svc) .tg-callnums a:hover{border-bottom-color:#393533}
+@media(max-width:750px){thorne-home-page .tg-c3b{flex:1 1 auto;padding:14px 16px}}

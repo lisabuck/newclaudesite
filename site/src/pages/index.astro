@@ -10,7 +10,7 @@ import '../styles/pages/thorne-home-page.css';
 >
   <thorne-home-page class="tg-home" set:html={body}></thorne-home-page>
   <script is:inline defer src="/js/lightdom-shim.js?v=1"></script>
-  <script is:inline defer src="/js/thorne-home-page54.js?v=89"></script>
+  <script is:inline defer src="/js/thorne-home-page54.js?v=90"></script>
   <script is:inline>
 /* hero rotation starts only once every hero photo has arrived, so no slide
    ever shows blank (the first photo holds still until then) */
@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { threshold: 0.35 });
   io.observe(band);
 });
-/* "Call Us for a Chat": phones dial the office straight away; tablets and
+/* Call buttons: phones dial the office straight away; tablets and
    computers show the office and Clare's numbers instead */
 document.addEventListener('click', function (e) {
   var b = e.target.closest && e.target.closest('.tg-callbtn');
