@@ -262,4 +262,7 @@ thorne-home-page .tg-c3link:hover span{transform:translateX(6px)}
 @media(min-width:751px){
   thorne-home-page .band-svc .tg-c3link,thorne-home-page .band-svc .tg-c3link:hover{color:#FAF9F6;text-shadow:0 1px 14px rgba(35,32,30,.45)}
 }
-@media(max-width:750px){thorne-home-page .tg-c3link{padding-left:0}}
+/* the link needs no indent of its own: the row gap spaces it, and it lines up
+   flush left when it wraps under the buttons (narrow columns, phones) */
+thorne-home-page .tg-cta3{gap:12px 16px}
+thorne-home-page .tg-c3link{padding-left:0}
