@@ -142,42 +142,44 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         place();
       })();
     </script>
-    <!-- Project updates pop-up: shows 30 seconds after each page opens (not
-         on the newsletter or contact pages), every time. Sign-ups go to the Wix
+    <!-- Project updates pop-up: a small card pinned bottom right (over the
+         E-Newsletter button's spot, no dark backdrop) that shows 30 seconds
+         after each page opens (not on the newsletter or contact pages), every time. Sign-ups go to the Wix
          "Newsletter Signup" form through the site's existing /api/contact
          connector; on the preview site (no connector) it says so instead. -->
     <div class="tg-pop" id="tg-pop" hidden data-form-id="">
-      <div class="tg-pop-card" role="dialog" aria-modal="true" aria-labelledby="tg-pop-h">
+      <div class="tg-pop-card" role="dialog" aria-labelledby="tg-pop-h">
         <button class="tg-pop-x" type="button" aria-label="Close">&times;</button>
         <h2 id="tg-pop-h">Interested in our current projects?</h2>
         <p class="tg-pop-lead">Early access to new developments, inspiration from our homes and updates on current projects.</p>
         <form class="tg-pop-form" novalidate>
           <label class="tg-pop-lab" for="tg-pop-first">First name</label>
-          <input id="tg-pop-first" name="first_name" type="text" autocomplete="given-name" required>
+          <input id="tg-pop-first" name="first_name" type="text" autocomplete="given-name" placeholder="First name" required>
           <label class="tg-pop-lab" for="tg-pop-email">Email address</label>
-          <input id="tg-pop-email" name="email" type="email" autocomplete="email" required>
+          <input id="tg-pop-email" name="email" type="email" autocomplete="email" placeholder="Email address" required>
           <button class="tg-pop-btn" type="submit">Keep me updated</button>
           <p class="tg-pop-msg" role="status" hidden></p>
         </form>
       </div>
     </div>
     <style is:inline>
-      .tg-pop{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(35,32,30,.55);opacity:0;transition:opacity .45s ease}
+      .tg-pop{position:fixed;right:18px;bottom:18px;z-index:2147483000;width:340px;max-width:calc(100vw - 36px);opacity:0;transition:opacity .45s ease}
       .tg-pop[hidden]{display:none}
       .tg-pop.on{opacity:1}
-      .tg-pop-card{position:relative;width:100%;max-width:480px;max-height:calc(100vh - 40px);overflow:auto;background:#FAF9F6;color:#393533;padding:48px 40px 40px;font-family:'Metric',system-ui,sans-serif}
-      .tg-pop-x{position:absolute;top:10px;right:10px;width:44px;height:44px;border:0;background:none;color:#393533;font-size:30px;line-height:1;font-weight:300;cursor:pointer}
+      .tg-pop-card{position:relative;max-height:calc(100vh - 36px);overflow:auto;background:#FAF9F6;color:#393533;padding:26px 24px 24px;border:1px solid #c8c3bb;box-shadow:0 10px 36px rgba(35,32,30,.3);font-family:'Metric',system-ui,sans-serif}
+      .tg-pop-x{position:absolute;top:4px;right:4px;width:44px;height:44px;border:0;background:none;color:#393533;font-size:28px;line-height:1;font-weight:300;cursor:pointer}
       .tg-pop-x:hover{color:#7a746e}
-      .tg-pop-card h2{margin:0 24px 0 0;font-weight:300;font-size:clamp(27px,3vw,34px);line-height:1.2;letter-spacing:-.02em;color:#393533}
-      .tg-pop-lead{margin:16px 0 24px;font-size:18px;line-height:1.65;color:#54504c}
-      .tg-pop-lab{display:block;margin:0 0 6px;font-size:14px;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:#54504c}
-      .tg-pop-form input{display:block;width:100%;box-sizing:border-box;margin:0 0 16px;padding:13px 14px;border:1px solid #c8c3bb;border-radius:0;background:#fff;font:inherit;font-size:17px;color:#393533}
+      .tg-pop-card h2{margin:0 30px 0 0;font-weight:300;font-size:22px;line-height:1.25;letter-spacing:-.01em;color:#393533}
+      .tg-pop-lead{margin:10px 0 16px;font-size:16px;line-height:1.5;color:#54504c}
+      .tg-pop-lab{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap} /* the boxes show the label as placeholder text */
+      .tg-pop-form input{display:block;width:100%;box-sizing:border-box;margin:0 0 10px;padding:11px 12px;border:1px solid #c8c3bb;border-radius:0;background:#fff;font:inherit;font-size:16px;color:#393533}
+      .tg-pop-form input::placeholder{color:#7a746e;opacity:1}
       .tg-pop-form input:focus{outline:2px solid #393533;outline-offset:1px;border-color:#393533}
-      .tg-pop-btn{display:block;width:100%;margin-top:6px;padding:15px 24px;border:1px solid #393533;background:#393533;color:#FAF9F6;font:inherit;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;cursor:pointer}
+      .tg-pop-btn{display:block;width:100%;margin-top:4px;padding:13px 18px;border:1px solid #393533;background:#393533;color:#FAF9F6;font:inherit;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;cursor:pointer}
       .tg-pop-btn:hover{background:#54504c}
       .tg-pop-btn[disabled]{opacity:.6;cursor:default}
-      .tg-pop-msg{margin:14px 0 0;font-size:16px;line-height:1.5;color:#393533}
-      @media(max-width:750px){.tg-pop-card{padding:44px 24px 28px}.tg-pop-lead{font-size:17px}}
+      .tg-pop-msg{margin:10px 0 0;font-size:15px;line-height:1.5;color:#393533}
+      @media(max-width:750px){.tg-pop{right:12px;bottom:12px;max-width:calc(100vw - 24px)}.tg-pop-card{max-height:calc(100vh - 24px);padding:22px 20px 20px}}
       @media(prefers-reduced-motion:reduce){.tg-pop{transition:none}}
     </style>
     <script is:inline>
@@ -192,15 +194,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
           lastFocus = document.activeElement;
           pop.hidden = false;
           requestAnimationFrame(function () { pop.classList.add('on'); });
-          setTimeout(function () { var f = document.getElementById('tg-pop-first'); if (f) f.focus({ preventScroll: true }); }, 60);
         }
         function close() {
           pop.classList.remove('on');
           setTimeout(function () { pop.hidden = true; }, 450);
-          if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+          if (pop.contains(document.activeElement) && lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
         }
         pop.querySelector('.tg-pop-x').addEventListener('click', function () { close(); });
-        pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(); });
         var form = pop.querySelector('form'), msg = pop.querySelector('.tg-pop-msg'), btn = pop.querySelector('.tg-pop-btn');
         function say(t) { msg.textContent = t; msg.hidden = false; }
