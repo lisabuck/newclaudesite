@@ -253,3 +253,13 @@ thorne-home-page .tg-band:not(.band-svc) .tg-callnums{color:#393533;text-shadow:
 thorne-home-page .tg-band:not(.band-svc) .tg-callnums a{color:#393533;border-bottom-color:rgba(57,53,51,.5)}
 thorne-home-page .tg-band:not(.band-svc) .tg-callnums a:hover{border-bottom-color:#393533}
 @media(max-width:750px){thorne-home-page .tg-c3b{flex:1 1 auto;padding:14px 16px}}
+/* v91: "Call us" and "Email" stay square buttons; "Learn more" is a plain
+   link with an arrow (no box), white over photos, dark on light panels - per Lisa */
+thorne-home-page .tg-c3link{display:inline-flex;align-items:center;gap:12px;padding:14px 0 14px 10px;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;line-height:1.2;text-decoration:none;white-space:nowrap;color:#393533}
+thorne-home-page .tg-c3link span{display:inline-block;letter-spacing:0;transition:transform .3s ease}
+thorne-home-page .tg-c3link:hover{color:#393533}
+thorne-home-page .tg-c3link:hover span{transform:translateX(6px)}
+@media(min-width:751px){
+  thorne-home-page .band-svc .tg-c3link,thorne-home-page .band-svc .tg-c3link:hover{color:#FAF9F6;text-shadow:0 1px 14px rgba(35,32,30,.45)}
+}
+@media(max-width:750px){thorne-home-page .tg-c3link{padding-left:0}}
