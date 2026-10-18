@@ -51,8 +51,8 @@ import '../styles/pages/thorne-gallery.css';
 })();
   </script>
   <script is:inline defer>
-/* Last photo of each project: show a call-to-action panel (over the photo
-   on larger screens, under it on phones). It reads the slideshow counter
+/* Last photo of each project: show a call-to-action box (top left of the
+   photo on larger screens, under it on phones). It reads the slideshow counter
    ("6 of 6"), so the slideshow script itself is unchanged. */
 (function () {
   var card = null, closedFor = '';
@@ -63,8 +63,8 @@ import '../styles/pages/thorne-gallery.css';
     card.className = 'th-endcta';
     card.setAttribute('role', 'note');
     card.innerHTML = '<button class="th-endcta-x" type="button" aria-label="Close">&times;</button>' +
-      '<p>Interested in finding out more about the cost to build specific projects?</p>' +
-      '<a class="th-endcta-btn" href="tel:+6475755555" aria-label="Give us a call for a chat on 07 575 5555">Give us a call for a chat <span aria-hidden="true">&rarr;</span></a>' +
+      '<p>Interested in discussing build costs for a home similar to this?</p>' +
+      '<a class="th-endcta-btn" href="tel:+6475755555" aria-label="Call us for a chat on 07 575 5555">Call us for a chat <span aria-hidden="true">&rarr;</span></a>' +
       '<span class="th-endcta-nums" hidden><span class="th-endcta-lab">Office</span> <a href="tel:+6475755555">07 575 5555</a><span class="th-endcta-sep" aria-hidden="true">/</span><span class="th-endcta-lab">Clare</span> <a href="tel:+64272813850">027 281 3850</a></span>';
     var stage = th.querySelector('.th-stage');
     stage.parentNode.insertBefore(card, stage.nextSibling);

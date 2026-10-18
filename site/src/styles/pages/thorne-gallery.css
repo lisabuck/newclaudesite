@@ -343,29 +343,31 @@ thorne-gallery .th-row-proj .th-b{ border-color:rgba(250,249,246,.9); }
   thorne-gallery .th-row .th-b{ height:58px; font-size:15px; }
 }
 
-/* Last photo of each project: a call-to-action panel. Over the bottom left
-   of the photo on tablets and computers, under the photo on phones. Phones
-   dial the office; larger screens reveal the office and Clare's numbers -
-   per Lisa */
-thorne-gallery .th-endcta{ display:none; color:#FAF9F6; background:rgba(35,32,30,.82); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); padding:26px 30px 28px; font-family:var(--f); }
+/* Last photo of each project: a call-to-action box. A light card at the
+   top left of the photo on tablets and computers (clear of the title bar
+   and arrows), under the photo on phones, so it stands out against the
+   dark slideshow. Phones dial the office; larger screens reveal the office
+   and Clare's numbers - per Lisa */
+thorne-gallery .th-endcta{ display:none; color:#393533; background:#FAF9F6; border:1px solid #c8c3bb; box-shadow:0 12px 40px rgba(0,0,0,.35); padding:28px 30px 30px; font-family:var(--f); }
 thorne-gallery .th.open .th-endcta.on{ display:block; }
-thorne-gallery .th-endcta p{ margin:0 28px 18px 0; font-size:18px; line-height:1.6; color:#FAF9F6; }
-thorne-gallery .th-endcta-x{ position:absolute; top:6px; right:6px; width:40px; height:40px; border:0; background:none; color:#FAF9F6; font-size:26px; line-height:1; font-weight:300; cursor:pointer; }
-thorne-gallery .th-endcta-x:hover{ opacity:.7; }
-thorne-gallery .th-endcta-btn{ display:inline-flex; align-items:center; gap:14px; font-size:14px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#FAF9F6; text-decoration:none; border:1px solid #FAF9F6; padding:14px 22px; line-height:1.3; transition:background .2s ease,color .2s ease; }
+thorne-gallery .th-endcta p{ margin:0 30px 20px 0; font-size:20px; line-height:1.5; color:#393533; }
+thorne-gallery .th-endcta-x{ position:absolute; top:6px; right:6px; width:44px; height:44px; border:0; background:none; color:#393533; font-size:28px; line-height:1; font-weight:300; cursor:pointer; }
+thorne-gallery .th-endcta-x:hover{ color:#7a746e; }
+thorne-gallery .th-endcta-btn{ display:inline-flex; align-items:center; gap:14px; font-size:14px; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:#FAF9F6; background:#393533; text-decoration:none; border:1px solid #393533; padding:15px 24px; line-height:1.3; transition:background .2s ease,border-color .2s ease; }
 thorne-gallery .th-endcta-btn span{ letter-spacing:0; }
-thorne-gallery .th-endcta-btn:hover{ background:#FAF9F6; color:#23201e; }
-thorne-gallery .th-endcta-nums{ display:block; margin-top:14px; font-size:17px; line-height:1.7; }
+thorne-gallery .th-endcta-btn:hover{ color:#FAF9F6; background:#54504c; border-color:#54504c; }
+thorne-gallery .th-endcta-nums{ display:block; margin-top:16px; font-size:17px; line-height:1.7; color:#393533; }
 thorne-gallery .th-endcta-nums[hidden]{ display:none; }
-thorne-gallery .th-endcta-nums a{ color:#FAF9F6; text-decoration:none; border-bottom:1px solid rgba(250,249,246,.6); white-space:nowrap; }
-thorne-gallery .th-endcta-lab{ font-size:14px; letter-spacing:.22em; text-transform:uppercase; opacity:.8; }
-thorne-gallery .th-endcta-sep{ margin:0 12px; opacity:.6; }
+thorne-gallery .th-endcta-nums a{ color:#393533; text-decoration:none; border-bottom:1px solid rgba(57,53,51,.5); white-space:nowrap; }
+thorne-gallery .th-endcta-nums a:hover{ border-bottom-color:#393533; }
+thorne-gallery .th-endcta-lab{ font-size:14px; letter-spacing:.22em; text-transform:uppercase; color:#7a746e; }
+thorne-gallery .th-endcta-sep{ margin:0 12px; color:#c8c3bb; }
 @media(min-width:751px){
-  thorne-gallery .th-endcta{ position:absolute; left:24px; bottom:24px; z-index:6; max-width:440px; }
+  thorne-gallery .th-endcta{ position:absolute; left:24px; top:88px; z-index:6; width:400px; max-width:calc(100% - 48px); }
 }
 @media(max-width:750px){
-  thorne-gallery .th-endcta{ position:relative; margin:8px 12px 0; padding:18px 20px 20px; }
-  thorne-gallery .th-endcta p{ font-size:16px; margin-bottom:14px; }
-  thorne-gallery .th-endcta-btn{ display:flex; justify-content:space-between; background:#FAF9F6; color:#23201e; letter-spacing:.16em; }
+  thorne-gallery .th-endcta{ position:relative; margin:10px 12px 0; padding:20px; }
+  thorne-gallery .th-endcta p{ font-size:17px; margin-bottom:16px; }
+  thorne-gallery .th-endcta-btn{ display:flex; justify-content:space-between; letter-spacing:.16em; }
   thorne-gallery .th-endcta-nums{ display:none !important; }
 }
