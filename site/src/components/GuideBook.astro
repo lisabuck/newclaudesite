@@ -14,7 +14,9 @@ interface Props {
   pages: number;  /* page count */
 }
 const { title, dir, pages: PAGES } = Astro.props;
-const pages = Array.from({ length: PAGES }, (_, i) => `/documents/${dir}/p${String(i + 1).padStart(2, '0')}.jpg`);
+/* bump IMG_V whenever page images are replaced, so browsers fetch the new copies */
+const IMG_V = 2;
+const pages = Array.from({ length: PAGES }, (_, i) => `/documents/${dir}/p${String(i + 1).padStart(2, '0')}.jpg?v=${IMG_V}`);
 /* leaves for the book: each sheet has a front page and a back page */
 const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 * k], pages[2 * k + 1]]);
 ---
@@ -85,7 +87,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
   </style>
 </head>
 <body>
-<div class="gb" id="gb" data-dir={dir} data-pages={PAGES}>
+<div class="gb" id="gb" data-dir={dir} data-pages={PAGES} data-v={IMG_V}>
   <div class="gb-top">
     <div class="gb-wrap gb-r1">
       <a href="https://www.thornegroup.co.nz"><img class="gb-logo" src="https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png" alt="Thorne Group" /></a>
@@ -135,7 +137,8 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
   var single = null, busy = false, shade = book.querySelector('.gb-shade');
   var turned = 0; /* book mode: how many sheets have been turned */
   var sp = 0;     /* phone mode: which page is showing (0-based) */
-  function src(i) { return '/documents/' + DIR + '/p' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  var IV = '?v=' + root.getAttribute('data-v');
+  function src(i) { return '/documents/' + DIR + '/p' + String(i + 1).padStart(2, '0') + '.jpg' + IV; }
   function warm(from) { for (var i = from; i < Math.min(N, from + 4); i++) { var im = new Image(); im.src = src(i); } }
 
   /* ---- book mode (tablets and computers) ---- */
@@ -251,7 +254,7 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
   /* ---- zoom: the page (or spread) showing, in a full-screen viewer ---- */
   var zv = document.getElementById('gb-zv'), zpages = zv.querySelector('.gb-zpages'), zscroll = zv.querySelector('.gb-zscroll');
   var LEVELS = [1, 1.5, 2, 3], zl = 0, zshow = [];
-  function zsrc(i) { return '/documents/' + DIR + '/z' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  function zsrc(i) { return '/documents/' + DIR + '/z' + String(i + 1).padStart(2, '0') + '.jpg' + IV; }
   function showing() {
     if (single) return [sp];
     if (turned === 0) return [0];
