@@ -55,7 +55,7 @@ thorne-home-page .ah-kick{ font-size:14px; font-weight:400; letter-spacing:.28em
 @media(max-width:750px){ thorne-home-page .ah-kick{ font-size:15px; } }
 
 /* Two next-step boxes before the contact panel: "Already have plans?" and
-   "Planning a new build?" - per Lisa */
+   "Not sure where to start?" - per Lisa */
 thorne-home-page .ah-next{max-width:1240px;margin:64px auto 0;padding:0 var(--pad);display:grid;grid-template-columns:1fr 1fr;gap:24px}
 thorne-home-page .ah-next-box{background:#E3DDD4;padding:48px 44px 44px;display:flex;flex-direction:column}
 thorne-home-page .ah-next-box h3{margin:0;font-weight:300;font-size:clamp(27px,2.4vw,36px);line-height:1.2;letter-spacing:-.02em;color:#393533}
