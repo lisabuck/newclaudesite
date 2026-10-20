@@ -1,0 +1,26 @@
+name: Probe the live site after a sync in real Chrome
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Install Playwright with Chrome
+        run: |
+          mkdir -p /tmp/p && cd /tmp/p && npm init -y >/dev/null && npm i playwright@1.47.2 >/dev/null
+          npx playwright install --with-deps chrome
+      - name: Check the live pages
+        run: node .github/probe/livesync.mjs
+        continue-on-error: true
+      - name: Save results
+        run: |
+          git config user.name "Claude" && git config user.email "noreply@anthropic.com"
+          git checkout -B diag-livesync
+          git add -f diagnostics/livesync || true
+          git commit -m "Live sync probe results" || true
+          git push -f origin diag-livesync
