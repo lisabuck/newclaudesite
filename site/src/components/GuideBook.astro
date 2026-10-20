@@ -1,0 +1,316 @@
+---
+/* Client guide flip-book: a private page shared by link only. Not in any
+   menu or the sitemap, and marked noindex. Page images live in
+   /documents/<dir>/ (robots.txt keeps that folder out of search): p01.jpg...
+   for the book and z01.jpg... (2200px) for Zoom. On computers it opens like
+   a book (cover, two-page spreads, back cover); on phones it turns one page
+   at a time. With an odd page count the book stops open at the last spread
+   (the final page is on the right). Used by the Rural, Coastal and Space
+   Optimising guide pages. */
+import '../styles/fonts.css';
+interface Props {
+  title: string;  /* shown in the header and the browser tab */
+  dir: string;    /* image folder under /documents/ */
+  pages: number;  /* page count */
+}
+const { title, dir, pages: PAGES } = Astro.props;
+const pages = Array.from({ length: PAGES }, (_, i) => `/documents/${dir}/p${String(i + 1).padStart(2, '0')}.jpg`);
+/* leaves for the book: each sheet has a front page and a back page */
+const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 * k], pages[2 * k + 1]]);
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{title} | Thorne Group</title>
+  <link rel="preload" as="image" href={pages[0]} />
+  <style is:global>
+    html,body{margin:0;height:100%}
+    body{background:#FAF9F6;color:#393533;font-family:'Metric','Helvetica Neue',Helvetica,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+    .gb{display:flex;flex-direction:column;height:100vh;height:100dvh;min-height:520px}
+    .gb *{box-sizing:border-box}
+    .gb a{color:#393533;text-decoration:none}
+    .gb-top{background:#FAF9F6;border-bottom:1px solid #c8c3bb}
+    .gb-wrap{max-width:1440px;margin:0 auto;padding:0 24px}
+    .gb-r1{padding:12px 24px 12px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 24px}
+    .gb-logo{height:60px;max-width:none;margin-left:-18px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
+    .gb-kick{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    .gb-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#E3DDD4;padding:28px 16px 20px;overflow:hidden;min-height:0}
+    .gb-book{position:relative;flex:none;perspective:2600px;transition:transform .7s cubic-bezier(.4,.1,.2,1)}
+    .gb-leaf{position:absolute;top:0;left:50%;width:50%;height:100%;transform-origin:left center;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.45,.05,.2,1);cursor:pointer}
+    .gb-leaf.on{transform:rotateY(-180deg)}
+    .gb-face{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;background:#fff;overflow:hidden;}
+    .gb-face img{display:block;width:100%;height:100%;object-fit:cover;-webkit-user-drag:none;user-select:none}
+    .gb-back{transform:rotateY(180deg)}
+    /* soft shading toward the spine so it reads as a bound book */
+.gb-shade{position:absolute;top:0;bottom:0;left:0;right:0;box-shadow:0 16px 44px rgba(35,32,30,.28);pointer-events:none;transition:left .9s cubic-bezier(.45,.05,.2,1),right .9s cubic-bezier(.45,.05,.2,1)}
+    .gb-front::after{content:"";position:absolute;inset:0;background:linear-gradient(to right,rgba(35,32,30,.16),rgba(35,32,30,0) 7%);pointer-events:none}
+    .gb-back::after{content:"";position:absolute;inset:0;background:linear-gradient(to left,rgba(35,32,30,.16),rgba(35,32,30,0) 7%);pointer-events:none}
+    .gb-ctrls{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:20px;flex-wrap:wrap}
+    .gb-b{width:56px;height:56px;border-radius:50%;border:1px solid #393533;background:#FAF9F6;color:#393533;font-size:28px;line-height:1;font-weight:300;cursor:pointer;font-family:inherit}
+    .gb-b:hover{background:#393533;color:#FAF9F6}
+    .gb-b[disabled]{opacity:.35;cursor:default;background:#FAF9F6;color:#393533}
+    .gb-count{min-width:150px;text-align:center;font-weight:400;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:#393533}
+    .gb-zoom{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 20px;border:1px solid #393533;background:#FAF9F6;color:#393533;font:inherit;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer}
+    .gb-zoom:hover{background:#393533;color:#FAF9F6}
+    .gb-zi{width:14px;height:14px;border:2px solid currentColor;border-radius:50%;position:relative;display:inline-block}
+    .gb-zi::after{content:"";position:absolute;width:2px;height:7px;background:currentColor;right:-4px;bottom:-6px;transform:rotate(-45deg)}
+    .gb-zv{position:fixed;inset:0;z-index:2147483000;background:#23201e;display:flex;flex-direction:column}
+    .gb-zv[hidden]{display:none}
+    .gb-zbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;color:#FAF9F6;border-bottom:1px solid rgba(250,249,246,.15)}
+    .gb-zlab{font-weight:400;font-size:14px;letter-spacing:.24em;text-transform:uppercase;opacity:.85}
+    .gb-zbtns{display:flex;align-items:center;gap:10px}
+    .gb-zb{width:48px;height:48px;border:1px solid rgba(250,249,246,.7);background:none;color:#FAF9F6;font-size:26px;line-height:1;font-weight:300;cursor:pointer;font-family:inherit}
+    .gb-zb:hover{background:#FAF9F6;color:#23201e}
+    .gb-zb[disabled]{opacity:.3;cursor:default;background:none;color:#FAF9F6}
+    .gb-zpct{min-width:56px;text-align:center;font-weight:400;font-size:14px;letter-spacing:.12em;color:#FAF9F6}
+    .gb-zscroll{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;cursor:grab;touch-action:pan-x pan-y}
+    .gb-zscroll.drag{cursor:grabbing}
+    .gb-zpages{display:flex;margin:0 auto;padding:16px;gap:0;box-sizing:content-box}
+    .gb-zpages img{display:block;flex:1 1 0;min-width:0;width:100%;height:auto;background:#fff;user-select:none;-webkit-user-drag:none}
+    @media(max-width:750px){.gb-zlab{display:none}.gb-zbar{justify-content:flex-end}}
+    .gb-ztip{margin:0;padding:12px 16px;text-align:center;font-size:15px;line-height:1.4;color:#FAF9F6;background:#2f2b28;border-top:1px solid rgba(250,249,246,.15)}
+    .gb-ztip kbd{display:inline-block;font:inherit;font-weight:500;font-size:14px;letter-spacing:.06em;padding:1px 8px;margin:0 2px;border:1px solid rgba(250,249,246,.7);border-radius:4px}
+    .gb-ztip b{font-weight:500}
+    .gb-ztip-t{display:none}
+    @media(hover:none){.gb-ztip-k{display:none}.gb-ztip-t{display:inline}}
+    .gb-hint{margin:10px 0 0;font-size:14px;color:#54504c;text-align:center}
+    /* phones: one page at a time */
+.gb.tall{height:auto;min-height:100vh;min-height:100dvh}
+    .gb.tall .gb-stage{flex:none}
+    .gb-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    @media (prefers-reduced-motion:reduce){.gb-leaf,.gb-book{transition:none}}
+  </style>
+</head>
+<body>
+<div class="gb" id="gb" data-dir={dir} data-pages={PAGES}>
+  <div class="gb-top">
+    <div class="gb-wrap gb-r1">
+      <a href="https://www.thornegroup.co.nz"><img class="gb-logo" src="https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png" alt="Thorne Group" /></a>
+      <span class="gb-kick">{title}</span>
+    </div>
+  </div>
+  <div class="gb-stage">
+    <div class="gb-book" id="gb-book" aria-label={`${title}, ${PAGES} pages`} role="region">
+      <div class="gb-shade" aria-hidden="true"></div>
+      {leaves.map(([front, back], k) => (
+        <div class="gb-leaf" data-k={k}>
+          <div class="gb-face gb-front"><img src={front} alt={`Page ${2 * k + 1}`} loading={k < 2 ? 'eager' : 'lazy'} decoding="async" draggable="false" /></div>
+          <div class="gb-face gb-back">{back && <img src={back} alt={`Page ${2 * k + 2}`} loading={k < 2 ? 'eager' : 'lazy'} decoding="async" draggable="false" />}</div>
+        </div>
+      ))}
+    </div>
+    <div class="gb-ctrls">
+      <button class="gb-b gb-prev" type="button" aria-label="Previous page">&lsaquo;</button>
+      <span class="gb-count" aria-live="polite">Cover</span>
+      <button class="gb-b gb-next" type="button" aria-label="Next page">&rsaquo;</button>
+      <button class="gb-zoom" type="button" aria-label="Zoom in on this page"><span aria-hidden="true" class="gb-zi"></span>Zoom</button>
+    </div>
+    <p class="gb-hint">Tap or swipe the pages to turn them. Use Zoom to read the detail.</p>
+  </div>
+  <div class="gb-zv" id="gb-zv" hidden role="dialog" aria-modal="true" aria-label="Zoomed page">
+    <div class="gb-zbar">
+      <span class="gb-zlab"></span>
+      <span class="gb-zbtns">
+        <button class="gb-zb gb-zout" type="button" aria-label="Zoom out">&minus;</button>
+        <span class="gb-zpct">100%</span>
+        <button class="gb-zb gb-zin" type="button" aria-label="Zoom in">+</button>
+        <button class="gb-zb gb-zx" type="button" aria-label="Close zoom">&times;</button>
+      </span>
+    </div>
+    <div class="gb-zscroll"><div class="gb-zpages"></div></div>
+    <p class="gb-ztip"><span class="gb-ztip-k">Press <kbd>Esc</kbd> or <b>&times;</b> to close zoom and turn the page.</span><span class="gb-ztip-t">Tap <b>&times;</b> to close zoom and turn the page.</span></p>
+  </div>
+</div>
+<script is:inline>
+(function () {
+  var root = document.getElementById('gb'), book = document.getElementById('gb-book');
+  var leaves = [].slice.call(book.querySelectorAll('.gb-leaf'));
+  var N = +root.getAttribute('data-pages'), DIR = root.getAttribute('data-dir'), L = leaves.length, ratio = 1553 / 1200;
+  var END = N % 2 ? L - 1 : L; /* odd page count: the last sheet stays put, its back is blank */
+  var BACK = N % 2 === 0;      /* only an even count ends on a lone back cover */
+  var prevB = root.querySelector('.gb-prev'), nextB = root.querySelector('.gb-next'), count = root.querySelector('.gb-count');
+  var single = null, busy = false, shade = book.querySelector('.gb-shade');
+  var turned = 0; /* book mode: how many sheets have been turned */
+  var sp = 0;     /* phone mode: which page is showing (0-based) */
+  function src(i) { return '/documents/' + DIR + '/p' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  function warm(from) { for (var i = from; i < Math.min(N, from + 4); i++) { var im = new Image(); im.src = src(i); } }
+
+  /* ---- book mode (tablets and computers) ---- */
+  function paintBook() {
+    leaves.forEach(function (lf, k) {
+      var on = k < turned;
+      lf.classList.toggle('on', on);
+      lf.style.zIndex = on ? (k + 1) : (L - k);
+    });
+    /* the closed book (cover or back cover) slides to the centre */
+    book.style.transform = turned === 0 ? 'translateX(-25%)' : (turned === L ? 'translateX(25%)' : 'none');
+    /* one shadow, under whichever pages are showing */
+    shade.style.left = turned === 0 ? '50%' : '0'; shade.style.right = turned === L ? '50%' : '0';
+    count.textContent = turned === 0 ? 'Cover' : (turned === L ? 'Back cover' : 'Pages ' + (2 * turned) + '–' + (2 * turned + 1) + ' of ' + N);
+    prevB.disabled = turned === 0; nextB.disabled = turned === END;
+    warm(2 * turned);
+  }
+  function turnBook(d) {
+    var t = Math.max(0, Math.min(END, turned + d)); if (t === turned) return;
+    var lf = leaves[d > 0 ? turned : turned - 1];
+    turned = t; busy = true;
+    paintBook();
+    lf.style.zIndex = 100; /* the turning sheet rides on top until it lands */
+    setTimeout(function () { busy = false; paintBook(); }, 920);
+  }
+
+  /* ---- phone mode: one page at a time, turning over its left edge ---- */
+  function pageEl(i) {
+    var el = document.createElement('div'); el.className = 'gb-single';
+    el.style.cssText = 'position:absolute;inset:0;background:#fff;transform-origin:left center;-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:transform .7s cubic-bezier(.45,.05,.2,1),opacity .7s ease';
+    var im = document.createElement('img'); im.src = src(i); im.alt = 'Page ' + (i + 1); im.draggable = false;
+    im.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block';
+    el.appendChild(im); return el;
+  }
+  function labelSingle() {
+    count.textContent = sp === 0 ? 'Cover' : (BACK && sp === N - 1 ? 'Back cover' : 'Page ' + (sp + 1) + ' of ' + N);
+    prevB.disabled = sp === 0; nextB.disabled = sp === N - 1;
+  }
+  function showSingle() {
+    book.querySelectorAll('.gb-single').forEach(function (n) { n.remove(); });
+    book.appendChild(pageEl(sp)); labelSingle(); warm(sp);
+  }
+  function turnSingle(d) {
+    var n = Math.max(0, Math.min(N - 1, sp + d)); if (n === sp) return;
+    busy = true;
+    var oldEl = book.querySelector('.gb-single:last-child'), newEl = pageEl(n);
+    if (d > 0) { /* new page waits underneath, the old one turns away */
+      book.insertBefore(newEl, oldEl);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { oldEl.style.transform = 'perspective(1800px) rotateY(-100deg)'; oldEl.style.opacity = '0'; }); });
+    } else {     /* the previous page turns back over the current one */
+      newEl.style.transform = 'perspective(1800px) rotateY(-100deg)'; newEl.style.opacity = '0';
+      book.appendChild(newEl);
+      requestAnimationFrame(function () { requestAnimationFrame(function () { newEl.style.transform = 'none'; newEl.style.opacity = '1'; }); });
+    }
+    sp = n; labelSingle();
+    setTimeout(function () { if (oldEl && oldEl.parentNode) oldEl.remove(); busy = false; warm(sp); }, 740);
+  }
+
+  function go(d) { if (busy) return; if (single) turnSingle(d); else turnBook(d); }
+
+  function layout() {
+    var nowSingle = window.matchMedia('(max-width:750px)').matches;
+    if (nowSingle !== single) {
+      if (nowSingle) { /* switching to phone: start from the page the book was open at */
+        sp = turned === 0 ? 0 : Math.min(N - 1, 2 * turned - 1);
+        leaves.forEach(function (lf) { lf.style.display = 'none'; });
+      } else {
+        book.querySelectorAll('.gb-single').forEach(function (n) { n.remove(); });
+        leaves.forEach(function (lf) { lf.style.display = ''; });
+        if (single !== null) turned = Math.min(END, Math.ceil(sp / 2));
+      }
+      single = nowSingle;
+      root.classList.toggle('single', single);
+    }
+    root.classList.remove('tall');
+    var stage = root.querySelector('.gb-stage'), cs = getComputedStyle(stage);
+    var ctrls = root.querySelector('.gb-ctrls'), hint = root.querySelector('.gb-hint');
+    var availW = stage.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var availH = stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom)
+      - ctrls.offsetHeight - parseFloat(getComputedStyle(ctrls).marginTop)
+      - hint.offsetHeight - parseFloat(getComputedStyle(hint).marginTop) - 2;
+    var pw;
+    if (single) {
+      /* phones: fit the screen, but never smaller than 80% of its width
+         (a very short screen scrolls a little instead) */
+      pw = Math.min(availW, Math.max(availH / ratio, availW * 0.8));
+      if (pw * ratio > availH + 1) root.classList.add('tall');
+    } else {
+      pw = Math.min(availW / 2, availH / ratio);
+    }
+    pw = Math.floor(pw);
+    book.style.width = (single ? pw : pw * 2) + 'px';
+    book.style.height = Math.round(pw * ratio) + 'px';
+    if (single) { book.style.transform = 'none'; shade.style.left = shade.style.right = '0'; showSingle(); } else paintBook();
+  }
+
+  prevB.addEventListener('click', function () { go(-1); });
+  nextB.addEventListener('click', function () { go(1); });
+  /* click the right-hand side to go forward, the left-hand side to go back */
+  book.addEventListener('click', function (e) {
+    var r = book.getBoundingClientRect();
+    go(e.clientX > r.left + r.width / 2 ? 1 : -1);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight') go(1); else if (e.key === 'ArrowLeft') go(-1);
+  });
+  var tx = null, ty = null, swiped = false;
+  book.addEventListener('touchstart', function (e) { var t = e.touches[0]; tx = t.clientX; ty = t.clientY; swiped = false; }, { passive: true });
+  book.addEventListener('touchend', function (e) {
+    if (tx === null) return; var t = e.changedTouches[0], dx = t.clientX - tx, dy = t.clientY - ty; tx = ty = null;
+    if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy) * 1.4) { e.preventDefault(); go(dx < 0 ? 1 : -1); }
+  });
+  /* ---- zoom: the page (or spread) showing, in a full-screen viewer ---- */
+  var zv = document.getElementById('gb-zv'), zpages = zv.querySelector('.gb-zpages'), zscroll = zv.querySelector('.gb-zscroll');
+  var LEVELS = [1, 1.5, 2, 3], zl = 0, zshow = [];
+  function zsrc(i) { return '/documents/' + DIR + '/z' + String(i + 1).padStart(2, '0') + '.jpg'; }
+  function showing() {
+    if (single) return [sp];
+    if (turned === 0) return [0];
+    if (turned === L) return [N - 1];
+    return [2 * turned - 1, 2 * turned];
+  }
+  function zfit() {
+    /* level 1 = the whole page or spread fits the screen */
+    var w = zscroll.clientWidth - 32, h = zscroll.clientHeight - 32;
+    return Math.max(120, Math.floor(Math.min(w, h / ratio * zshow.length)) - 2); /* a hair under, so no scrollbar at 100% */
+  }
+  function zapply(keepCentre) {
+    var cx = 0.5, cy = 0.5;
+    if (keepCentre && zscroll.scrollWidth > 0) {
+      cx = (zscroll.scrollLeft + zscroll.clientWidth / 2) / zscroll.scrollWidth;
+      cy = (zscroll.scrollTop + zscroll.clientHeight / 2) / zscroll.scrollHeight;
+    }
+    zpages.style.width = Math.floor(zfit() * LEVELS[zl]) + 'px';
+    zv.querySelector('.gb-zpct').textContent = Math.round(LEVELS[zl] * 100) + '%';
+    zv.querySelector('.gb-zout').disabled = zl === 0;
+    zv.querySelector('.gb-zin').disabled = zl === LEVELS.length - 1;
+    zscroll.scrollLeft = cx * zscroll.scrollWidth - zscroll.clientWidth / 2;
+    zscroll.scrollTop = cy * zscroll.scrollHeight - zscroll.clientHeight / 2;
+  }
+  function zopen() {
+    zshow = showing(); zl = 0;
+    zpages.textContent = '';
+    zshow.forEach(function (i) {
+      var im = document.createElement('img'); im.alt = 'Page ' + (i + 1); im.draggable = false;
+      im.src = src(i);                       /* the page already loaded shows straight away */
+      var hi = new Image(); hi.onload = function () { im.src = hi.src; }; hi.src = zsrc(i); /* then swaps to the sharp copy */
+      zpages.appendChild(im);
+    });
+    zv.querySelector('.gb-zlab').textContent = zshow.length === 2 ? 'Pages ' + (zshow[0] + 1) + '–' + (zshow[1] + 1) : (zshow[0] === 0 ? 'Cover' : (BACK && zshow[0] === N - 1 ? 'Back cover' : 'Page ' + (zshow[0] + 1)));
+    zv.hidden = false; document.body.style.overflow = 'hidden';
+    zapply(false); zv.querySelector('.gb-zin').focus();
+  }
+  function zclose() { zv.hidden = true; document.body.style.overflow = ''; root.querySelector('.gb-zoom').focus(); }
+  function zstep(d) { var n = Math.max(0, Math.min(LEVELS.length - 1, zl + d)); if (n !== zl) { zl = n; zapply(true); } }
+  root.querySelector('.gb-zoom').addEventListener('click', zopen);
+  zv.querySelector('.gb-zin').addEventListener('click', function () { zstep(1); });
+  zv.querySelector('.gb-zout').addEventListener('click', function () { zstep(-1); });
+  zv.querySelector('.gb-zx').addEventListener('click', zclose);
+  /* double-click a zoomed page to zoom in a step (back to fit after the last) */
+  zpages.addEventListener('dblclick', function () { if (zl === LEVELS.length - 1) { zl = 0; zapply(false); } else zstep(1); });
+  /* drag to move around with a mouse; fingers scroll natively */
+  var dx0 = null, dy0, sl0, st0;
+  zscroll.addEventListener('mousedown', function (e) { dx0 = e.clientX; dy0 = e.clientY; sl0 = zscroll.scrollLeft; st0 = zscroll.scrollTop; zscroll.classList.add('drag'); e.preventDefault(); });
+  window.addEventListener('mousemove', function (e) { if (dx0 === null) return; zscroll.scrollLeft = sl0 - (e.clientX - dx0); zscroll.scrollTop = st0 - (e.clientY - dy0); });
+  window.addEventListener('mouseup', function () { dx0 = null; zscroll.classList.remove('drag'); });
+  document.addEventListener('keydown', function (e) {
+    if (zv.hidden) return;
+    if (e.key === 'Escape') zclose(); else if (e.key === '+' || e.key === '=') zstep(1); else if (e.key === '-') zstep(-1);
+    e.stopImmediatePropagation();
+  }, true);
+
+  var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { layout(); if (!zv.hidden) zapply(true); }, 120); });
+  layout();
+})();
+</script>
+</body>
+</html>
