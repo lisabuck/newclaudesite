@@ -150,14 +150,14 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <div class="tg-pop" id="tg-pop" hidden data-form-id="">
       <div class="tg-pop-card" role="dialog" aria-labelledby="tg-pop-h">
         <button class="tg-pop-x" type="button" aria-label="Close">&times;</button>
-        <h2 id="tg-pop-h">Interested in our current projects?</h2>
-        <p class="tg-pop-lead">Early access to new developments, inspiration from our homes and updates on current projects.</p>
+        <h2 id="tg-pop-h">Be the first to know!</h2>
+        <p class="tg-pop-lead">Register for early access to new developments, inspiration from our homes and updates on current projects.</p>
         <form class="tg-pop-form" novalidate>
           <label class="tg-pop-lab" for="tg-pop-first">First name</label>
           <input id="tg-pop-first" name="first_name" type="text" autocomplete="given-name" placeholder="First name" required>
           <label class="tg-pop-lab" for="tg-pop-email">Email address</label>
           <input id="tg-pop-email" name="email" type="email" autocomplete="email" placeholder="Email address" required>
-          <button class="tg-pop-btn" type="submit">Keep me updated</button>
+          <button class="tg-pop-btn" type="submit">Subscribe</button>
           <p class="tg-pop-msg" role="status" hidden></p>
         </form>
       </div>
@@ -221,7 +221,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
               setTimeout(function () { close(); }, 3500);
             })
             .catch(function (err) { say((err && err.message) || 'Something went wrong. Please try again or email info@thornegroup.co.nz.'); })
-            .then(function () { btn.disabled = false; btn.textContent = 'Keep me updated'; });
+            .then(function () { btn.disabled = false; btn.textContent = 'Subscribe'; });
         });
         setTimeout(open, 30000);
       })();
