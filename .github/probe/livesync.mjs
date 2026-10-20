@@ -29,5 +29,9 @@ for (const g of ['rural-building-guide', 'coastal-building-guide', 'space-optimi
     await ctx.close();
   }
 }
+for (const f of ['coastal-guide/p02.jpg?v=2', 'coastal-guide/z02.jpg?v=2', 'space-guide/p08.jpg?v=2', 'space-guide/z08.jpg?v=2', 'space-guide/p03.jpg?v=2']) {
+  const ctx = await browser.newContext(); const r = await ctx.request.get(SITE + '/documents/' + f); const body = await r.body();
+  log(`FILE ${f} ${r.status()} ${body.length} bytes`); await ctx.close();
+}
 await browser.close();
 fs.writeFileSync(`${out}/report.txt`, L.join('\n') + '\n');
