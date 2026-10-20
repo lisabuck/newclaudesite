@@ -201,10 +201,10 @@ thorne-home-page .band-svc .tg-band-copy .tg-band-tag{color:#FAF9F6!important;op
 @media(max-width:750px){thorne-home-page .band-svc .tg-band-copy .tg-band-tag{color:#54504c!important;text-shadow:none}}
 /* v86: the longer band title wraps to two lines so the panel stays compact */
 thorne-home-page .tg-band[data-screen-label="Architectural Homes band"] .tg-band-copy h3{max-width:14em}
-/* v86: the text panel sits at the bottom LEFT of the photo, inset the same
-   distance from the photo's bottom and left edges - per Lisa */
+/* v95: the text panel sits at the bottom RIGHT of the photo, inset the same
+   distance from the photo's bottom and right edges (v86 had it bottom left) - per Lisa */
 @media(min-width:751px){
-  thorne-home-page .tg-band[data-screen-label="Architectural Homes band"] .tg-band-copy{top:auto!important;bottom:calc(clamp(44px,4.5vw,72px) + clamp(32px,4.5vw,76px))!important;left:calc(clamp(20px,2.6vw,48px) + clamp(32px,4.5vw,76px))!important;right:auto!important}
+  thorne-home-page .tg-band[data-screen-label="Architectural Homes band"] .tg-band-copy{top:auto!important;bottom:calc(clamp(44px,4.5vw,72px) + clamp(32px,4.5vw,76px))!important;right:calc(clamp(20px,2.6vw,48px) + clamp(32px,4.5vw,76px))!important;left:auto!important}
 }
 /* v87: hero at five photos (dusk photo second): 12.5s loop, 2.5s each */
 thorne-home-page .tg-hero-slides .tg-hsl,thorne-home-page .tg-hero-slides .tg-hslm{animation-name:tgHomeHero5;animation-duration:12.5s}
