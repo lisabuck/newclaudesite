@@ -145,7 +145,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <!-- Project updates pop-up: a small card pinned bottom right (over the
          E-Newsletter button's spot, no dark backdrop) that shows once per
          browser session, 30 seconds after the visitor arrives on the site
-         (counted across pages; never on the newsletter or contact pages). Sign-ups go to the Wix
+         (counted across pages; never on the newsletter or contact pages), and
+         whenever the pinned E-Newsletter button is clicked. Sign-ups go to the Wix
          "Newsletter Signup" form through the site's existing /api/contact
          connector; on the preview site (no connector) it says so instead. -->
     <div class="tg-pop" id="tg-pop" hidden data-form-id="">
@@ -186,31 +187,30 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <script is:inline>
       (function () {
         var pop = document.getElementById('tg-pop'); if (!pop) return;
-        /* once per session (until the tab or browser is closed): 30 seconds
-           after the visitor arrives on the site, counted across pages - per Lisa */
         function sget(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
         function sset(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
-        if (sget('tgPopShown')) return;
-        var now = Date.now(), start = +sget('tgPopStart') || 0;
-        if (!start) { start = now; sset('tgPopStart', String(now)); }
-        var path = location.pathname.replace(/\/+$/, '');
-        if (/^\/(newsletter|contact)$/.test(path)) return;
-        var lastFocus = null;
-        function open() {
-          if (sget('tgPopShown') || document.querySelector('.tg-pop.on')) return;
+        var lastFocus = null, done = false;
+        var form = pop.querySelector('form'), msg = pop.querySelector('.tg-pop-msg'), btn = pop.querySelector('.tg-pop-btn');
+        function open(byHand) {
+          if (document.querySelector('.tg-pop.on')) return;
           sset('tgPopShown', '1');
+          if (done) reset(); /* opened again after a sign-up: a fresh form */
           lastFocus = document.activeElement;
           pop.hidden = false;
           requestAnimationFrame(function () { pop.classList.add('on'); });
+          if (byHand) setTimeout(function () { var f = document.getElementById('tg-pop-first'); if (f) f.focus({ preventScroll: true }); }, 60);
         }
         function close() {
           pop.classList.remove('on');
           setTimeout(function () { pop.hidden = true; }, 450);
           if (pop.contains(document.activeElement) && lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
         }
+        function reset() {
+          form.reset(); done = false; msg.hidden = true;
+          form.querySelectorAll('input,.tg-pop-btn,.tg-pop-lab').forEach(function (el) { el.hidden = false; });
+        }
         pop.querySelector('.tg-pop-x').addEventListener('click', function () { close(); });
         document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(); });
-        var form = pop.querySelector('form'), msg = pop.querySelector('.tg-pop-msg'), btn = pop.querySelector('.tg-pop-btn');
         function say(t) { msg.textContent = t; msg.hidden = false; }
         form.addEventListener('submit', function (e) {
           e.preventDefault();
@@ -225,13 +225,27 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             .then(function (r) {
               if (!r.ok) throw new Error((r.b && r.b.error) || 'Something went wrong.');
               form.querySelectorAll('input,.tg-pop-btn,.tg-pop-lab').forEach(function (el) { el.hidden = true; });
-              say('Thank you. We’ll keep you posted.');
+              say('Thank you. We’ll keep you posted.'); done = true;
               setTimeout(function () { close(); }, 3500);
             })
             .catch(function (err) { say((err && err.message) || 'Something went wrong. Please try again or email info@thornegroup.co.nz.'); })
             .then(function () { btn.disabled = false; btn.textContent = 'Subscribe'; });
         });
-        setTimeout(open, Math.max(3000, 30000 - (now - start))); /* a later page waits at least 3 seconds */
+        /* the pinned E-Newsletter button opens this pop-up rather than going to
+           the newsletter page (its link stays as the fallback if scripts are off) - per Lisa */
+        var cta = document.querySelector('.tg-news-cta');
+        if (cta) {
+          cta.setAttribute('aria-haspopup', 'dialog'); cta.setAttribute('aria-controls', 'tg-pop');
+          cta.addEventListener('click', function (e) { e.preventDefault(); open(true); });
+        }
+        /* on its own: once per session (until the tab or browser is closed),
+           30 seconds after the visitor arrives on the site, counted across pages;
+           never on the newsletter or contact pages - per Lisa */
+        if (sget('tgPopShown')) return;
+        var now = Date.now(), start = +sget('tgPopStart') || 0;
+        if (!start) { start = now; sset('tgPopStart', String(now)); }
+        if (/^\/(newsletter|contact)$/.test(location.pathname.replace(/\/+$/, ''))) return;
+        setTimeout(function () { if (!sget('tgPopShown')) open(false); }, Math.max(3000, 30000 - (now - start))); /* a later page waits at least 3 seconds */
       })();
     </script>
 </body>
