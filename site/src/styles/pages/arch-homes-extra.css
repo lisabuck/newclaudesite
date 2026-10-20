@@ -70,3 +70,20 @@ thorne-home-page .ah-next-cta:hover{background:#393533;color:#FAF9F6}
   thorne-home-page .ah-next-box p{font-size:17px}
   thorne-home-page .ah-next-cta{background:#393533;color:#FAF9F6;letter-spacing:.18em}
 }
+
+/* "Already have plans?" box: Email us (contact page) and Call us side by
+   side. Call us dials the office on phones; tablets and computers reveal
+   the office and Clare's numbers. "Request our Design Brief" opens an
+   email to info@ with the subject "Request Design Brief" - per Lisa */
+thorne-home-page .ah-next-ctas{margin-top:auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+thorne-home-page .ah-next-ctas .ah-next-cta{margin-top:0;align-self:auto;justify-content:center}
+thorne-home-page .ah-next-nums{flex-basis:100%;width:0;min-width:100%;margin-top:4px;font-size:17px;line-height:1.6;color:#393533}
+thorne-home-page .ah-next-nums[hidden]{display:none}
+thorne-home-page .ah-next-nums a{color:#393533;text-decoration:none;border-bottom:1px solid rgba(57,53,51,.5);white-space:nowrap}
+thorne-home-page .ah-next-nums a:hover{border-bottom-color:#393533}
+thorne-home-page .ah-next-lab{font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#54504c}
+thorne-home-page .ah-next-sep{margin:0 12px;color:#7a746e}
+@media(max-width:750px){
+  thorne-home-page .ah-next-ctas .ah-next-cta{flex:1 1 auto}
+  thorne-home-page .ah-next-nums{display:none!important}
+}
