@@ -3,61 +3,42 @@ import fs from 'fs';
 const out = 'diagnostics/livesync'; fs.mkdirSync(out, { recursive: true });
 const L = []; const log = s => { L.push(s); console.log(s); };
 const SITE = 'https://www.thornegroup.co.nz';
+const q = () => '?probe=' + Date.now();
 const browser = await chromium.launch({ channel: 'chrome' });
-async function open(path, vp, label) {
-  const ctx = await browser.newContext({ viewport: vp });
-  const page = await ctx.newPage();
-  const bad = [];
-  page.on('pageerror', e => log(`${label} PAGEERROR ${e.message.slice(0, 160)}`));
-  page.on('response', r => { if (r.status() >= 400 && !/favicon|analytics|collect/.test(r.url())) bad.push(r.status() + ' ' + r.url().slice(0, 140)); });
-  await page.goto(SITE + path + (path.includes('?') ? '&' : '?') + 'probe=' + Date.now(), { waitUntil: 'networkidle', timeout: 90000 }).catch(e => log(`${label} goto ${e.message.slice(0, 120)}`));
-  return { ctx, page, bad };
-}
+const vis = p => p.evaluate(() => { const e = document.getElementById('tg-pop'); return !!e && !e.hidden && getComputedStyle(e).opacity > 0.5; });
+async function ctxNew(vp) { const c = await browser.newContext({ viewport: vp }); await c.addInitScript(() => { try { sessionStorage.tgPreSeen = '1'; } catch (e) {} }); return c; }
 for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
-  // home
-  let { ctx, page, bad } = await open('/', vp, label + ' home');
-  const home = await page.evaluate(() => ({
-    engine: [...document.scripts].map(s => s.src).find(s => s.includes('thorne-home-page54')) || '',
-    tagline: /concept to completion/i.test(document.body.innerText),
-    band: (document.querySelector('.tg-band[data-screen-label="Architectural Homes band"] h3') || {}).textContent,
-    ctas: [...document.querySelectorAll('.tg-cta3')].map(c => [...c.querySelectorAll('.tg-c3b,.tg-c3link')].map(a => a.textContent.trim()).join('/')),
-    brokenImgs: [...document.querySelectorAll('img')].filter(i => i.complete && i.currentSrc && i.naturalWidth === 0).map(i => i.currentSrc.slice(0, 110)),
-    popFormId: (document.getElementById('tg-pop') || {}).getAttribute ? document.getElementById('tg-pop').getAttribute('data-form-id') : null,
-    popHeading: (document.getElementById('tg-pop-h') || {}).textContent
-  }));
+  // A: E-Newsletter button opens the pop-up, no navigation; then no automatic pop-up later in the session
+  let ctx = await ctxNew(vp); let page = await ctx.newPage();
+  page.on('pageerror', e => log(`${label} PAGEERROR ${e.message.slice(0, 160)}`));
+  await page.goto(SITE + '/' + q(), { waitUntil: 'networkidle', timeout: 90000 });
+  const home = await page.evaluate(() => {
+    const band = document.querySelector('.tg-band[data-screen-label="Architectural Homes band"]'); const c = band.querySelector('.tg-band-copy').getBoundingClientRect(), m = band.querySelector('.tg-band-media').getBoundingClientRect();
+    return { engine: [...document.scripts].map(s => s.src).find(s => s.includes('thorne-home-page54')) || '', heroBtn: (document.querySelector('.tg-hb-fill') || {}).textContent, panel: innerWidth > 750 ? (c.left > m.left + m.width / 2 ? 'right side' : 'left side') : 'below photo (phone)' };
+  });
   log(`${label} HOME ${JSON.stringify(home)}`);
-  await page.screenshot({ path: `${out}/${label}-home.png` });
   await page.evaluate(() => document.querySelector('.tg-band[data-screen-label="Architectural Homes band"]').scrollIntoView({ block: 'center' }));
-  await page.waitForTimeout(1500);
-  await page.screenshot({ path: `${out}/${label}-home-band.png` });
-  await page.waitForTimeout(31000);
-  const pop = await page.evaluate(() => { const e = document.getElementById('tg-pop'); const r = e.getBoundingClientRect(); return { shown: !e.hidden && getComputedStyle(e).opacity > 0.5, right: Math.round(innerWidth - r.right), bottom: Math.round(innerHeight - r.bottom) }; });
-  log(`${label} POPUP after 31s ${JSON.stringify(pop)}`);
-  await page.screenshot({ path: `${out}/${label}-popup.png` });
-  if (bad.length) log(`${label} home failed requests: ${bad.slice(0, 8).join(' | ')}`);
+  await page.waitForTimeout(1500); await page.screenshot({ path: `${out}/${label}-band.png` });
+  const url0 = page.url();
+  await page.click('.tg-news-cta'); await page.waitForTimeout(900);
+  log(`${label} E-NEWSLETTER click: pop-up shown ${await vis(page)}, same page ${page.url() === url0}, tabs ${ctx.pages().length}, cursor in ${await page.evaluate(() => document.activeElement.id)}, form id ${await page.evaluate(() => document.getElementById('tg-pop').getAttribute('data-form-id'))}`);
+  await page.screenshot({ path: `${out}/${label}-newsletter-click.png` });
+  await page.click('.tg-pop-x'); await page.waitForTimeout(600);
+  await page.goto(SITE + '/about' + q(), { waitUntil: 'domcontentloaded', timeout: 90000 }); await page.waitForTimeout(36000);
+  log(`${label} after using the button, automatic pop-up on next page within 36s: ${await vis(page)}`);
   await ctx.close();
-  // service pages
-  for (const [p, sel] of [['/services/architectural-homes', '.ah-next'], ['/services/development-collaborations', '.nx-single'], ['/services/renovations', '.nx-boxes']]) {
-    ({ ctx, page, bad } = await open(p, vp, label + ' ' + p));
-    const r = await page.evaluate(s => { const e = document.querySelector(s); return e ? e.innerText.replace(/\s+/g, ' ').slice(0, 400) : 'MISSING'; }, sel);
-    const pricing = await page.evaluate(() => /what specific homes cost/i.test(document.body.innerText));
-    log(`${label} ${p} box: ${r}${p.includes('architectural') ? ' | old pricing CTA present: ' + pricing : ''}`);
-    await page.evaluate(s => { const e = document.querySelector(s); if (e) e.scrollIntoView({ block: 'center' }); }, sel);
-    await page.waitForTimeout(800);
-    await page.screenshot({ path: `${out}/${label}-${p.split('/').pop()}.png` });
-    if (bad.length) log(`${label} ${p} failed requests: ${bad.slice(0, 6).join(' | ')}`);
-    await ctx.close();
-  }
-  // rural guide
-  ({ ctx, page, bad } = await open('/rural-building-guide', vp, label + ' guide'));
-  const g = await page.evaluate(() => ({ title: document.title, robots: (document.querySelector('meta[name=robots]') || {}).content, count: (document.querySelector('.gb-count') || {}).textContent, imgs: [...document.querySelectorAll('.gb-book img')].filter(i => i.complete && i.naturalWidth > 0).length }));
-  log(`${label} GUIDE ${JSON.stringify(g)}`);
-  await page.screenshot({ path: `${out}/${label}-guide.png` });
-  if (bad.length) log(`${label} guide failed requests: ${bad.slice(0, 6).join(' | ')}`);
+  // B: automatic once per session
+  ctx = await ctxNew(vp); page = await ctx.newPage();
+  await page.goto(SITE + '/about' + q(), { waitUntil: 'domcontentloaded', timeout: 90000 }); await page.waitForTimeout(33000);
+  const first = await vis(page);
+  await page.click('.tg-pop-x').catch(() => {}); await page.waitForTimeout(600);
+  await page.goto(SITE + '/projects' + q(), { waitUntil: 'domcontentloaded', timeout: 90000 }); await page.waitForTimeout(36000);
+  log(`${label} automatic pop-up: first page after 33s ${first}, second page after 36s ${await vis(page)}`);
   await ctx.close();
 }
-for (const f of ['/documents/rural-building-guide.pdf', '/documents/rural-guide/z13.jpg']) {
-  const ctx = await browser.newContext(); const r = await ctx.request.get(SITE + f); log(`FILE ${f} ${r.status()} ${r.headers()['content-type']}`); await ctx.close();
-}
-await browser.close();
+const ctx = await ctxNew({ width: 1440, height: 900 }); const page = await ctx.newPage();
+await page.goto(SITE + '/rural-building-guide' + q(), { waitUntil: 'networkidle', timeout: 90000 });
+log(`GUIDE controls: ${await page.evaluate(() => [...document.querySelectorAll('.gb-ctrls > *')].map(e => e.textContent.trim() || e.getAttribute('aria-label')).join(' | '))}; download link present: ${await page.evaluate(() => !!document.querySelector('a[download], a[href$=".pdf"]'))}`);
+await page.screenshot({ path: `${out}/guide.png` });
+await ctx.close(); await browser.close();
 fs.writeFileSync(`${out}/report.txt`, L.join('\n') + '\n');
