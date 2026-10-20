@@ -46,8 +46,6 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
     .gb-b:hover{background:#393533;color:#FAF9F6}
     .gb-b[disabled]{opacity:.35;cursor:default;background:#FAF9F6;color:#393533}
     .gb-count{min-width:150px;text-align:center;font-weight:400;font-size:14px;letter-spacing:.24em;text-transform:uppercase;color:#393533}
-    .gb-dl{display:inline-flex;align-items:center;gap:12px;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;color:#393533;border:1px solid #393533;padding:13px 22px}
-    .gb a.gb-dl:hover{background:#393533;color:#FAF9F6}
     .gb-zoom{display:inline-flex;align-items:center;gap:10px;height:56px;padding:0 20px;border:1px solid #393533;background:#FAF9F6;color:#393533;font:inherit;font-weight:500;font-size:14px;letter-spacing:.22em;text-transform:uppercase;cursor:pointer}
     .gb-zoom:hover{background:#393533;color:#FAF9F6}
     .gb-zi{width:14px;height:14px;border:2px solid currentColor;border-radius:50%;position:relative;display:inline-block}
@@ -102,7 +100,6 @@ const leaves = Array.from({ length: Math.ceil(PAGES / 2) }, (_, k) => [pages[2 *
       <span class="gb-count" aria-live="polite">Cover</span>
       <button class="gb-b gb-next" type="button" aria-label="Next page">&rsaquo;</button>
       <button class="gb-zoom" type="button" aria-label="Zoom in on this page"><span aria-hidden="true" class="gb-zi"></span>Zoom</button>
-      <a class="gb-dl" href="/documents/rural-building-guide.pdf" download>Download the PDF <span aria-hidden="true">&darr;</span></a>
     </div>
     <p class="gb-hint">Tap or swipe the pages to turn them. Use Zoom to read the detail.</p>
   </div>

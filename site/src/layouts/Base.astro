@@ -143,8 +143,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
       })();
     </script>
     <!-- Project updates pop-up: a small card pinned bottom right (over the
-         E-Newsletter button's spot, no dark backdrop) that shows 30 seconds
-         after each page opens (not on the newsletter or contact pages), every time. Sign-ups go to the Wix
+         E-Newsletter button's spot, no dark backdrop) that shows once per
+         browser session, 30 seconds after the visitor arrives on the site
+         (counted across pages; never on the newsletter or contact pages). Sign-ups go to the Wix
          "Newsletter Signup" form through the site's existing /api/contact
          connector; on the preview site (no connector) it says so instead. -->
     <div class="tg-pop" id="tg-pop" hidden data-form-id="">
@@ -185,12 +186,19 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <script is:inline>
       (function () {
         var pop = document.getElementById('tg-pop'); if (!pop) return;
+        /* once per session (until the tab or browser is closed): 30 seconds
+           after the visitor arrives on the site, counted across pages - per Lisa */
+        function sget(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
+        function sset(k, v) { try { sessionStorage.setItem(k, v); } catch (e) {} }
+        if (sget('tgPopShown')) return;
+        var now = Date.now(), start = +sget('tgPopStart') || 0;
+        if (!start) { start = now; sset('tgPopStart', String(now)); }
         var path = location.pathname.replace(/\/+$/, '');
         if (/^\/(newsletter|contact)$/.test(path)) return;
-        /* no memory of earlier visits: it appears 30 seconds into every page view - per Lisa */
         var lastFocus = null;
         function open() {
-          if (document.querySelector('.tg-pop.on')) return;
+          if (sget('tgPopShown') || document.querySelector('.tg-pop.on')) return;
+          sset('tgPopShown', '1');
           lastFocus = document.activeElement;
           pop.hidden = false;
           requestAnimationFrame(function () { pop.classList.add('on'); });
@@ -223,7 +231,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
             .catch(function (err) { say((err && err.message) || 'Something went wrong. Please try again or email info@thornegroup.co.nz.'); })
             .then(function () { btn.disabled = false; btn.textContent = 'Subscribe'; });
         });
-        setTimeout(open, 30000);
+        setTimeout(open, Math.max(3000, 30000 - (now - start))); /* a later page waits at least 3 seconds */
       })();
     </script>
 </body>
