@@ -56,6 +56,9 @@ import '../styles/pages/thorne-gallery.css';
    ("6 of 6"), so the slideshow script itself is unchanged. */
 (function () {
   var card = null, closedFor = '';
+  /* projects that never show the panel - per Lisa */
+  var SKIP = ['Coastal Sanctuary'];
+  function skipped(th) { return SKIP.indexOf(((th.querySelector('.th-title') || {}).textContent || '').trim()) !== -1; }
   /* closing it hides it for that project's last photo until the slideshow is reopened */
   function key(th) { return ((th.querySelector('.th-title') || {}).textContent || '') + '|' + ((th.querySelector('.th-counter') || {}).textContent || ''); }
   function build(th) {
@@ -84,7 +87,7 @@ import '../styles/pages/thorne-gallery.css';
     if (!card || !card.isConnected) build(th);
     if (!th.classList.contains('open')) { card.classList.remove('on'); closedFor = ''; return; }
     var m = ((th.querySelector('.th-counter') || {}).textContent || '').match(/(\d+)\s+of\s+(\d+)/);
-    var last = !!m && m[1] === m[2] && key(th) !== closedFor;
+    var last = !!m && m[1] === m[2] && key(th) !== closedFor && !skipped(th);
     if (last !== card.classList.contains('on')) {
       card.classList.toggle('on', last);
       if (!last) card.querySelector('.th-endcta-nums').hidden = true;
