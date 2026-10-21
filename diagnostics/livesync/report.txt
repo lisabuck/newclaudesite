@@ -1,0 +1,18 @@
+desktop: HTTP 200 | Planning brief | Thorne Group | robots noindex, nofollow | endpoint /api/brief | progress 00 / 14 | site pop-up on page false
+  screen 1: images 5/5
+  screen 4: images 8/8
+  screen 5: images 9/9
+  screen 6: images 6/6
+  screen 14: images 0/0
+  screen 15: images 0/0
+  errors none | failed requests none
+phone: HTTP 200 | Planning brief | Thorne Group | robots noindex, nofollow | endpoint /api/brief | progress 00 / 14 | site pop-up on page false
+  screen 1: images 5/5
+  screen 4: images 8/8
+  screen 5: images 9/9
+  screen 6: images 6/6
+  screen 14: images 0/0
+  screen 15: images 0/0
+  errors none | failed requests none
+api/brief (empty): 400 {"error":"We need a name and email to send your brief."}
+api/brief-upload (not an image): 415 {"error":"Images only"}
