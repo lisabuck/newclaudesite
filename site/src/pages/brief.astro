@@ -1,0 +1,698 @@
+---
+/* Design brief: private page at /brief, shared by link only. Not in any menu,
+   not in the sitemap, and marked noindex so search engines leave it out.
+   The online version of the Planning Guide Questionnaire (14 sections), built
+   from the designer's handoff ("Minimal" layout, copy used verbatim).
+   Answers save on the visitor's device as they go (localStorage key
+   tg-planning-brief-v1). ENDPOINT is empty on the Vercel preview, so Submit
+   checks the name and email, sends nothing, and says so on the last screen. */
+import '../styles/fonts.css';
+
+const ENDPOINT = '';
+const P = '/brief-photos/';
+const TITLES = ['Before you start', 'Your details', 'Project scope', 'Your site', 'General style', 'Cladding', 'Roof', 'Interior and kitchen', 'Appliances and bathrooms', 'Flooring and built-ins', 'Laundry', 'Home efficiency', 'Outdoor living', 'Landscaping and vehicles', 'Budget', 'What happens next'];
+const pad = (n: number) => String(n).padStart(2, '0');
+
+type Field = { name: string; label: string; ac?: string; type?: string; im?: string; full?: boolean; req?: boolean };
+type Item =
+  | { i: 'input'; name: string; aria: string; money?: boolean }
+  | { i: 'area'; name: string; aria: string }
+  | { i: 'opts'; min?: number; one?: boolean; opts: [string, string][]; other?: [string, string] }
+  | { i: 'tiles'; opts: [string, string, string][] }
+  | { i: 'upload'; zone: string; aria: string }
+  | { i: 'radio'; group: string; opts: [string, string][] }
+  | { i: 'clients' };
+type Block = { fields: Field[] } | { q: string; help?: string; items: Item[] };
+type Sec = { h: string; intro: string; blocks: Block[] };
+
+const up = (zone: string, aria: string): Item => ({ i: 'upload', zone, aria });
+const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
+const ANY = 'Tick as many as you like.';
+
+const SECS: Sec[] = [
+  { h: 'A few details for our <strong>records</strong>.', intro: 'These stay confidential. We will not share them without your permission.', blocks: [
+    { fields: [
+      { name: 's1_contact', label: 'Contact name(s)', ac: 'name', req: true },
+      { name: 's1_legal', label: 'Legal name(s), if different' },
+      { name: 's1_phone', label: 'Phone number(s)', type: 'tel', ac: 'tel' },
+      { name: 's1_email', label: 'Email(s)', type: 'email', ac: 'email', req: true },
+      { name: 's1_postal', label: 'Postal address, including postcode', ac: 'street-address', full: true },
+      { name: 's1_site', label: 'Project (site) address, with lot number if known', full: true },
+      { name: 's1_heard', label: 'How did you hear about Thorne Group?', full: true },
+      { name: 's1_timeframe', label: 'What is your expected timeframe to complete the project?', full: true },
+    ] },
+    { q: 'Talk to people who have built with us.', help: 'Over 100 of our clients have written about their experience. If you would like to speak to one directly, we can put you in touch.', items: [
+      { i: 'clients' },
+      { i: 'opts', one: true, opts: [['s1_referral', 'Yes, put me in touch with a previous client.']] },
+    ] },
+  ] },
+  { h: 'The size of home you are <strong>considering</strong>.', intro: 'Rough numbers are fine. We will refine them together.', blocks: [
+    { fields: [
+      { name: 's2_area', label: 'Approximate floor area (m²)', im: 'decimal' },
+      { name: 's2_storeys', label: 'Number of storeys', im: 'numeric' },
+      { name: 's2_bedrooms', label: 'Number of bedrooms', im: 'numeric' },
+      { name: 's2_bathrooms', label: 'Number of bathrooms, including powder rooms', im: 'numeric' },
+      { name: 's2_living', label: 'Number and type of living spaces', full: true },
+      { name: 's2_garage', label: 'Garage size and purpose', full: true },
+    ] },
+    { q: 'Any other spaces you are considering?', help: 'For example a study nook, office, rumpus or games room.', items: [area('s2_other', 'Other spaces')] },
+  ] },
+  { h: 'Tell us about your <strong>site</strong>.', intro: 'Ground conditions, slope and access all shape the design and the cost. Tell us what you know.', blocks: [
+    { q: 'Land area', items: [{ i: 'input', name: 's3_area', aria: 'Land area' }] },
+    { q: 'Site type', items: [{ i: 'opts', min: 180, opts: [['s3_type_rural', 'Rural'], ['s3_type_coastal', 'Coastal'], ['s3_type_infill', 'Infill'], ['s3_type_subdivision', 'Subdivision'], ['s3_type_other', 'Other']] }] },
+    { q: 'Topography', items: [{ i: 'opts', min: 180, opts: [['s3_topo_flat', 'Flat'], ['s3_topo_gentle', 'Gentle slope'], ['s3_topo_steep', 'Steep or hilly'], ['s3_topo_sandy', 'Coastal or sandy'], ['s3_topo_other', 'Other']] }] },
+    { q: 'Is there a geotechnical report, or any geotechnical issues you are aware of?', items: [area('s3_geo', 'Geotechnical report or issues')] },
+    { q: 'Are there any building covenants to consider?', items: [area('s3_covenants', 'Building covenants')] },
+    { q: 'Are there any potential access issues with the site?', items: [area('s3_access', 'Site access issues')] },
+  ] },
+  { h: 'The style of home that <strong>appeals</strong> to you.', intro: 'Tick the images that appeal, upload your own, or describe it in your own words.', blocks: [
+    { q: 'Which styles appeal to you?', help: ANY, items: [{ i: 'tiles', opts: [
+      ['s4_hamptons', 'Hamptons inspired', 'style-hamptons'], ['s4_midcentury', 'Mid-century inspired', 'style-mid-century'],
+      ['s4_french', 'French country inspired', 'style-french-country'], ['s4_villa', 'NZ villa', 'style-nz-villa'],
+      ['s4_coastal', 'Coastal', 'style-coastal'], ['s4_urban', 'Modern urban', 'style-modern-urban'],
+      ['s4_barn', 'Modern barn', 'style-modern-barn'], ['s4_pavilion', 'Pavilion', 'style-pavilion'],
+    ] }] },
+    { q: 'Examples of styles you like', items: [up('s4', 'Upload images of styles you like')] },
+    { q: 'Describe your style', help: 'In your own words. A few lines is plenty.', items: [area('s4_describe', 'Describe your style')] },
+  ] },
+  { h: 'The exterior <strong>finishes</strong> you prefer.', intro: 'Tick the cladding that appeals, upload your own images, or describe your preferences.', blocks: [
+    { q: 'Which types of cladding do you prefer?', help: ANY, items: [{ i: 'tiles', opts: [
+      ['s5_colorsteel', 'Colorsteel', 'clad-colorsteel'], ['s5_stone', 'Stone', 'clad-stone'],
+      ['s5_batten', 'Board and batten', 'clad-board-batten'], ['s5_cedar', 'Cedar', 'clad-cedar'],
+      ['s5_vweatherboard', 'Vertical weatherboard', 'clad-vertical-weatherboard'], ['s5_aluminium', 'Aluminium', 'clad-aluminium'],
+      ['s5_plaster', 'Aerated concrete plaster', 'clad-plaster'], ['s5_weatherboard', 'Weatherboard', 'clad-weatherboard'],
+      ['s5_brick', 'Brick', 'clad-brick'],
+    ] }] },
+    { q: 'Examples of cladding you like', items: [up('s5', 'Upload images of cladding you like')] },
+    { q: 'Describe your preferences', items: [area('s5_describe', 'Describe your cladding preferences')] },
+  ] },
+  { h: 'Your preferred roof <strong>pitch</strong> and style.', intro: 'Tick the roof styles that appeal, upload your own images, or describe your preferences.', blocks: [
+    { q: 'Do you have a preferred roof style?', help: ANY, items: [{ i: 'tiles', opts: [
+      ['s6_skillion', 'Skillion', 'roof-skillion'], ['s6_lowmono', 'Low mono pitch', 'roof-low-mono'],
+      ['s6_noeaves', 'Gable with no eaves', 'roof-gable-no-eaves'], ['s6_gable', 'Standard gable', 'roof-standard-gable'],
+      ['s6_flat', 'Flat with concealed parapet', 'roof-flat-parapet'], ['s6_splitmono', 'Split mono with covered area', 'roof-split-mono'],
+    ] }] },
+    { q: 'Images that represent your style', items: [up('s6', 'Upload images of roofs you like')] },
+    { q: 'Describe your preferences', items: [area('s6_describe', 'Describe your roof preferences')] },
+  ] },
+  { h: 'How the inside should <strong>feel</strong>.', intro: 'Tick what applies, add your own notes and upload images of interiors you like.', blocks: [
+    { q: 'How would you describe your preferred interior style?', items: [
+      { i: 'opts', opts: [['s7_minimalist', 'Minimalist'], ['s7_scandi', 'Scandinavian'], ['s7_bach', 'Coastal or bach'], ['s7_midcentury', 'Mid-century modern'], ['s7_industrial', 'Industrial'], ['s7_character', 'Traditional or character'], ['s7_hamptons', 'Hamptons']], other: ['s7_mood_other', 'Other'] },
+      up('s7_mood', 'Upload images of your preferred interior style'),
+    ] },
+    { q: 'What kitchen features do you have in mind?', items: [
+      { i: 'opts', opts: [['s7_pantry', 'Walk-in pantry, no sink'], ['s7_scullery', 'Scullery with sink'], ['s7_island', 'Island bench'], ['s7_dining', 'Built-in dining seating'], ['s7_shelving', 'Display shelving'], ['s7_breakfast', 'Breakfast bar'], ['s7_integrated', 'Integrated appliances']], other: ['s7_kitchen_other', 'Other'] },
+      up('s7_kitchen', 'Upload images of kitchens you like'),
+    ] },
+  ] },
+  { h: 'Appliances, fittings and <strong>bathrooms</strong>.', intro: 'Tick what applies. Add brands or models if you already know them.', blocks: [
+    { q: 'Are there specific appliances or kitchen fittings you would like to include?', items: [
+      { i: 'opts', opts: [['s8_wine', 'Wine fridge'], ['s8_filter', 'Filtered water tap'], ['s8_sparkling', 'Instant sparkling water'], ['s8_steam', 'Steam oven'], ['s8_coffee', 'Built-in coffee machine'], ['s8_double', 'Double oven'], ['s8_fridge2', 'Second fridge or freezer'], ['s8_hotwater', 'Instant hot water']], other: ['s8_app_other', 'Other, or preferred brands'] },
+    ] },
+    { q: 'What bathroom features do you have in mind?', items: [
+      { i: 'opts', opts: [['s8_freestanding', 'Freestanding bath'], ['s8_doorless', 'Doorless shower'], ['s8_wetroom', 'Fully tiled wet room'], ['s8_sauna', 'Sauna'], ['s8_bidet', 'Bidet'], ['s8_vanities', 'Double vanities'], ['s8_tiled', 'Tiled shower'], ['s8_niche', 'Shower niche or shelf']], other: ['s8_bath_other', 'Other'] },
+      up('s8_bathroom', 'Upload images of bathrooms you like'),
+    ] },
+  ] },
+  { h: 'Floors and built-in <strong>furniture</strong>.', intro: 'Tick what applies and upload any examples you have saved.', blocks: [
+    { q: 'What types of flooring do you prefer?', items: [
+      { i: 'opts', opts: [['s9_engineered', 'Engineered timber'], ['s9_solid', 'Solid timber'], ['s9_tiles', 'Tiles'], ['s9_concrete', 'Polished concrete'], ['s9_wool', 'Wool carpet'], ['s9_nylon', 'Nylon carpet'], ['s9_vinyl', 'Vinyl plank'], ['s9_cork', 'Cork']], other: ['s9_floor_other', 'Other'] },
+    ] },
+    { q: 'Are you considering any custom built-in furniture or cabinetry?', items: [
+      { i: 'opts', opts: [['s9_windowseat', 'Window seat'], ['s9_shelving', 'Shelving or display'], ['s9_headboard', 'Headboard'], ['s9_desk', 'Office desk and drawers'], ['s9_entry', 'Entry seat and storage'], ['s9_booth', 'Dining or booth seating'], ['s9_tv', 'TV unit'], ['s9_lounge', 'Lounge seating']], other: ['s9_built_other', 'Other'] },
+      up('s9_built', 'Upload images of built-in furniture you like'),
+    ] },
+  ] },
+  { h: 'How your laundry should <strong>work</strong>.', intro: 'Where it sits and what goes in it.', blocks: [
+    { q: 'What type of laundry space do you have in mind?', items: [
+      { i: 'opts', opts: [['s10_garage', 'In the garage'], ['s10_room', 'Dedicated laundry room'], ['s10_mudroom', 'Mudroom'], ['s10_scullery', 'Within the scullery'], ['s10_nook', 'Laundry nook']], other: ['s10_space_other', 'Other'] },
+    ] },
+    { q: 'What laundry appliances do you have?', items: [
+      { i: 'opts', opts: [['s10_front', 'Front-loader washing machine'], ['s10_top', 'Top-loader washing machine'], ['s10_dryer', 'Dryer']], other: ['s10_app_other', 'Other'] },
+    ] },
+  ] },
+  { h: 'Heating, energy and <strong>automation</strong>.', intro: 'These choices affect running costs for as long as you live in the home. Tick anything you are considering.', blocks: [
+    { q: 'Are you interested in home automation for any of these?', items: [
+      { i: 'opts', opts: [['s11_auto_heating', 'Heating and cooling'], ['s11_auto_lighting', 'Lighting'], ['s11_auto_audio', 'Audio and sound'], ['s11_auto_security', 'CCTV and alarm'], ['s11_auto_blinds', 'Curtains and blinds']], other: ['s11_auto_other', 'Other'] },
+    ] },
+    { q: 'Are you considering any of the following energy options?', items: [
+      { i: 'opts', opts: [['s11_solar', 'Grid-tied solar panels'], ['s11_battery', 'Solar battery storage'], ['s11_ev', 'EV charging'], ['s11_gasmains', 'Mains gas'], ['s11_lpg', 'LPG gas bottles']], other: ['s11_energy_other', 'Other'] },
+    ] },
+    { q: 'What heating and cooling do you prefer?', items: [
+      { i: 'opts', opts: [['s11_wood', 'Wood-burning fire'], ['s11_gasfire', 'Gas fire'], ['s11_gasheat', 'Gas heating'], ['s11_underfloor', 'Underfloor heating'], ['s11_central', 'Central heating'], ['s11_hvac', 'Ducted HVAC'], ['s11_heatpump', 'Heat pumps or air conditioning']], other: ['s11_heat_other', 'Other'] },
+    ] },
+    { q: 'How would you like to heat your water?', items: [
+      { i: 'opts', opts: [['s11_hw_infinity', 'Gas infinity hot water'], ['s11_hw_cylinder', 'Gas hot water cylinder'], ['s11_hw_electric', 'Electric hot water'], ['s11_hw_heatpump', 'Heat pump hot water']] },
+    ] },
+  ] },
+  { h: 'How you want to live <strong>outdoors</strong>.', intro: 'Tick what applies and upload images of outdoor spaces you like.', blocks: [
+    { q: 'What outdoor living features do you have in mind?', items: [
+      { i: 'opts', opts: [['s12_covered', 'Covered seating area'], ['s12_kitchen', 'Outdoor kitchen'], ['s12_bbq', 'Built-in BBQ'], ['s12_louvre', 'Louvre roof'], ['s12_pergola', 'Pergola'], ['s12_screens', 'Weather screens'], ['s12_fire', 'Wood or gas fire'], ['s12_poolhouse', 'Pool structure']], other: ['s12_other', 'Other'] },
+      up('s12', 'Upload images of outdoor spaces you like'),
+    ] },
+  ] },
+  { h: 'Landscaping, pools and <strong>vehicles</strong>.', intro: 'A short description is enough at this stage.', blocks: [
+    { q: 'Are there hard landscaping features you would like factored into the design?', help: 'For example planter boxes, terraced gardens or decks.', items: [area('s13_landscape', 'Hard landscaping features')] },
+    { q: 'Are you considering a pool?', help: 'If so, describe it briefly.', items: [area('s13_pool', 'Pool')] },
+    { q: 'What are your garaging, parking and storage needs?', help: 'Include cars, boats and any other vehicles.', items: [area('s13_vehicles', 'Garaging, parking and storage')] },
+  ] },
+  { h: 'Your budget and <strong>priorities</strong>.', intro: 'Your budget shapes the design from the first sketch. The earlier we know it, the more useful we can be.', blocks: [
+    { q: 'What is your overall target budget for construction?', items: [{ i: 'input', name: 's14_budget', aria: 'Target construction budget', money: true }] },
+    { q: 'How important is staying within your target budget?', help: 'Select one.', items: [{ i: 'radio', group: 's14_flex', opts: [['critical', 'Critical. We cannot exceed this amount.'], ['flexible', 'Somewhat flexible. We are willing to adjust for key features.'], ['open', 'Open to review, so the design meets the brief.']] }] },
+    { q: 'Where would you most like to spend?', help: 'For example kitchen, bathrooms, energy efficiency, home automation or outdoor living.', items: [area('s14_priorities', 'Priority spend areas')] },
+  ] },
+];
+
+const STEPS_IN = [['01', 'Answer what you can.', 'Skip anything you are unsure of. We will work through it together.'], ['02', 'Show us what you like.', 'Tick the images that appeal, or upload your own.'], ['03', 'Stop and start.', 'Your answers save on this device as you go.']];
+const STEPS_OUT = [['01', 'We read your brief.', 'Your answers go to our design team. We note anything we need to understand better before we meet.'], ['02', 'We meet.', 'We go through the brief with you, on site where it helps.'], ['03', 'We start on the design.', 'Early concepts and pricing are prepared while the design can still change, before you reach a point of no return.']];
+const MSG = 'We need a name and email to send your brief.';
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Planning brief | Thorne Group</title>
+  <style is:global>
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;background:#FAF9F6;color:#393533;font-family:'Metric','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+    .bf *,.bf *::before,.bf *::after{box-sizing:border-box}
+    .bf{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column}
+    .bf [hidden]{display:none!important}
+    .bf a{color:#393533}
+    .bf a:hover{color:#7a746e}
+    .bf strong{font-weight:500}
+    .bf button{font-family:inherit;-webkit-tap-highlight-color:transparent}
+
+    /* header: logo, label, NN / 14, and the 14-segment progress line */
+    .bf-top{position:sticky;top:0;z-index:5;background:#FAF9F6;border-bottom:1px solid #c8c3bb}
+    .bf-row{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px clamp(24px,4vw,48px) 12px}
+    .bf-home{display:block;line-height:0}
+    .bf-logo{height:16px;width:auto;display:block}
+    .bf-meta{display:flex;align-items:center;gap:20px;white-space:nowrap}
+    .bf-lab{font-size:14px;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    .bf-prog{font-size:14px;letter-spacing:.15em;color:#393533;white-space:nowrap}
+    .bf-segs{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:4px;padding:0 clamp(24px,4vw,48px)}
+    .bf-seg{display:block;width:100%;height:12px;margin:0;padding:0;background:none;border:0;border-bottom:2px solid #c8c3bb;border-radius:0;cursor:pointer}
+    .bf-seg.on{border-bottom-color:#393533}
+    @media (max-width:479px){ .bf-lab{display:none} }
+    @media (max-width:379px){ .bf-row{gap:16px} .bf-logo{height:14px} }
+
+    /* one centred column, one section per screen */
+    .bf-main{flex:1;width:100%;max-width:900px;margin:0 auto;padding:0 clamp(24px,5vw,64px) 40px}
+    .bf-sec{padding:72px 0 64px}
+    .bf-head{display:grid;gap:20px;padding-bottom:44px;max-width:640px}
+    .bf-intro{display:grid;gap:28px;max-width:680px}
+    .eb{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px;font-weight:400;line-height:1.4;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb}
+    .eb span{white-space:nowrap}
+    .eb .t{color:#7a746e}
+    @media (max-width:479px){ .eb{letter-spacing:.25em} .eb .t{white-space:normal} }
+    .bf h1{margin:0;font-weight:300;font-size:clamp(36px,4vw,56px);line-height:1.15;letter-spacing:-.02em;color:#393533}
+    .bf h2{margin:0;font-weight:300;font-size:clamp(28px,3vw,44px);line-height:1.1;letter-spacing:-.02em;color:#393533}
+    .bf p{margin:0;font-size:15px;line-height:2;color:#7a746e}
+    .bf-ps{display:grid;gap:12px}
+
+    /* question blocks */
+    .q{display:grid;gap:16px;padding:36px 0;border-top:1px solid #c8c3bb}
+    .ql{font-size:17px;line-height:1.5;color:#393533}
+    .qh{font-size:14px;line-height:1.8;color:#7a746e;margin-top:-10px}
+    .q.fg{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px 24px;padding:36px 0 40px}
+    .fl{display:grid;gap:8px;align-content:start}
+    .fl.full{grid-column:1/-1}
+    .fl>span:first-child{font-size:14px;line-height:1.5;color:#393533}
+    .in{font:inherit;font-size:15px;font-weight:300;color:#393533;background:transparent;border:1px solid #c8c3bb;border-radius:0;padding:13px 16px;outline:none;width:100%;margin:0;-webkit-appearance:none;appearance:none}
+    .in:focus{border-color:#393533}
+    textarea.in{display:block;line-height:1.7;min-height:120px;resize:vertical}
+    .inw{position:relative;max-width:360px}
+    .inw.money .in{padding-left:32px}
+    .cur{position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:15px;color:#7a746e;pointer-events:none}
+    .fl.bad .in{border-color:#393533}
+    .fmsg{font-size:14px;line-height:1.5;color:#393533}
+
+    /* tick-box cells, shared borders */
+    .og{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--min,200px),1fr));padding:0 1px 1px 0}
+    .og.one{grid-template-columns:minmax(0,1fr)}
+    .oc{position:relative;display:flex;align-items:center;gap:12px;min-height:52px;margin:0 -1px -1px 0;padding:10px 16px;border:1px solid #c8c3bb;border-radius:0;background:transparent;color:#393533;font-size:14px;font-weight:300;line-height:1.4;text-align:left;cursor:pointer}
+    .ck{position:relative;flex:none;width:16px;height:16px;border:1px solid #393533}
+    [aria-checked="true"] .ck::after{content:'';position:absolute;inset:2px;background:#393533}
+    .oc[aria-checked="true"]::after{content:'';position:absolute;inset:-1px;border:1px solid #393533;z-index:1;pointer-events:none}
+    .oth{grid-column:1/-1;display:flex;align-items:center;gap:16px;min-height:52px;margin:0 -1px -1px 0;padding:4px 16px;border:1px solid #c8c3bb}
+    .oth>span{flex:none;font-size:14px;color:#7a746e}
+    .oth input{flex:1;min-width:0;font:inherit;font-size:14px;font-weight:300;color:#393533;background:transparent;border:0;border-bottom:1px solid #c8c3bb;border-radius:0;padding:8px 0;outline:none;-webkit-appearance:none;appearance:none}
+    .oth input:focus{border-bottom-color:#393533}
+
+    /* image tiles (style, cladding, roof) */
+    .tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));padding:0 1px 1px 0}
+    .tile{position:relative;display:block;margin:0 -1px -1px 0;padding:0;border:1px solid #c8c3bb;border-radius:0;background:transparent;color:#393533;text-align:left;cursor:pointer}
+    .ti{display:block;aspect-ratio:4/3;overflow:hidden;background:#c8c3bb}
+    .ti img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+    .tile:hover .ti img{transform:scale(1.03)}
+    .tl{display:flex;align-items:center;gap:12px;min-height:56px;padding:8px 16px;font-size:14px;font-weight:300;line-height:1.4}
+    .tile[aria-checked="true"]::after{content:'';position:absolute;inset:-1px;border:2px solid #393533;z-index:1;pointer-events:none}
+
+    /* image upload zones */
+    .upw{display:grid;gap:12px}
+    .up{position:relative;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding:20px 24px;border:1px solid #c8c3bb;cursor:pointer}
+    .up:focus-within,.up.drag{border-color:#393533}
+    .upt{display:grid;gap:2px}
+    .up1{font-size:15px;line-height:1.5;color:#393533}
+    .up2{font-size:14px;line-height:1.6;color:#7a746e}
+    .up input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+    .thumbs{display:flex;flex-wrap:wrap;gap:12px}
+    .th{display:grid;gap:6px;width:120px}
+    .th img{display:block;width:120px;height:90px;object-fit:cover}
+    .th button{justify-self:start;min-height:32px;padding:4px 0;background:none;border:0;font-size:14px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:#7a746e;cursor:pointer}
+    .th button:hover{color:#393533}
+
+    /* buttons */
+    .btn-fill,.btn-outline{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:0;padding:12px 28px;border-radius:0;font-family:inherit;font-size:14px;font-weight:400;line-height:1.3;letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:all .2s ease}
+    .btn-fill{background:#393533;color:#FAF9F6;border:1px solid #393533}
+    .btn-fill:hover{opacity:.85}
+    .btn-fill:disabled{opacity:.6;cursor:default}
+    .btn-outline{background:transparent;color:#393533;border:1px solid #c8c3bb}
+    .btn-outline:hover,.up:hover .btn-outline{background:#393533;color:#FAF9F6;border-color:#393533}
+    .bf button:focus-visible,.bf a:focus-visible{outline:1px solid #393533;outline-offset:2px}
+    .oc:focus-visible{outline-offset:-5px}
+    .tile:focus-visible{outline-offset:-6px}
+
+    /* intro and closing screens */
+    .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:56px;padding:0 1px 1px 0}
+    .step{display:grid;align-content:start;gap:10px;margin:0 -1px -1px 0;padding:28px 24px 32px;border:1px solid #c8c3bb}
+    .num{font-size:14px;font-weight:400;letter-spacing:.35em;color:#c8c3bb}
+    .step .t{font-size:17px;line-height:1.4;color:#393533}
+    .step .d{font-size:14px;line-height:1.8;color:#7a746e}
+    .acts{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:48px}
+    .bf p.foot{margin-top:20px;font-size:14px;line-height:1.8}
+    .nexts{margin-top:56px;border-bottom:1px solid #c8c3bb}
+    .nx{display:grid;grid-template-columns:64px minmax(0,1fr);gap:24px;padding:32px 0;border-top:1px solid #c8c3bb}
+    .nx .num{padding-top:8px}
+    .nx div{display:grid;gap:8px}
+    .nx .t{font-size:22px;line-height:1.4;letter-spacing:-.01em;color:#393533}
+    .nx .d{font-size:15px;line-height:2;color:#7a746e}
+    .bf p.bf-prev{margin-top:40px;padding:14px 18px;border:1px solid #c8c3bb;font-size:14px;line-height:1.6;color:#393533}
+    @media (max-width:479px){ .nx{grid-template-columns:40px minmax(0,1fr);gap:16px} }
+
+    /* client photo strip */
+    .cl{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+    .cl img{display:block;width:100%;aspect-ratio:1;object-fit:cover}
+
+    /* footer: Back, NN / 14, Next */
+    .bf-foot{position:sticky;bottom:0;z-index:5;background:#FAF9F6;border-top:1px solid #c8c3bb}
+    .bf-fi{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px clamp(24px,4vw,48px)}
+    .bf-prog2{font-size:14px;letter-spacing:.15em;color:#7a746e;white-space:nowrap}
+    .bf p.bf-err{padding:14px clamp(24px,4vw,48px) 0;font-size:14px;line-height:1.6;color:#393533}
+    @media (max-width:479px){
+      .bf-prog2{display:none}
+      .bf-fi{gap:12px;padding:12px 16px}
+      .bf-fi .btn-fill,.bf-fi .btn-outline{padding:12px 18px;letter-spacing:.12em}
+    }
+
+    /* phones: 16px text in fields so iPhones do not zoom in when typing */
+    @media (max-width:750px){ .in,.oth input{font-size:16px} }
+
+    /* spam trap: hidden from people, bots fill it in */
+    .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+    /* print-friendly summary of a sent brief (Review your answers) */
+    .bf-print{display:none}
+    @media print{
+      .bf{display:none}
+      .bf-print{display:block;color:#393533;font-size:12pt;line-height:1.5}
+      .bf-print h1{font-weight:400;font-size:20pt;margin:0 0 4pt}
+      .bf-print h2{font-weight:500;font-size:13pt;margin:18pt 0 6pt;padding-top:8pt;border-top:1px solid #c8c3bb}
+      .bf-print dt{font-weight:500;margin-top:8pt}
+      .bf-print dd{margin:2pt 0 0;white-space:pre-wrap}
+      .bf-print .pics{display:flex;flex-wrap:wrap;gap:6pt;margin-top:6pt}
+      .bf-print .pics img{width:90pt;height:68pt;object-fit:cover}
+    }
+  </style>
+</head>
+<body>
+<div class="bf" data-endpoint={ENDPOINT} data-titles={JSON.stringify(TITLES)}>
+  <header class="bf-top">
+    <div class="bf-row">
+      <a class="bf-home" href="/"><img class="bf-logo" src={P + 'logo.png'} alt="Thorne Group" width="559" height="48" /></a>
+      <div class="bf-meta"><span class="bf-lab">Design brief</span><span class="bf-prog" data-prog>00 / 14</span></div>
+    </div>
+    <nav class="bf-segs" aria-label="Sections">
+      {TITLES.slice(1, 15).map((t, j) => <button type="button" class="bf-seg" data-go={j + 1} aria-label={`Go to ${pad(j + 1)} ${t}`}></button>)}
+    </nav>
+  </header>
+
+  <main class="bf-main">
+    <section class="bf-sec" data-sec="0">
+      <div class="bf-intro">
+        <div class="eb"><span class="t">Preliminary design brief</span></div>
+        <h1>The more we know now, the fewer <strong>surprises</strong> later.</h1>
+        <div class="bf-ps">
+          <p>This brief tells our design team what you want to build, where you want to build it and what you want to spend.</p>
+          <p>We use it to prepare for our first meeting, shape early concepts and raise site or budget issues while they are still easy to solve.</p>
+        </div>
+      </div>
+      <div class="steps">
+        {STEPS_IN.map(([n, t, d]) => <div class="step"><span class="num">{n}</span><span class="t">{t}</span><span class="d">{d}</span></div>)}
+      </div>
+      <div class="acts">
+        <button type="button" class="btn-fill" data-go="1">Start the brief</button>
+        <button type="button" class="btn-outline" data-go="resume" hidden>Continue from 01</button>
+      </div>
+      <p class="foot">14 sections. Your details are confidential and will not be shared without your permission. Read our <a href="/privacy-statement">privacy statement</a>.</p>
+    </section>
+
+    {SECS.map((s, idx) => (
+      <section class="bf-sec" data-sec={idx + 1} hidden>
+        <div class="bf-head">
+          <div class="eb"><span>{pad(idx + 1)} / 14</span><span class="t">{TITLES[idx + 1]}</span></div>
+          <h2 set:html={s.h} />
+          <p>{s.intro}</p>
+        </div>
+        {s.blocks.map((b) => 'fields' in b ? (
+          <div class="q fg">
+            {b.fields.map((f) => (
+              <label class={f.full ? 'fl full' : 'fl'}>
+                <span>{f.label}</span>
+                <input class="in" name={f.name} type={f.type || 'text'} autocomplete={f.ac} inputmode={f.im} />
+                {f.req && <span class="fmsg" hidden>{MSG}</span>}
+              </label>
+            ))}
+          </div>
+        ) : (
+          <div class="q">
+            <div class="ql">{b.q}</div>
+            {b.help && <div class="qh">{b.help}</div>}
+            {b.items.map((it) =>
+              it.i === 'input' ? (
+                <div class={it.money ? 'inw money' : 'inw'}>
+                  {it.money && <span class="cur">$</span>}
+                  <input class="in" name={it.name} aria-label={it.aria} inputmode={it.money ? 'numeric' : undefined} />
+                </div>
+              ) : it.i === 'area' ? (
+                <textarea class="in" name={it.name} aria-label={it.aria}></textarea>
+              ) : it.i === 'opts' ? (
+                <div class={it.one ? 'og one' : 'og'} style={it.min ? `--min:${it.min}px` : undefined}>
+                  {it.opts.map(([k, l]) => <button type="button" class="oc" role="checkbox" aria-checked="false" data-opt={k}><span class="ck"></span><span>{l}</span></button>)}
+                  {it.other && <label class="oth"><span>{it.other[1]}</span><input name={it.other[0]} /></label>}
+                </div>
+              ) : it.i === 'tiles' ? (
+                <div class="tg">
+                  {it.opts.map(([k, l, img]) => <button type="button" class="tile" role="checkbox" aria-checked="false" data-opt={k}><span class="ti"><img src={P + img + '.jpg'} alt="" loading="lazy" decoding="async" /></span><span class="tl"><span class="ck"></span><span>{l}</span></span></button>)}
+                </div>
+              ) : it.i === 'upload' ? (
+                <div class="upw">
+                  <label class="up">
+                    <span class="upt"><span class="up1">Upload your own images</span><span class="up2">Drop images here, or choose them from your device.</span></span>
+                    <span class="btn-outline">Choose images</span>
+                    <input type="file" accept="image/*" multiple data-upload={it.zone} aria-label={it.aria} />
+                  </label>
+                  <div class="thumbs" data-thumbs={it.zone} hidden></div>
+                </div>
+              ) : it.i === 'radio' ? (
+                <div class="og one" role="radiogroup" aria-label={b.q}>
+                  {it.opts.map(([v, l]) => <button type="button" class="oc" role="radio" aria-checked="false" data-radio={it.group} data-val={v}><span class="ck"></span><span>{l}</span></button>)}
+                </div>
+              ) : (
+                <div class="cl">
+                  {[1, 2, 3, 4, 5].map((n) => <img src={`${P}client-${n}.jpg`} alt={n === 1 ? 'Thorne Group clients' : ''} loading="lazy" decoding="async" />)}
+                </div>
+              )
+            )}
+          </div>
+        ))}
+      </section>
+    ))}
+
+    <section class="bf-sec" data-sec="15" hidden>
+      <div class="bf-intro">
+        <div class="eb"><span class="t">What happens next</span></div>
+        <h1>Thank you. Your brief is with our design <strong>team</strong>.</h1>
+        <p>Here is what happens from here.</p>
+      </div>
+      <p class="bf-prev" hidden>Preview only. Nothing was sent. On the live site this step sends your brief to Thorne Group.</p>
+      <div class="nexts">
+        {STEPS_OUT.map(([n, t, d]) => <div class="nx"><span class="num">{n}</span><div><span class="t">{t}</span><span class="d">{d}</span></div></div>)}
+      </div>
+      <div class="acts"><button type="button" class="btn-outline" data-go="review">Review your answers</button></div>
+    </section>
+
+    <div class="hp" aria-hidden="true"><label>Leave this empty <input data-hp tabindex="-1" autocomplete="off" /></label></div>
+  </main>
+
+  <footer class="bf-foot" hidden>
+    <p class="bf-err" role="alert" hidden>Your brief did not send. Your answers are still saved on this device. Try again, or email <a href="mailto:info@thornegroup.co.nz">info@thornegroup.co.nz</a>.</p>
+    <div class="bf-fi">
+      <button type="button" class="btn-outline" data-go="back">Back</button>
+      <span class="bf-prog2" data-prog>01 / 14</span>
+      <button type="button" class="btn-fill" data-go="next" data-next>Next</button>
+    </div>
+  </footer>
+</div>
+<div class="bf-print" aria-hidden="true"></div>
+
+<script is:inline>
+(() => {
+  const KEY = 'tg-planning-brief-v1';
+  const root = document.querySelector('.bf');
+  const ENDPOINT = root.dataset.endpoint || '';
+  const TITLES = JSON.parse(root.dataset.titles);
+  const $ = (s, el) => (el || root).querySelector(s);
+  const $$ = (s, el) => [...(el || root).querySelectorAll(s)];
+  const pad = (n) => String(n).padStart(2, '0');
+  const foot = $('.bf-foot'), fi = $('.bf-fi'), nextBtn = $('[data-next]'), err = $('.bf-err');
+  const query = new URLSearchParams(location.search);
+  const fixed = query.has('step');
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } };
+  const saved = load();
+  const st = {
+    step: Math.max(0, Math.min(15, fixed ? (parseInt(query.get('step'), 10) || 0) : (saved.step || 0))),
+    furthest: saved.furthest || 0,
+    sel: saved.sel || {}, text: saved.text || {}, files: saved.files || {}
+  };
+  let sent = null, sending = false, timer = 0;
+
+  // autosave (debounced); if the images make it too big for storage, save without them
+  function save() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const prev = fixed ? load() : {};
+      const data = { sel: st.sel, text: st.text, files: st.files, step: fixed ? prev.step : st.step, furthest: fixed ? prev.furthest : st.furthest };
+      try { localStorage.setItem(KEY, JSON.stringify(data)); }
+      catch (e) { try { localStorage.setItem(KEY, JSON.stringify(Object.assign({}, data, { files: {} }))); } catch (e2) {} }
+    }, 200);
+  }
+
+  function nextLabel() {
+    if (st.step >= 14) { nextBtn.textContent = sending ? 'Sending…' : 'Submit brief'; return; }
+    nextBtn.textContent = 'Next: ' + TITLES[st.step + 1];
+    if (root.clientWidth < 760 || fi.scrollWidth > fi.clientWidth) nextBtn.textContent = 'Next';
+  }
+
+  function render() {
+    const s = st.step;
+    $$('.bf-sec').forEach((el) => { el.hidden = +el.dataset.sec !== s; });
+    const prog = pad(Math.min(14, s)) + ' / 14';
+    $$('[data-prog]').forEach((el) => { el.textContent = prog; });
+    $$('.bf-seg').forEach((el) => {
+      const i = +el.dataset.go;
+      el.classList.toggle('on', i <= s);
+      if (i === s) el.setAttribute('aria-current', 'step'); else el.removeAttribute('aria-current');
+    });
+    const resume = $('[data-go="resume"]');
+    resume.hidden = !(s === 0 && st.furthest > 1 && st.furthest < 15);
+    resume.textContent = 'Continue from ' + pad(st.furthest);
+    foot.hidden = !(s >= 1 && s <= 14);
+    if (!foot.hidden) nextLabel();
+  }
+
+  function go(v) {
+    if (v === 'next' && st.step === 14) return submit();
+    if (v === 'review') { if (sent) return printSummary(); v = '1'; }
+    const s = st.step;
+    let n = v === 'next' ? s + 1 : v === 'back' ? s - 1 : v === 'resume' ? st.furthest : parseInt(v, 10);
+    if (isNaN(n)) return;
+    n = Math.max(0, Math.min(15, n));
+    st.step = n; st.furthest = Math.max(st.furthest, n);
+    err.hidden = true;
+    render(); window.scrollTo(0, 0); save();
+  }
+
+  function thumbs(z) {
+    const box = $('[data-thumbs="' + z + '"]');
+    if (!box) return;
+    box.replaceChildren(...(st.files[z] || []).filter(Boolean).map((f) => {
+      const d = document.createElement('div'); d.className = 'th';
+      const im = new Image(); im.src = f.url; im.alt = f.name || '';
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Remove';
+      b.dataset.remove = z + ':' + f.id; b.setAttribute('aria-label', 'Remove ' + (f.name || 'image'));
+      d.append(im, b); return d;
+    }));
+    box.hidden = !box.children.length;
+  }
+
+  // a small copy of each chosen image, kept with the answers for the preview
+  function thumb(file) {
+    return new Promise((res) => {
+      const url = URL.createObjectURL(file), img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, 480 / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        res({ id: Math.random().toString(36).slice(2, 9), name: file.name, url: c.toDataURL('image/jpeg', 0.8) });
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); res(null); };
+      img.src = url;
+    });
+  }
+
+  // restore saved answers into the page
+  $$('input[name], textarea[name]').forEach((el) => { const v = st.text[el.name]; if (v != null) el.value = v; });
+  $$('[data-opt]').forEach((el) => el.setAttribute('aria-checked', String(!!st.sel[el.dataset.opt])));
+  $$('[data-radio]').forEach((el) => el.setAttribute('aria-checked', String(st.sel[el.dataset.radio] === el.dataset.val)));
+  $$('[data-thumbs]').forEach((el) => thumbs(el.dataset.thumbs));
+
+  root.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-opt],[data-radio],[data-remove],[data-go]');
+    if (!el) return;
+    if (el.dataset.opt) {
+      const k = el.dataset.opt;
+      if (st.sel[k]) delete st.sel[k]; else st.sel[k] = true;
+      el.setAttribute('aria-checked', String(!!st.sel[k])); save(); return;
+    }
+    if (el.dataset.radio) {
+      const g = el.dataset.radio, v = el.dataset.val;
+      st.sel[g] = st.sel[g] === v ? '' : v;
+      $$('[data-radio="' + g + '"]').forEach((r) => r.setAttribute('aria-checked', String(st.sel[g] === r.dataset.val)));
+      save(); return;
+    }
+    if (el.dataset.remove) {
+      const [z, id] = el.dataset.remove.split(':');
+      st.files[z] = (st.files[z] || []).filter((f) => f && f.id !== id);
+      thumbs(z); save(); return;
+    }
+    go(el.dataset.go);
+  });
+
+  root.addEventListener('input', (e) => {
+    const t = e.target;
+    if (!t.name || t.type === 'file') return;
+    st.text[t.name] = t.value;
+    const fl = t.closest('.fl.bad');
+    if (fl) { fl.classList.remove('bad'); $('.fmsg', fl).hidden = true; }
+    save();
+  });
+
+  root.addEventListener('change', (e) => {
+    const t = e.target, z = t.dataset && t.dataset.upload;
+    if (!z || !t.files || !t.files.length) return;
+    const list = [...t.files].filter((f) => /^image\//.test(f.type)).slice(0, 12);
+    t.value = '';
+    t.closest('.up').classList.remove('drag');
+    Promise.all(list.map(thumb)).then((items) => {
+      const ok = items.filter(Boolean);
+      if (!ok.length) return;
+      st.files[z] = (st.files[z] || []).concat(ok).slice(-12);
+      thumbs(z); save();
+    });
+  });
+  ['dragenter', 'dragover'].forEach((ev) => root.addEventListener(ev, (e) => { const u = e.target.closest && e.target.closest('.up'); if (u) u.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((ev) => root.addEventListener(ev, (e) => { const u = e.target.closest && e.target.closest('.up'); if (u) u.classList.remove('drag'); }));
+
+  // the brief as labelled answers, section by section (unanswered questions left out)
+  function build() {
+    const secs = [];
+    $$('.bf-sec').forEach((sec) => {
+      const n = +sec.dataset.sec;
+      if (n < 1 || n > 14) return;
+      const rows = [], pics = [];
+      $$('.q', sec).forEach((q) => {
+        const ql = $('.ql', q);
+        if (!ql) {
+          $$('.fl', q).forEach((fl) => { const v = (st.text[$('input', fl).name] || '').trim(); if (v) rows.push([$('span', fl).textContent, v]); });
+          return;
+        }
+        const lines = [];
+        const ticks = $$('[data-opt]', q).filter((o) => st.sel[o.dataset.opt]).map((o) => o.textContent.trim());
+        $$('[data-radio]', q).forEach((o) => { if (st.sel[o.dataset.radio] === o.dataset.val) ticks.push(o.textContent.trim()); });
+        if (ticks.length) lines.push(ticks.join(', '));
+        $$('.oth', q).forEach((o) => { const v = (st.text[$('input', o).name] || '').trim(); if (v) lines.push($('span', o).textContent + ': ' + v); });
+        $$('.inw .in, textarea.in', q).forEach((i) => { const v = (st.text[i.name] || '').trim(); if (v) lines.push((i.closest('.money') ? '$' : '') + v); });
+        $$('[data-upload]', q).forEach((i) => {
+          const f = (st.files[i.dataset.upload] || []).filter(Boolean);
+          if (f.length) { lines.push(f.length + (f.length === 1 ? ' image uploaded' : ' images uploaded')); f.forEach((x) => pics.push(x.url)); }
+        });
+        if (lines.length) rows.push([ql.textContent, lines.join('\n')]);
+      });
+      if (rows.length) secs.push({ n, title: TITLES[n], rows, pics });
+    });
+    const text = secs.map((s) => pad(s.n) + ' ' + s.title + '\n\n' + s.rows.map(([l, v]) => l + '\n' + v).join('\n\n')).join('\n\n\n');
+    return { secs, text };
+  }
+
+  function printSummary() {
+    const box = document.querySelector('.bf-print');
+    const el = (tag, text) => { const x = document.createElement(tag); if (text != null) x.textContent = text; return x; };
+    box.replaceChildren(el('h1', 'Planning brief'), el('div', 'Thorne Group'));
+    sent.secs.forEach((s) => {
+      box.append(el('h2', pad(s.n) + ' ' + s.title));
+      const dl = el('dl');
+      s.rows.forEach(([l, v]) => dl.append(el('dt', l), el('dd', v)));
+      box.append(dl);
+      if (s.pics.length) { const p = el('div'); p.className = 'pics'; s.pics.forEach((u) => { const im = new Image(); im.src = u; im.alt = ''; p.append(im); }); box.append(p); }
+    });
+    window.print();
+  }
+
+  function mark(name, bad) {
+    const fl = $('[name="' + name + '"]').closest('.fl');
+    fl.classList.toggle('bad', bad); $('.fmsg', fl).hidden = !bad;
+  }
+  function valid() {
+    const name = (st.text.s1_contact || '').trim(), email = (st.text.s1_email || '').trim();
+    const parts = email.split(/[\s,;]+/).filter(Boolean);
+    const emailOk = parts.length > 0 && parts.every((x) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x));
+    mark('s1_contact', !name); mark('s1_email', !emailOk);
+    return !!name && emailOk;
+  }
+
+  async function submit() {
+    if (sending) return;
+    if (!valid()) {
+      go('1');
+      const first = $('.fl.bad .in');
+      if (first) first.focus({ preventScroll: true });
+      return;
+    }
+    const brief = build();
+    if ($('[data-hp]').value) { sent = brief; go('15'); return; }
+    if (!ENDPOINT) { sent = brief; $('.bf-prev').hidden = false; go('15'); return; }
+    sending = true; nextBtn.disabled = true; err.hidden = true; nextLabel();
+    try {
+      const r = await fetch(ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contact: st.text.s1_contact || '', email: st.text.s1_email || '', phone: st.text.s1_phone || '', summary: brief.text, sel: st.sel, text: st.text })
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      sent = brief;
+      clearTimeout(timer);
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      st.step = 15; st.furthest = 0; st.sel = {}; st.text = {}; st.files = {};
+      $$('input[name], textarea[name]').forEach((i) => { i.value = ''; });
+      $$('[data-opt],[data-radio]').forEach((o) => o.setAttribute('aria-checked', 'false'));
+      $$('[data-thumbs]').forEach((t) => thumbs(t.dataset.thumbs));
+      render(); window.scrollTo(0, 0);
+    } catch (e) {
+      err.hidden = false;
+    } finally {
+      sending = false; nextBtn.disabled = false;
+      if (!foot.hidden) nextLabel();
+    }
+  }
+
+  window.addEventListener('resize', () => { if (!foot.hidden) nextLabel(); });
+  render();
+})();
+</script>
+</body>
+</html>
