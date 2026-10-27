@@ -1,0 +1,8 @@
+  step 2 pop-up "Match the Right Architect or Architectural Designer": photo hidden | empty label hidden | option tops 406/406 | scrolled 0
+desktop: HTTP 200 | "Our Process | Thorne Group" | robots noindex, nofollow | cards 12 | dark step-4,step-7 | logo ok | sideways scroll false
+  photos not loaded: none | pop-up open "Initial Pricing Review" photo ok | next "Client Review"
+  errors none | failed requests none
+  step 2 pop-up "Match the Right Architect or Architectural Designer": photo hidden | empty label hidden | option tops 352/563 | scrolled 0
+phone: HTTP 200 | "Our Process | Thorne Group" | robots noindex, nofollow | cards 12 | dark step-4,step-7 | logo ok | sideways scroll false
+  photos not loaded: none | pop-up open "Initial Pricing Review" photo ok | next "Client Review"
+  errors none | failed requests none
