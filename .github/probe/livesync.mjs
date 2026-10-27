@@ -1,10 +1,43 @@
+import { chromium } from '/tmp/p/node_modules/playwright/index.mjs';
 import fs from 'fs';
-const out = 'diagnostics/livesync/dunes'; fs.mkdirSync(out, { recursive: true });
-const URLS = ["https://static.wixstatic.com/media/b2375c_6bf7fd1afb4e43f7a7c8382242aa4e75~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes.jpg", "https://static.wixstatic.com/media/b2375c_80df3c0488d94af0b322ae3ea3379b9f~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-2.jpg", "https://static.wixstatic.com/media/b2375c_b47cebdccf274163aa84ac3619a4cca4~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-3.jpg", "https://static.wixstatic.com/media/b2375c_494d3fdd06cf4d4f91c9b2e8b14a9b9b~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-5.jpg", "https://static.wixstatic.com/media/b2375c_bc0aca04b59948c8a797dff3db96bb10~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-7.jpg", "https://static.wixstatic.com/media/b2375c_0f7b75965e6344d09ec98c7f5325bfdb~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-8.jpg", "https://static.wixstatic.com/media/b2375c_4f5c784dba6145969f5c63994def3064~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-9.jpg", "https://static.wixstatic.com/media/b2375c_9ad7b73277d842c2baf69d5a18b1ece3~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-10.jpg", "https://static.wixstatic.com/media/b2375c_a143a4e3e0a5485d80131a1b9f5c0c72~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-11.jpg", "https://static.wixstatic.com/media/b2375c_30ee1bc44229446b82723eb065273aa0~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-12.jpg", "https://static.wixstatic.com/media/b2375c_8bfd2e9546f849828b514dedbee907f3~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-13.jpg", "https://static.wixstatic.com/media/b2375c_2b42c6b243d54a20b5ba08e4a2186100~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-14.jpg", "https://static.wixstatic.com/media/b2375c_b3dd10cdcf2546fdab647be9a661cfcf~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-15.jpg", "https://static.wixstatic.com/media/b2375c_3fc31883e9d84c7498aea769f046061e~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-16.jpg", "https://static.wixstatic.com/media/b2375c_6a26feba1cfd45fb884bc6cf3124b95f~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-17.jpg", "https://static.wixstatic.com/media/b2375c_47bda24b25e84b4fad3082164bf91a25~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-18.jpg", "https://static.wixstatic.com/media/b2375c_98f540b8cb6b4fe08b1e42389e3abf52~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-19.jpg", "https://static.wixstatic.com/media/b2375c_9c9032500b404d2fa7adbb8a7d04b9fe~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-20.jpg", "https://static.wixstatic.com/media/b2375c_5219441390d842a895d1604825ce692d~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-21.jpg", "https://static.wixstatic.com/media/b2375c_853fa7d146094e18ad131e64ff446e5f~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-22.jpg", "https://static.wixstatic.com/media/b2375c_9edcc17f26e64d25a5940a5db297d926~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-23.jpg", "https://static.wixstatic.com/media/b2375c_ed976ffabd744f7e8405d3ab954bd4ae~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-24.jpg", "https://static.wixstatic.com/media/b2375c_6c5e4903f37a40d09254310c23aaa35b~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-25.jpg", "https://static.wixstatic.com/media/b2375c_4814dc36ae9744a78e10f968f38bcbbf~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/dunes-26.jpg"];
-const L = [];
-for (let i = 0; i < URLS.length; i++) {
-  try { const r = await fetch(URLS[i]); const b = Buffer.from(await r.arrayBuffer()); fs.writeFileSync(`${out}/${String(i + 1).padStart(2, '0')}.jpg`, b); L.push(`${i + 1} ${r.status} ${b.length}`); }
-  catch (e) { L.push(`${i + 1} ERR ${e.message}`); }
+const out = 'diagnostics/livesync'; fs.mkdirSync(out, { recursive: true });
+const L = []; const log = s => { L.push(s); console.log(s); };
+const SITE = 'https://www.thornegroup.co.nz';
+const browser = await chromium.launch({ channel: 'chrome' });
+for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
+  const ctx = await browser.newContext({ viewport: vp }); const page = await ctx.newPage();
+  const bad = [], errs = [];
+  page.on('pageerror', e => errs.push(e.message.slice(0, 200)));
+  page.on('response', r => { if (r.status() >= 400) bad.push(r.status() + ' ' + r.url().slice(0, 150)); });
+  const res = await page.goto(SITE + '/projects?probe=' + Date.now(), { waitUntil: 'networkidle', timeout: 90000 });
+  const info = await page.evaluate(() => {
+    const c = [...document.querySelectorAll('thorne-gallery .card')].find(c => /On the dunes/.test(c.getAttribute('aria-label')));
+    const v = [...document.scripts].map(s => s.src).find(s => /GALLERY6/.test(s)) || '';
+    return { meta: c ? c.querySelector('.card-meta').textContent : 'NO CARD', v: v.split('?')[1] };
+  });
+  await page.evaluate(() => { [...document.querySelectorAll('thorne-gallery .card')].find(c => /On the dunes/.test(c.getAttribute('aria-label'))).click(); });
+  await page.waitForTimeout(1500);
+  const seq = []; const notLoaded = [];
+  for (let k = 0; k < 26; k++) {
+    await page.waitForTimeout(1200);
+    const st = await page.evaluate(() => {
+      const th = document.querySelector('.th'), stg = th.querySelector('.th-stage');
+      const a = stg.querySelector('.th-img:not(.th-img2)'), b = stg.querySelector('.th-img2');
+      const pair = stg.classList.contains('th-pair');
+      const ok = x => x.complete && x.naturalWidth > 0;
+      return { t: th.querySelector('.th-title').textContent, c: th.querySelector('.th-counter').textContent, pair, okA: ok(a), okB: !pair || ok(b), on: th.querySelectorAll('.th-thumbs .tt.on').length, cta: !!document.querySelector('.th-endcta.on') };
+    });
+    if (st.t !== 'On the dunes') break;
+    seq.push(st.c.replace(' of 23', '') + (st.pair ? 'P' : '') + (st.cta ? '[cta]' : ''));
+    if (!st.okA || !st.okB) notLoaded.push(st.c);
+    if (label === 'desktop' && /^15-16/.test(st.c)) await page.screenshot({ path: `${out}/dunes-bathroom-pair.png` });
+    if (label === 'desktop' && /^2-3/.test(st.c)) await page.screenshot({ path: `${out}/dunes-pair-2-3.png` });
+    if (label === 'phone' && /^15 of/.test(st.c)) await page.screenshot({ path: `${out}/dunes-phone-15.png` });
+    await page.keyboard.press('ArrowRight');
+  }
+  log(`${label}: HTTP ${res.status()} | card "${info.meta}" | GALLERY6 ${info.v} | ${seq.join(' ')}`);
+  log(`  photos not loaded: ${notLoaded.length ? notLoaded.join(', ') : 'none'} | errors ${errs.length ? errs.join(' ; ') : 'none'} | failed requests ${bad.length ? bad.slice(0, 5).join(' ; ') : 'none'}`);
+  await ctx.close();
 }
-fs.writeFileSync('diagnostics/livesync/report.txt', L.join('\n') + '\n');
-console.log(L.join('\n'));
+await browser.close();
+fs.writeFileSync(`${out}/report.txt`, L.join('\n') + '\n');
