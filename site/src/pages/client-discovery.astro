@@ -2,7 +2,7 @@
 /* Client discovery: private page at /client-discovery, shared by link only.
    Not in any menu, not in the sitemap, and marked noindex.
    A second version of the design brief: the three-stage client and architect
-   matching questionnaire (31 questions), laid out as three tabs on one page.
+   matching questionnaire (32 questions), laid out as three tabs on one page.
    It finds the right architect. The detailed design brief stays with them.
    Answers save on the visitor's device as they go (localStorage key
    tg-client-discovery-v1). ENDPOINT is empty on the Vercel preview, so Submit
@@ -73,6 +73,10 @@ const STAGES: Stage[] = [
           ['12m', 'More than a year away'], ['exploring', 'Just exploring at this stage'],
         ] },
       ] },
+      { q: 'When is your ideal move-in date?', help: 'An estimate is absolutely fine.', items: [{ i: 'radio', group: 's_movein', opts: [
+        ['12m', 'Within 12 months'], ['1-2y', 'In 1 to 2 years'], ['2-3y', 'In 2 to 3 years'],
+        ['3y', 'More than 3 years away'], ['flexible', 'I’m flexible'], ['unsure', 'Not sure yet'],
+      ] }] },
       { q: 'Where are you in life, and what would you like your home to accommodate?', help: 'Think about how you live today and how your circumstances might change over time. Select up to four.', items: [
         { i: 'check', max: 4, opts: LIFE, other: ['s5_else_text', 'Tell us more'] },
       ] },
