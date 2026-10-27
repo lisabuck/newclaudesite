@@ -1,0 +1,335 @@
+---
+/* Our process: standalone page at /our-process, shared by link only. Not in
+   any menu or the sitemap, and marked noindex like the other standalone pages
+   (client guides, design brief). The 12 design + build steps run down a
+   numbered line like a flow diagram; the two pricing checks before consent
+   are the dark steps, and the band under the heading sums them up. */
+import '../styles/fonts.css';
+
+const LOGO = 'https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png';
+const tick = (i: string) => `<li><span class="mk"></span><span>${i}</span></li>`;
+const ticks = (items: string[], two = false) =>
+  '<ul class="ticks' + (two ? ' two' : '') + '">' + items.map(tick).join('') + '</ul>';
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Our Process | Thorne Group</title>
+  <style is:global>
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#FAF9F6;color:#393533;font-family:'Metric','Helvetica Neue',Helvetica,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+    .op *{box-sizing:border-box}
+    .op a{color:#393533}
+    .op strong{font-weight:500}
+
+    /* header: logo and page label, same as the client guides */
+    .op-top{position:sticky;top:0;z-index:5;background:#FAF9F6;border-bottom:1px solid #c8c3bb}
+    .op-wrap{max-width:1080px;margin:0 auto;padding-left:24px;padding-right:24px}
+    .op-r1{padding-top:18px;padding-bottom:14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
+    .op-logo{height:66px;max-width:none;margin-left:-20px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
+    .op-kick{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    @media (max-width:1000px){ .op-logo{height:54px;margin-left:-17px} }
+    @media (max-width:750px){ .op-top{position:static} .op-logo{height:60px;margin-left:-19px} }
+    @media (max-width:430px){ .op-logo{height:53px;margin-left:-16px} }
+
+    .op-main{padding-top:56px;padding-bottom:80px}
+    .eb{margin:0 0 22px;font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    .op h1{margin:0;font-weight:300;font-size:clamp(36px,5vw,56px);line-height:1.1;letter-spacing:-.02em;color:#393533}
+
+    /* the short version: design, price, refine, price again, consent */
+    .key{margin-top:40px;max-width:900px;background:#393533;color:#FAF9F6;padding:32px 36px 34px}
+    .key .eb{color:#c8c3bb;margin-bottom:20px}
+    .key-flow{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:12px 10px}
+    .key-flow li{display:flex;align-items:center;gap:10px}
+    .key-flow a{display:block;padding:12px 18px;border:1px solid rgba(250,249,246,.45);color:#FAF9F6;text-decoration:none;font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;transition:background .2s ease,color .2s ease}
+    .key-flow a:hover{background:rgba(250,249,246,.12)}
+    .key-flow a.pr{background:#FAF9F6;color:#393533;border-color:#FAF9F6}
+    .key-flow a.pr:hover{background:#e9e5df}
+    .key-flow .ar{font-size:18px;color:#c8c3bb;line-height:1}
+    .key-line{margin:24px 0 0;max-width:34em;font-size:20px;line-height:1.5;letter-spacing:-.01em;color:#FAF9F6}
+
+    /* the flow: one line down the left, a numbered square for each step,
+       an arrow between steps, and a diamond where each part begins */
+    .flow{--rail:64px;position:relative;margin-top:64px;max-width:900px}
+    .flow::before{content:'';position:absolute;left:calc(var(--rail)/2);top:12px;bottom:40px;border-left:1px solid #c8c3bb}
+    .phase{position:relative;display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0 28px;align-items:center;margin:0 0 30px}
+    .phase::before{content:'';grid-column:1;justify-self:center;width:13px;height:13px;background:#393533;transform:rotate(45deg);position:relative;z-index:1}
+    .phase-t{grid-column:2;display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+    .phase-n{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    .phase h2{margin:0;font-weight:300;font-size:clamp(26px,2.6vw,32px);line-height:1.2;letter-spacing:-.02em;color:#393533}
+    .steps{list-style:none;margin:0;padding:0}
+    .step{position:relative;display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0 28px;margin:0 0 44px;scroll-margin-top:130px}
+    .step::after{content:'';position:absolute;left:calc(var(--rail)/2 - 5px);bottom:-27px;width:9px;height:9px;border-right:1px solid #7a746e;border-bottom:1px solid #7a746e;transform:rotate(45deg);background:#FAF9F6}
+    .steps.last .step:last-child::after{display:none}
+    .node{grid-column:1;justify-self:center;align-self:start;position:relative;z-index:1;width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:#FAF9F6;border:1px solid #393533;font-weight:400;font-size:15px;letter-spacing:.08em;color:#393533}
+    .card{grid-column:2;background:#F2F0ED;padding:28px 32px 30px}
+    .card h3{margin:0 0 14px;font-weight:300;font-size:clamp(23px,2.2vw,28px);line-height:1.25;letter-spacing:-.015em;color:#393533}
+    .card p{margin:0 0 12px;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
+    .card p:last-child{margin-bottom:0}
+    .tag{display:inline-block;margin:0 0 14px;font-weight:400;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e}
+    .go{display:inline-block;margin-top:8px;font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#393533;text-decoration:none;border-bottom:1px solid #393533;padding-bottom:4px}
+    .go:hover{opacity:.6}
+
+    /* the two pricing checks */
+    .step.price .node{background:#393533;color:#FAF9F6;border-color:#393533}
+    .step.price .card{background:#393533}
+    .step.price .card h3{color:#FAF9F6}
+    .step.price .card p{color:#e6e1da}
+    .step.price .tag{color:#c8c3bb}
+
+    /* ticked lists */
+    .ticks{list-style:none;margin:6px 0 4px;padding:0;border-bottom:1px solid #c8c3bb}
+    .ticks li{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-top:1px solid #c8c3bb;font-weight:400;font-size:17px;line-height:1.5;color:#393533}
+    .ticks .mk{flex:none;width:13px;height:13px;border:1px solid #7a746e;margin-top:6px}
+    .ticks.two{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+
+    /* step 2: the path splits into two options */
+    .fork{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:40px}
+    .fork::before{content:'';position:absolute;top:-20px;left:calc(25% - 5px);right:calc(25% - 5px);border-top:1px solid #7a746e}
+    .fork::after{content:'';position:absolute;top:-34px;left:50%;height:14px;border-left:1px solid #7a746e}
+    .opt{position:relative;background:#FAF9F6;border:1px solid #c8c3bb;padding:22px 24px 24px}
+    .opt::before{content:'';position:absolute;top:-21px;left:50%;height:20px;border-left:1px solid #7a746e}
+    .opt h4{margin:0 0 10px;font-weight:300;font-size:21px;line-height:1.3;letter-spacing:-.01em;color:#393533}
+    .opt p{font-size:17px}
+    .opt .tag{margin-bottom:10px}
+    .or{display:none}
+
+    /* step 5: the decision */
+    .both{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 22px}
+    .both span{padding:10px 16px;border:1px solid #393533;font-weight:400;font-size:15px;letter-spacing:.06em;color:#393533;background:#FAF9F6}
+    .both .plus{padding:0;border:0;background:none;font-size:22px;color:#7a746e}
+    .outs{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .out{background:#FAF9F6;border:1px solid #c8c3bb;padding:20px 22px 22px}
+    .out .tag{margin-bottom:8px}
+    .out p{font-size:17px}
+    .out-ic{display:inline-block;vertical-align:-3px;margin-right:8px}
+
+    /* closing call to action */
+    .end{margin-top:72px;background:#F2F0ED;padding:44px 40px 46px;max-width:900px}
+    .end h2{margin:0;font-weight:300;font-size:clamp(30px,3.4vw,44px);line-height:1.15;letter-spacing:-.02em;color:#393533}
+    .end p{margin:18px 0 0;max-width:34em;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
+    .acts{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+    .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:14px 26px;font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;white-space:nowrap;border:1px solid #393533;transition:background .2s ease,color .2s ease}
+    .btn.fill{background:#393533;color:#FAF9F6}
+    .btn.fill:hover{opacity:.88}
+    .btn.line{background:transparent;color:#393533}
+    .btn.line:hover{background:#393533;color:#FAF9F6}
+
+    .op-foot{border-top:1px solid #c8c3bb}
+    .op-foot .op-wrap{padding-top:22px;padding-bottom:40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-weight:400;font-size:14px;letter-spacing:.15em;text-transform:uppercase;color:#7a746e}
+    .op-foot a{color:#7a746e;text-decoration:none}
+
+    /* phones: a narrower line, the options and outcomes stack, and the short
+       version runs down the band with arrows pointing down */
+    @media (max-width:750px){
+      .op-main{padding-top:40px;padding-bottom:56px}
+      .key{margin-top:32px;padding:26px 22px 28px}
+      .key-flow{flex-direction:column;align-items:stretch;gap:6px}
+      .key-flow li{flex-direction:column;align-items:stretch;gap:6px}
+      .key-flow a{text-align:center}
+      .key-flow .ar{transform:rotate(90deg);text-align:center;align-self:center}
+      .key-line{font-size:18px}
+      .flow{--rail:40px;margin-top:48px}
+      .flow::before{bottom:30px}
+      .phase,.step{gap:0 14px}
+      .node{width:40px;height:40px;font-size:14px}
+      .card{padding:22px 20px 24px}
+      .card p{font-size:17px}
+      .ticks.two{grid-template-columns:1fr}
+      .fork{grid-template-columns:1fr;gap:0;margin-top:20px}
+      .fork::before,.fork::after,.opt::before{display:none}
+      .or{display:block;padding:10px 0;text-align:center;font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+      .outs{grid-template-columns:1fr;gap:12px}
+      .end{margin-top:56px;padding:32px 20px 34px}
+      .btn{width:100%;white-space:normal;text-align:center;letter-spacing:.14em}
+    }
+  </style>
+</head>
+<body>
+<div class="op">
+  <header class="op-top">
+    <div class="op-wrap op-r1">
+      <a href="https://www.thornegroup.co.nz"><img class="op-logo" src={LOGO} alt="Thorne Group" /></a>
+      <span class="op-kick">Our process</span>
+    </div>
+  </header>
+
+  <main class="op-wrap op-main">
+    <p class="eb">Our process</p>
+    <h1>Design + Build Process</h1>
+
+    <section class="key" aria-label="Two pricing checks before consent">
+      <p class="eb">Two pricing checks before consent</p>
+      <ol class="key-flow">
+        <li><a href="#step-3">Design</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a class="pr" href="#step-4">Price</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a href="#step-5">Refine</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a class="pr" href="#step-7">Price again</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a href="#step-9">Consent</a></li>
+      </ol>
+      <p class="key-line">We price the design twice before it goes to consent. You see the likely cost while the design can still change, not after the whole house is drawn.</p>
+    </section>
+
+    <div class="flow">
+      <div class="phase"><div class="phase-t"><span class="phase-n">Part 1</span><h2>The brief and the architect</h2></div></div>
+      <ol class="steps">
+        <li class="step" id="step-1">
+          <span class="node">01</span>
+          <div class="card">
+            <h3>Complete the Design Brief</h3>
+            <p>We start by understanding the site, how you want to live, your priorities, style, budget and what is most important to you.</p>
+            <p>This gives us a clear brief to work from before design begins.</p>
+            <a class="go" href="https://www.thornegroup.co.nz/brief">Start the Design Brief &rarr;</a>
+          </div>
+        </li>
+        <li class="step" id="step-2">
+          <span class="node">02</span>
+          <div class="card">
+            <h3>Match the Right Architect or Architectural Designer</h3>
+            <p>Based on the brief, we recommend the architect or designer we think is best suited to the project, considering style, budget, site, project complexity and how they work.</p>
+            <p>There are two ways we can approach this:</p>
+            <div class="fork">
+              <div class="opt">
+                <span class="tag">Option A</span>
+                <h4>Select one architect</h4>
+                <p>We recommend the architect we believe is the best fit and move directly into the concept design process with them.</p>
+              </div>
+              <div class="or" aria-hidden="true">or</div>
+              <div class="opt">
+                <span class="tag">Option B</span>
+                <h4>Invite more than one architect to put forward a concept</h4>
+                <p>If appropriate, two or more architects could be asked to develop an initial concept for consideration. There would generally be a fee from each architect for this work.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+      </ol>
+
+      <div class="phase"><div class="phase-t"><span class="phase-n">Part 2</span><h2>Design and pricing, before consent</h2></div></div>
+      <ol class="steps" start="3">
+        <li class="step" id="step-3">
+          <span class="node">03</span>
+          <div class="card">
+            <h3>Concept / Scheme Design</h3>
+            <p>The selected architect develops the initial concept for the home.</p>
+            <p>At this stage we review the design with the client and architect, looking at things such as:</p>
+            <Fragment set:html={ticks(['Overall layout and size', 'How the home sits on the site', 'Buildability', 'Structural complexity', 'Materials', 'Areas that may have a significant impact on cost'], true)} />
+          </div>
+        </li>
+        <li class="step price" id="step-4">
+          <span class="node">04</span>
+          <div class="card">
+            <span class="tag">Pricing check 1 of 2</span>
+            <h3>Initial Pricing Review</h3>
+            <p>Once there is enough detail in the scheme, we carry out an initial pricing review.</p>
+            <p>This is deliberately done early, before too much design work has been completed.</p>
+            <p>We compare the emerging design with the agreed budget and identify any areas that may need to be reconsidered.</p>
+          </div>
+        </li>
+        <li class="step" id="step-5">
+          <span class="node">05</span>
+          <div class="card">
+            <h3>Client Review</h3>
+            <p>The client then decides whether they are happy with:</p>
+            <div class="both"><span>The design</span><span class="plus" aria-hidden="true">+</span><span>The likely level of investment</span></div>
+            <div class="outs">
+              <div class="out">
+                <span class="tag"><svg class="out-ic" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4" fill="none" stroke="#7a746e" stroke-width="1.2"/></svg>Happy with both</span>
+                <p>Move on to design development.</p>
+              </div>
+              <div class="out">
+                <span class="tag"><svg class="out-ic" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3" fill="none" stroke="#7a746e" stroke-width="1.2"/></svg>Changes needed</span>
+                <p>The architect, client and Thorne Group work through them together before progressing.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="step" id="step-6">
+          <span class="node">06</span>
+          <div class="card">
+            <h3>Design Development</h3>
+            <p>Once the overall concept and budget are aligned, the architect develops the design further.</p>
+            <p>More detailed decisions are made around construction, materials, specification, interiors and key architectural details.</p>
+          </div>
+        </li>
+        <li class="step price" id="step-7">
+          <span class="node">07</span>
+          <div class="card">
+            <span class="tag">Pricing check 2 of 2</span>
+            <h3>Second Pricing Check</h3>
+            <p>We price the project again as the design develops.</p>
+            <p>This gives another opportunity to identify cost movements and make informed decisions before the plans are completed and submitted for consent.</p>
+            <p>If necessary, elements can be redesigned, simplified or reprioritised at this stage.</p>
+          </div>
+        </li>
+        <li class="step" id="step-8">
+          <span class="node">08</span>
+          <div class="card">
+            <h3>Client Approval to Proceed</h3>
+            <p>Once the client is comfortable with the developed design and updated pricing, approval is given to move forward.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="phase"><div class="phase-t"><span class="phase-n">Part 3</span><h2>Consent and planning</h2></div></div>
+      <ol class="steps" start="9">
+        <li class="step" id="step-9">
+          <span class="node">09</span>
+          <div class="card">
+            <h3>Detailed Documentation + Building Consent</h3>
+            <p>The architect completes the detailed construction documentation required for building consent.</p>
+            <p>Engineering and other specialist consultants are coordinated as required, and the project is lodged for consent.</p>
+          </div>
+        </li>
+        <li class="step" id="step-10">
+          <span class="node">10</span>
+          <div class="card">
+            <h3>Final Pricing + Construction Planning</h3>
+            <p>While consent is progressing, we continue developing the construction side of the project, including:</p>
+            <Fragment set:html={ticks(['Final pricing and supplier quotes', 'Construction methodology', 'Procurement and lead times', 'Selections', 'Subcontractor planning', 'Programme and sequencing'], true)} />
+          </div>
+        </li>
+        <li class="step" id="step-11">
+          <span class="node">11</span>
+          <div class="card">
+            <h3>Construction Programme Established</h3>
+            <p>A detailed construction schedule is established so the client understands:</p>
+            <Fragment set:html={ticks(['When we expect to start', 'The key stages of the build', 'The anticipated completion timeframe'])} />
+          </div>
+        </li>
+      </ol>
+
+      <div class="phase"><div class="phase-t"><span class="phase-n">Part 4</span><h2>Build</h2></div></div>
+      <ol class="steps last" start="12">
+        <li class="step" id="step-12">
+          <span class="node">12</span>
+          <div class="card">
+            <h3>Build</h3>
+            <p>Once consent, pricing, contracts and programme are confirmed, construction begins.</p>
+            <p>Thorne Group manages the project through construction, handover and aftercare.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+
+    <section class="end">
+      <p class="eb">Step 1</p>
+      <h2>Start with the Design Brief.</h2>
+      <p>It gives us a clear brief to work from before design begins.</p>
+      <div class="acts">
+        <a class="btn fill" href="https://www.thornegroup.co.nz/brief">Start the Design Brief</a>
+        <a class="btn line" href="/contact">Email us</a>
+        <a class="btn line" href="tel:+6475755555">Call 07 575 5555</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="op-foot">
+    <div class="op-wrap"><span>Thorne Group · Tauranga</span><a href="https://www.thornegroup.co.nz">thornegroup.co.nz</a></div>
+  </footer>
+</div>
+</body>
+</html>
