@@ -1,0 +1,87 @@
+---
+/* Our process, option A (preview only): light rows divided by fine rules,
+   a very big number, the title and one line, a large photo on the right and
+   a + that drops the full detail down. The two pricing checks sit on a
+   tinted band with a dark label. */
+import ProcessShell from '../components/ProcessShell.astro';
+import { STEPS, photo, pad } from '../data/our-process';
+---
+<ProcessShell option="a">
+  <style is:global>
+    .ra-bar{display:flex;justify-content:flex-end;max-width:1032px;margin:48px 0 14px}
+    .ra-all{background:none;border:0;padding:8px 0;cursor:pointer;font-family:inherit;font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#393533;border-bottom:1px solid #393533}
+    .ra{list-style:none;margin:0;padding:0;border-top:1px solid #c8c3bb;max-width:1032px}
+    .ra-row{border-bottom:1px solid #c8c3bb;scroll-margin-top:130px}
+    .ra-row.price{background:#F2F0ED}
+    .ra-head{display:grid;grid-template-columns:120px 1px minmax(0,1fr) 300px 44px;align-items:center;gap:0 32px;padding:30px 20px;cursor:pointer;list-style:none}
+    .ra-head::-webkit-details-marker{display:none}
+    .ra-head:focus-visible{outline:1px solid #393533;outline-offset:-4px}
+    .ra-num{font-weight:300;font-size:88px;line-height:.9;letter-spacing:-.03em;color:#393533;text-align:center}
+    .ra-rule{align-self:stretch;background:#c8c3bb}
+    .ra-tt{display:grid;gap:10px}
+    .ra-tt h2{margin:0;font-weight:500;font-size:19px;line-height:1.35;letter-spacing:.1em;text-transform:uppercase;color:#393533}
+    .ra-sum{margin:0;font-weight:400;font-size:18px;line-height:1.5;color:#54504c}
+    .ra-ph{display:block;width:300px;aspect-ratio:3/2;overflow:hidden;background:#e8e4de}
+    .ra-ph img{display:block;width:100%;height:100%;object-fit:cover}
+    .ra-pm{position:relative;justify-self:end;width:44px;height:44px;border:1px solid #393533}
+    .ra-pm::before,.ra-pm::after{content:'';position:absolute;left:50%;top:50%;width:16px;height:1px;background:#393533;transform:translate(-50%,-50%)}
+    .ra-pm::after{transform:translate(-50%,-50%) rotate(90deg);transition:transform .2s ease}
+    details[open] .ra-pm::after{transform:translate(-50%,-50%) rotate(0deg)}
+    .ra-head:hover .ra-pm{background:#393533}
+    .ra-head:hover .ra-pm::before,.ra-head:hover .ra-pm::after{background:#FAF9F6}
+    .ra-more{padding:0 20px 34px calc(20px + 120px + 32px + 1px + 32px);max-width:1032px}
+    @media (max-width:1000px){
+      .ra-head{grid-template-columns:84px 1px minmax(0,1fr) 200px 44px;gap:0 22px}
+      .ra-num{font-size:64px}
+      .ra-ph{width:200px}
+      .ra-more{padding-left:calc(20px + 84px + 22px + 1px + 22px)}
+    }
+    @media (max-width:750px){
+      .ra-bar{margin-top:36px}
+      .ra-head{grid-template-columns:minmax(0,1fr) 40px;grid-template-areas:"num pm" "ph ph" "tt tt";gap:16px 14px;padding:24px 0}
+      .ra-num{grid-area:num;justify-self:start;text-align:left;font-size:60px}
+      .ra-rule{display:none}
+      .ra-ph{grid-area:ph;width:100%}
+      .ra-tt{grid-area:tt}
+      .ra-pm{grid-area:pm;width:40px;height:40px}
+      .ra-tt h2{font-size:16px}
+      .ra-sum{font-size:17px}
+      .ra-row.price{background:#F2F0ED;margin:0 -24px;padding:0 24px}
+      .ra-more{padding:0 0 28px}
+    }
+  </style>
+
+  <div class="ra-bar"><button class="ra-all" type="button" aria-expanded="false">Open all steps</button></div>
+  <ol class="ra">
+    {STEPS.map((s) => (
+      <li class={s.price ? 'ra-row price' : 'ra-row'} id={`step-${s.n}`}>
+        <details>
+          <summary class="ra-head">
+            <span class="ra-num">{pad(s.n)}</span>
+            <span class="ra-rule"></span>
+            <div class="ra-tt">
+              {s.price && <span class="chip">Pricing check {s.price} of 2</span>}
+              <h2>{s.title}</h2>
+              <span class="ra-sum">{s.sum}</span>
+            </div>
+            <span class="ra-ph"><img src={photo(s.id)} alt={s.alt} loading="lazy" decoding="async" style={`object-position:${s.pos}`} /></span>
+            <span class="ra-pm" aria-hidden="true"></span>
+          </summary>
+          <div class="ra-more dt" set:html={s.more} />
+        </details>
+      </li>
+    ))}
+  </ol>
+
+  <script is:inline>
+  (function () {
+    var boxes = Array.prototype.slice.call(document.querySelectorAll('.ra details'));
+    var all = document.querySelector('.ra-all');
+    function sync() { var o = boxes.every(function (d) { return d.open; }); all.textContent = o ? 'Close all steps' : 'Open all steps'; all.setAttribute('aria-expanded', String(o)); }
+    all.addEventListener('click', function () { var o = !boxes.every(function (d) { return d.open; }); boxes.forEach(function (d) { d.open = o; }); sync(); });
+    boxes.forEach(function (d) { d.addEventListener('toggle', sync); });
+    function fromHash() { var el = location.hash && document.getElementById(location.hash.slice(1)); var d = el && el.querySelector('details'); if (d) d.open = true; }
+    window.addEventListener('hashchange', fromHash); fromHash();
+  })();
+  </script>
+</ProcessShell>

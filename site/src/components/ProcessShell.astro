@@ -1,0 +1,137 @@
+---
+/* Frame for the Our Process page options (preview only): head, logo header,
+   the switcher between options, the heading and the "two pricing checks"
+   band, then the option's own layout in the slot, then the footer. The
+   step content comes from src/data/our-process.ts. */
+import '../styles/fonts.css';
+
+interface Props { option: string }
+const { option } = Astro.props;
+const LOGO = 'https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png';
+const OPTS = [['current', '/our-process', 'Current'], ['a', '/our-process-a', 'A · Light rows'], ['b', '/our-process-b', 'B · Photo grid'], ['c', '/our-process-c', 'C · Step through']];
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Our Process | Thorne Group</title>
+  <style is:global>
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#FAF9F6;color:#393533;font-family:'Metric','Helvetica Neue',Helvetica,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+    .op *{box-sizing:border-box}
+    .op a{color:#393533}
+    .op strong{font-weight:500}
+    .op-top{position:sticky;top:0;z-index:20;background:#FAF9F6;border-bottom:1px solid #c8c3bb}
+    .op-wrap{max-width:1080px;margin:0 auto;padding-left:24px;padding-right:24px}
+    .op-r1{padding-top:18px;padding-bottom:14px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px}
+    .op-logo{height:66px;max-width:none;margin-left:-20px;width:auto;display:block;filter:brightness(0) invert(21%) sepia(6%) saturate(600%) hue-rotate(340deg)}
+    .op-kick{font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    @media (max-width:1000px){ .op-logo{height:54px;margin-left:-17px} }
+    @media (max-width:750px){ .op-top{position:static} .op-logo{height:60px;margin-left:-19px} }
+    @media (max-width:430px){ .op-logo{height:53px;margin-left:-16px} }
+
+    /* preview only: switch between the options */
+    .sw{background:#F2F0ED;border-bottom:1px solid #c8c3bb}
+    .sw .op-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding-top:12px;padding-bottom:12px}
+    .sw-l{font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#7a746e;margin-right:6px}
+    .op .sw a{padding:8px 14px;border:1px solid #c8c3bb;font-weight:400;font-size:14px;letter-spacing:.1em;text-decoration:none;color:#393533;background:#FAF9F6;white-space:nowrap}
+    .op .sw a.on{background:#393533;border-color:#393533;color:#FAF9F6}
+
+    .op-main{padding-top:56px;padding-bottom:80px}
+    .eb{margin:0 0 22px;font-weight:400;font-size:14px;letter-spacing:.35em;text-transform:uppercase;color:#7a746e}
+    .op h1{margin:0;font-weight:300;font-size:clamp(36px,5vw,56px);line-height:1.1;letter-spacing:-.02em;color:#393533}
+    .key{margin-top:40px;max-width:900px;background:#393533;color:#FAF9F6;padding:32px 36px 34px}
+    .key .eb{color:#c8c3bb;margin-bottom:20px}
+    .key-flow{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:12px 10px}
+    .key-flow li{display:flex;align-items:center;gap:10px}
+    .op .key-flow a{display:block;padding:12px 18px;border:1px solid rgba(250,249,246,.45);color:#FAF9F6;text-decoration:none;font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap}
+    .op .key-flow a.pr{background:#FAF9F6;color:#393533;border-color:#FAF9F6}
+    .key-flow .ar{font-size:18px;color:#c8c3bb;line-height:1}
+    .key-line{margin:24px 0 0;max-width:34em;font-size:20px;line-height:1.5;letter-spacing:-.01em;color:#FAF9F6}
+
+    /* step detail (light) */
+    .dt p{margin:0 0 12px;font-weight:400;font-size:18px;line-height:1.75;color:#54504c}
+    .dt p:last-child{margin-bottom:0}
+    .dt .tag{display:block;margin-bottom:8px;font-weight:400;font-size:14px;letter-spacing:.3em;text-transform:uppercase;color:#7a746e}
+    .ticks{list-style:none;margin:6px 0 4px;padding:0;border-bottom:1px solid #c8c3bb}
+    .ticks li{display:flex;gap:14px;align-items:flex-start;padding:10px 0;border-top:1px solid #c8c3bb;font-weight:400;font-size:17px;line-height:1.5;color:#393533}
+    .ticks .mk{flex:none;width:13px;height:13px;border:1px solid #7a746e;margin-top:6px}
+    .ticks.two{display:grid;grid-template-columns:1fr 1fr;gap:0 28px}
+    .opts,.outs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:6px}
+    .opt,.out{background:#FAF9F6;border:1px solid #c8c3bb;padding:20px 22px 22px}
+    .opt h3{margin:0 0 8px;font-weight:300;font-size:21px;line-height:1.3;letter-spacing:-.01em;color:#393533}
+    .opt p,.out p{font-size:17px}
+    .both{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:4px 0 18px}
+    .both span{padding:10px 16px;border:1px solid #393533;font-weight:400;font-size:15px;letter-spacing:.06em;color:#393533;background:#FAF9F6}
+    .both .plus{padding:0;border:0;background:none;font-size:22px;color:#7a746e}
+    /* step detail on a dark background */
+    .dark .dt p{color:#e6e1da}
+    .dark .dt .tag{color:#c8c3bb}
+    .dark .ticks{border-bottom-color:rgba(250,249,246,.25)}
+    .dark .ticks li{color:#FAF9F6;border-top-color:rgba(250,249,246,.25)}
+    .dark .ticks .mk{border-color:#c8c3bb}
+    .dark .opt,.dark .out{background:transparent;border-color:rgba(250,249,246,.3)}
+    .dark .opt h3{color:#FAF9F6}
+    .dark .both span{border-color:rgba(250,249,246,.6);color:#FAF9F6;background:transparent}
+    .dark .both .plus{color:#c8c3bb}
+    /* the pricing check label */
+    .chip{display:inline-block;justify-self:start;padding:6px 10px 5px;background:#393533;color:#FAF9F6;font-weight:400;font-size:14px;letter-spacing:.22em;text-transform:uppercase}
+    .dark .chip{background:#FAF9F6;color:#393533}
+
+    .op-foot{border-top:1px solid #c8c3bb}
+    .op-foot .op-wrap{padding-top:22px;padding-bottom:40px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;font-weight:400;font-size:14px;letter-spacing:.15em;text-transform:uppercase;color:#7a746e}
+    .op .op-foot a{color:#7a746e;text-decoration:none}
+
+    @media (max-width:750px){
+      .op-main{padding-top:40px;padding-bottom:56px}
+      .key{margin-top:32px;padding:26px 22px 28px}
+      .key-flow{flex-direction:column;align-items:stretch;gap:6px}
+      .key-flow li{flex-direction:column;align-items:stretch;gap:6px}
+      .op .key-flow a{text-align:center}
+      .key-flow .ar{transform:rotate(90deg);text-align:center;align-self:center}
+      .key-line{font-size:18px}
+      .dt p{font-size:17px}
+      .ticks.two,.opts,.outs{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+<div class="op">
+  <header class="op-top">
+    <div class="op-wrap op-r1">
+      <a href="https://www.thornegroup.co.nz"><img class="op-logo" src={LOGO} alt="Thorne Group" /></a>
+      <span class="op-kick">Our process</span>
+    </div>
+  </header>
+  <nav class="sw" aria-label="Preview options">
+    <div class="op-wrap">
+      <span class="sw-l">Preview options</span>
+      {OPTS.map(([k, href, label]) => <a href={href} class={k === option ? 'on' : undefined}>{label}</a>)}
+    </div>
+  </nav>
+
+  <main class="op-wrap op-main">
+    <p class="eb">Our process</p>
+    <h1>Design + Build Process</h1>
+    <section class="key" aria-label="Two pricing checks before consent">
+      <p class="eb">Two pricing checks before consent</p>
+      <ol class="key-flow">
+        <li><a href="#step-3">Design</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a class="pr" href="#step-4">Price</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a href="#step-5">Refine</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a class="pr" href="#step-7">Price again</a><span class="ar" aria-hidden="true">&rarr;</span></li>
+        <li><a href="#step-9">Consent</a></li>
+      </ol>
+      <p class="key-line">We price the design twice before it goes to consent. You see the likely cost while the design can still change, not after the whole house is drawn.</p>
+    </section>
+    <slot />
+  </main>
+
+  <footer class="op-foot">
+    <div class="op-wrap"><span>Thorne Group · Tauranga</span><a href="https://www.thornegroup.co.nz">thornegroup.co.nz</a></div>
+  </footer>
+</div>
+</body>
+</html>

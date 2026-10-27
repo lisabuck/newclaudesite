@@ -148,6 +148,12 @@ const ticks = (items: string[], two = false) =>
       .down{width:44px;margin-left:17px;padding:10px 0}
     }
     @media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .pm,.pm::after{transition:none} }
+    /* preview only: switch between the options */
+    .sw{background:#F2F0ED;border-bottom:1px solid #c8c3bb}
+    .sw .op-wrap{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding-top:12px;padding-bottom:12px}
+    .sw-l{font-weight:400;font-size:14px;letter-spacing:.2em;text-transform:uppercase;color:#7a746e;margin-right:6px}
+    .op .sw a{padding:8px 14px;border:1px solid #c8c3bb;font-weight:400;font-size:14px;letter-spacing:.1em;text-decoration:none;color:#393533;background:#FAF9F6;white-space:nowrap}
+    .op .sw a.on{background:#393533;border-color:#393533;color:#FAF9F6}
   </style>
 </head>
 <body>
@@ -158,6 +164,12 @@ const ticks = (items: string[], two = false) =>
       <span class="op-kick">Our process</span>
     </div>
   </header>
+  <nav class="sw" aria-label="Preview options">
+    <div class="op-wrap">
+      <span class="sw-l">Preview options</span>
+      <a href="/our-process" class="on">Current</a><a href="/our-process-a">A · Light rows</a><a href="/our-process-b">B · Photo grid</a><a href="/our-process-c">C · Step through</a>
+    </div>
+  </nav>
 
   <main class="op-wrap op-main">
     <div class="col">
