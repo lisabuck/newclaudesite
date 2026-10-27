@@ -29,6 +29,12 @@ for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', 
   await page.screenshot({ path: `${out}/our-process-${label}-popup.png` });
   await page.click('.rb-nav [data-d="1"]'); await page.waitForTimeout(800);
   const d5 = await page.evaluate(() => document.querySelector('.rb-dlg h2').textContent);
+  /* step 2: no photo in the pop-up, the two options side by side (stacked on phones), no empty label, opens at the top */
+  await page.click('.rb-x'); await page.waitForTimeout(300);
+  await page.click('#step-2 .rb-card'); await page.waitForTimeout(800);
+  const d2 = await page.evaluate(() => { const d = document.querySelector('.rb-dlg'); return { h2: d.querySelector('h2').textContent, photo: getComputedStyle(d.querySelector('.rb-dlg-ph')).display !== 'none', label: d.querySelector('.chip').getClientRects().length > 0, opts: [...d.querySelectorAll('.opt')].map(o => Math.round(o.getBoundingClientRect().top)).join('/'), top: d.scrollTop }; });
+  await page.screenshot({ path: `${out}/our-process-${label}-step2.png` });
+  log(`  step 2 pop-up "${d2.h2}": photo ${d2.photo ? 'SHOWN' : 'hidden'} | empty label ${d2.label ? 'SHOWN' : 'hidden'} | option tops ${d2.opts} | scrolled ${d2.top}`);
   log(`${label}: HTTP ${res.status()} | "${info.title}" | robots ${info.robots} | cards ${info.cards} | dark ${info.dark} | logo ${info.logo ? 'ok' : 'MISSING'} | sideways scroll ${info.wide}`);
   log(`  photos not loaded: ${info.notLoaded.length ? info.notLoaded.join(', ') : 'none'} | pop-up ${d4.open ? 'open' : 'SHUT'} "${d4.h2}" photo ${d4.img ? 'ok' : 'MISSING'} | next "${d5}"`);
   log(`  errors ${errs.length ? errs.join(' ; ') : 'none'} | failed requests ${bad.length ? bad.slice(0, 5).join(' ; ') : 'none'}`);
