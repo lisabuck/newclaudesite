@@ -1,0 +1,860 @@
+---
+/* Client discovery: private page at /client-discovery, shared by link only.
+   Not in any menu, not in the sitemap, and marked noindex.
+   A second version of the design brief: the three-stage client and architect
+   matching questionnaire (32 questions), laid out as three tabs on one page.
+   It finds the right architect. The detailed design brief stays with them.
+   Answers save on the visitor's device as they go (localStorage key
+   tg-client-discovery-v1). ENDPOINT is empty on the Vercel preview, so Submit
+   checks the name, email and consent, sends nothing, and says so. */
+import '../styles/fonts.css';
+
+const ENDPOINT = '';
+const P = '/brief-photos/';
+const pad = (n: number) => String(n).padStart(2, '0');
+
+type Opt = [string, string] | [string, string, string];
+type Item =
+  | { i: 'fields'; fields: { name: string; label: string; type?: string; ac?: string; req?: boolean }[] }
+  | { i: 'sub'; t: string; help?: string }
+  | { i: 'input'; name: string; aria: string }
+  | { i: 'area'; name: string; aria: string }
+  | { i: 'radio'; group: string; opts: Opt[] }
+  | { i: 'check'; max?: number; opts: Opt[]; other?: [string, string] }
+  | { i: 'scale'; group: string; a: string; b: string }
+  | { i: 'likert'; group: string; quote: string }
+  | { i: 'top' }
+  | { i: 'upload'; zone: string; aria: string }
+  | { i: 'when'; group: string; vals: string[]; items: Item[] };
+type Q = { n: number; q: string; help?: string; items: Item[] };
+type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; next?: [string, string] };
+
+const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
+const LIKERT: [string, string][] = [['1', 'Strongly disagree'], ['2', 'Disagree'], ['3', 'Neither agree nor disagree'], ['4', 'Agree'], ['5', 'Strongly agree']];
+const SCALE: [string, string][] = [['1', 'A'], ['2', 'Closer to A'], ['3', 'In the middle'], ['4', 'Closer to B'], ['5', 'B']];
+
+// Q5 options, reused by Q6 (which of these matters most)
+const LIFE: Opt[] = [
+  ['s5_simplify', 'Simplifying life', 'I’m looking for something more compact, easy to manage and low-maintenance.'],
+  ['s5_growing', 'A growing family', 'I need a home that can adapt as young children grow and family life evolves.'],
+  ['s5_changing', 'Changing family dynamics', 'I have older children who are becoming more independent, and our needs are changing.'],
+  ['s5_coming', 'Family coming and going', 'I want a home that suits our everyday lives but can comfortably accommodate children, grandchildren, family or friends who visit or stay.'],
+  ['s5_multigen', 'Multi-generational living', 'I want to accommodate different generations living together, while allowing for independence and privacy.'],
+  ['s5_lockup', 'A lock-up-and-leave lifestyle', 'I travel frequently or spend time away and want a home that’s easy to secure and maintain.'],
+  ['s5_athome', 'Making the most of life at home', 'I want to invest in a home that supports entertaining, hobbies, working from home or other activities I enjoy.'],
+  ['s5_lifestyle', 'A changing lifestyle', 'I anticipate significant changes in the way I live over the coming years.'],
+  ['s5_else', 'Something else'],
+];
+
+const STAGES: Stage[] = [
+  { tab: 'Your life & project', short: 'Your life', h: 'First, let’s get to know <strong>you</strong>.',
+    intro: ['Finding the right architect starts with understanding you: how you live, what matters to you, and what you’re hoping to achieve.', 'You don’t need to have everything figured out. Just tell us a little about your life and what you have in mind.'],
+    next: ['Wonderful, that’s a great start.', 'Next, we’d love to discover what inspires you architecturally and the type of design approach that appeals to you.'],
+    qs: [
+      { n: 1, q: 'Let’s start with a few details.', items: [{ i: 'fields', fields: [
+        { name: 's1_name', label: 'Your name', ac: 'name', req: true },
+        { name: 's1_email', label: 'Email address', type: 'email', ac: 'email', req: true },
+        { name: 's1_phone', label: 'Phone number (optional)', type: 'tel', ac: 'tel' },
+      ] }] },
+      { n: 2, q: 'What type of project are you considering?', help: 'Select one.', items: [{ i: 'radio', group: 's2_type', opts: [
+        ['new', 'A new home'], ['reno', 'A renovation or extension'], ['holiday', 'A holiday home or bach'], ['multigen', 'A multi-generational home'],
+        ['multires', 'A multi-residential development'], ['commercial', 'A commercial project'], ['else', 'Something else / I’m still exploring'],
+      ] }] },
+      { n: 3, q: 'Where is your project, and how far along are you?', items: [
+        { i: 'sub', t: 'Project location' },
+        { i: 'input', name: 's3_location', aria: 'Project location: town or region' },
+        { i: 'sub', t: 'Where are you in the process?' },
+        { i: 'radio', group: 's3_stage', opts: [
+          ['exploring', 'Just exploring ideas'], ['land', 'Looking for land or a property'], ['site', 'Have a site or existing property'],
+          ['ideas', 'Have some initial ideas or plans'], ['ready', 'Ready to engage an architect'],
+        ] },
+      ] },
+      { n: 4, q: 'Do you have an approximate construction budget and timeframe in mind?', help: 'An estimate is absolutely fine.', items: [
+        { i: 'sub', t: 'Budget (excluding land)' },
+        { i: 'radio', group: 's4_budget', opts: [
+          ['u500', 'Under $500,000'], ['500-1m', '$500,000 to $1 million'], ['1-1.5m', '$1 million to $1.5 million'], ['1.5-2m', '$1.5 million to $2 million'],
+          ['2-3m', '$2 million to $3 million'], ['3-5m', '$3 million to $5 million'], ['5m', '$5 million+'], ['unsure', 'Not yet sure'],
+        ] },
+        { i: 'sub', t: 'When would you ideally like to begin working with an architect?' },
+        { i: 'radio', group: 's4_when', opts: [
+          ['asap', 'As soon as possible'], ['3m', 'Within 3 months'], ['3-6m', 'Within 3 to 6 months'], ['6-12m', 'Within 6 to 12 months'],
+          ['12m', 'More than a year away'], ['exploring', 'Just exploring at this stage'],
+        ] },
+      ] },
+      { n: 5, q: 'Where are you in life, and what would you like your home to accommodate?', help: 'Think about how you live today and how your circumstances might change over time. Select up to four.', items: [
+        { i: 'check', max: 4, opts: LIFE, other: ['s5_else_text', 'Tell us more'] },
+      ] },
+      { n: 6, q: 'Of the options you’ve selected, which is most important to you?', help: 'Choose one from your answers to question 5.', items: [{ i: 'top' }] },
+      { n: 7, q: 'How do you most enjoy spending your time at home?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+        ['s7_entertain', 'Entertaining friends and family'], ['s7_cook', 'Cooking and sharing meals'], ['s7_relax', 'Relaxing and enjoying quiet time'],
+        ['s7_outdoors', 'Spending time outdoors'], ['s7_work', 'Working or studying from home'], ['s7_creative', 'Pursuing creative interests or hobbies'],
+        ['s7_family', 'Spending time together as a family'], ['s7_privacy', 'Enjoying privacy and personal space'], ['s7_active', 'Staying active, exercising or enjoying recreation'],
+        ['s7_other', 'Other'],
+      ], other: ['s7_other_text', 'Tell us more'] }] },
+      { n: 8, q: 'What are the three most important things you want to achieve with your project?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+        ['s8_enhance', 'A home that enhances the way I live'], ['s8_beautiful', 'A beautiful and inspiring environment'], ['s8_unique', 'Something architecturally unique and personal'],
+        ['s8_timeless', 'A timeless home that will age well'], ['s8_practical', 'A practical and functional home'], ['s8_quality', 'Exceptional quality and craftsmanship'],
+        ['s8_value', 'A home that offers good long-term value'], ['s8_maintain', 'A home that’s easy to maintain'], ['s8_sanctuary', 'A place that feels like a sanctuary'],
+        ['s8_budget', 'Staying within my intended construction budget'],
+      ] }] },
+      { n: 9, q: 'How important is it that your home can adapt to your changing needs over time?', help: 'Think about the next 10 to 20 years and how your lifestyle, family circumstances or mobility may change.', items: [{ i: 'radio', group: 's9_adapt', opts: [
+        ['essential', 'Essential', 'I want a home that will comfortably accommodate different stages of life.'],
+        ['very', 'Very important', 'I’d like future flexibility to be a significant consideration.'],
+        ['somewhat', 'Somewhat important', 'It would be good to allow for change where practical.'],
+        ['not', 'Not a major priority', 'I’m primarily focused on how I want to live today.'],
+        ['unsure', 'Unsure', 'I’d welcome guidance on what to consider.'],
+      ] }] },
+      { n: 10, q: 'How important is accessibility and ease of movement within your home?', help: 'For example, step-free access, wheelchair accessibility or accommodating changing mobility needs. Select any that apply.', items: [{ i: 'check', opts: [
+        ['s10_wheelchair', 'Wheelchair accessibility is an essential requirement from the outset.'],
+        ['s10_future', 'I’d like my home to accommodate wheelchair use or reduced mobility in the future.'],
+        ['s10_ease', 'Ease of movement, including avoiding unnecessary stairs or level changes, is important to me.'],
+        ['s10_visitors', 'I’d like to comfortably accommodate visitors or family members with accessibility needs.'],
+        ['s10_none', 'Accessibility is not currently a particular priority.'],
+        ['s10_unsure', 'I’m not sure what I should be considering.'],
+      ] }] },
+      { n: 11, q: 'What would you most like to improve about the way you live now?', help: 'This could be something about your current home, your lifestyle or how you imagine living in the future. Optional.', items: [area('s11_improve', 'What you would most like to improve')] },
+    ] },
+  { tab: 'Your architectural outlook', short: 'Your outlook', h: 'What does great architecture mean to <strong>you</strong>?',
+    intro: ['Every architect has their own design philosophy, creative strengths and way of thinking. Understanding what appeals to you helps us identify architects whose approach may align with your aspirations.', 'For questions with two opposing statements, simply choose where you sit on a five-point scale between them. You may fall somewhere in the middle. There are no right or wrong answers.'],
+    next: ['We’re getting a picture of your architectural preferences.', 'One last step: understanding how you like to work, communicate and make decisions will help us find an architect who suits you personally.'],
+    qs: [
+      { n: 12, q: 'How would you like your home to relate to its surroundings?', items: [{ i: 'scale', group: 's12', a: 'I would like my home to complement its surroundings and be in keeping with the area.', b: 'I would like something architecturally unique and distinctive that stands apart.' }] },
+      { n: 13, q: 'Which architectural expression appeals to you more?', items: [{ i: 'scale', group: 's13', a: 'Understated, restrained and timeless architecture.', b: 'Bold, expressive and perhaps unconventional architecture.' }] },
+      { n: 14, q: 'How do you feel about specific architectural detailing?', help: 'Think about features such as beautifully crafted joinery, carefully resolved material connections, customised fittings and other small elements that make a design special.', items: [{ i: 'radio', group: 's14_detail', opts: [
+        ['notice', 'I don’t tend to notice those details. The overall look and feeling matter more.'],
+        ['appreciate', 'I appreciate thoughtful detailing where it adds to the overall experience.'],
+        ['love', 'I love beautiful, bespoke architectural detailing and would be open to investing in it.'],
+        ['unsure', 'I’m not sure. I’d like an architect to help me understand the possibilities.'],
+      ] }] },
+      { n: 15, q: 'What qualities do you value most in architecture?', help: 'Select your top three.', items: [{ i: 'check', max: 3, opts: [
+        ['s15_creative', 'Creativity and originality'], ['s15_simple', 'Simplicity and restraint'], ['s15_materials', 'Beautiful materials and craftsmanship'],
+        ['s15_practical', 'Practicality and functionality'], ['s15_timeless', 'Timelessness and longevity'], ['s15_innovative', 'Innovative ideas and technologies'],
+        ['s15_nature', 'Connection to the natural environment'], ['s15_comfort', 'Comfort and atmosphere'], ['s15_value', 'Value and cost-conscious design'],
+        ['s15_space', 'Thoughtful use of space and proportion'],
+      ] }] },
+      { n: 16, q: 'How do you feel about architectural experimentation?', items: [{ i: 'scale', group: 's16', a: 'I’m drawn to established design ideas and proven approaches that work well.', b: 'I’m excited by the possibility of exploring new or unconventional design ideas.' }] },
+      { n: 17, q: 'What kind of feeling would you most love your home to create?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+        ['s17_calm', 'Calm and peaceful'], ['s17_warm', 'Warm and welcoming'], ['s17_elegant', 'Elegant and sophisticated'], ['s17_relaxed', 'Relaxed and informal'],
+        ['s17_inspiring', 'Inspiring and uplifting'], ['s17_bold', 'Bold and memorable'], ['s17_natural', 'Natural and grounded'], ['s17_light', 'Light and spacious'],
+        ['s17_intimate', 'Intimate and private'], ['s17_playful', 'Playful and creative'],
+      ] }] },
+      { n: 18, q: 'How do you feel about balancing aesthetics and ongoing maintenance?', items: [{ i: 'scale', group: 's18', a: 'I strongly prefer materials and design choices that minimise ongoing care and maintenance.', b: 'I’m comfortable with some additional care or maintenance if it achieves an architectural quality I really value.' }] },
+      { n: 19, q: 'How important are environmental sustainability and energy efficiency to you?', items: [
+        { i: 'radio', group: 's19_sustain', opts: [
+          ['essential', 'Essential', 'Environmental responsibility is a core value, and I want it to be central to my project.'],
+          ['very', 'Very important', 'I’d like sustainability to be a significant part of the architectural approach.'],
+          ['reason', 'Important, within reason', 'I value sustainable choices where they provide a sensible balance of cost and benefit.'],
+          ['somewhat', 'Somewhat important', 'My main focus is on comfort, practicality and reasonable running costs.'],
+          ['not', 'Not a major priority', 'Sustainability isn’t a primary consideration for this project.'],
+          ['unsure', 'Unsure', 'I’d welcome an architect’s guidance on the possibilities.'],
+        ] },
+        { i: 'when', group: 's19_sustain', vals: ['essential', 'very', 'reason', 'somewhat', 'unsure'], items: [
+          { i: 'sub', t: 'What aspects of sustainability matter most to you?', help: 'Optional. Choose up to three.' },
+          { i: 'check', max: 3, opts: [
+            ['s19_energy', 'Reducing energy consumption and running costs'], ['s19_healthy', 'Creating a naturally comfortable, healthy home'],
+            ['s19_materials', 'Using environmentally responsible materials'], ['s19_impact', 'Reducing the environmental impact of construction'],
+            ['s19_water', 'Water conservation and resource efficiency'], ['s19_durable', 'Designing a durable home that will last for generations'],
+            ['s19_open', 'I’m open to recommendations from my architect'],
+          ] },
+        ] },
+      ] },
+      { n: 20, q: 'Are there any homes, buildings or architects whose work you particularly admire?', help: 'You can share a Pinterest board, Instagram link, website or a few images. This is optional, and you don’t have to have a particular style in mind.', items: [
+        area('s20_admire', 'Homes, buildings or architects you admire, with any links'),
+        { i: 'upload', zone: 's20', aria: 'Upload images of homes or buildings you admire' },
+      ] },
+    ] },
+  { tab: 'Your ideal architect', short: 'Your architect', h: 'The right relationship makes all the <strong>difference</strong>.',
+    intro: ['Creating a home is a personal and collaborative journey. Architects have different ways of developing ideas, communicating, managing their work and involving clients.', 'We’d love to understand what makes a working relationship successful for you.'],
+    qs: [
+      { n: 21, q: 'How important is a clearly structured process?', help: 'How strongly do you agree with this statement?', items: [{ i: 'likert', group: 's21', quote: '“I like to know what happens next, what decisions are required of me, and when key stages are expected to be completed.”' }] },
+      { n: 22, q: 'How comfortable are you with the creative process being fluid?', help: 'How strongly do you agree with this statement?', items: [{ i: 'likert', group: 's22', quote: '“I understand that design ideas can evolve as possibilities are explored, and I’m comfortable with some uncertainty as the design develops.”' }] },
+      { n: 23, q: 'How involved would you like to be in the design journey?', items: [{ i: 'scale', group: 's23', a: 'I enjoy being involved in exploring ideas, reviewing options and making decisions along the way.', b: 'I prefer to establish my aspirations and trust the architect to develop and present considered recommendations.' }] },
+      { n: 24, q: 'How would you like your architect to approach your ideas?', items: [{ i: 'scale', group: 's24', a: 'I want an architect who carefully listens to my ideas and works closely with them.', b: 'I want an architect who will confidently challenge my thinking and introduce ideas I may never have considered.' }] },
+      { n: 25, q: 'How would you prefer design ideas to be presented?', items: [{ i: 'scale', group: 's25', a: 'I prefer to see well-developed, considered concepts rather than lots of early possibilities.', b: 'I enjoy seeing the creative thinking unfold and exploring different concepts before settling on a direction.' }] },
+      { n: 26, q: 'When you send an email or ask a non-urgent question, when would you generally expect a response or acknowledgement?', items: [{ i: 'radio', group: 's26_response', opts: [
+        ['hour', 'Almost immediately, or within an hour during working hours'], ['hours', 'Within a few hours'], ['day', 'By the end of the working day'],
+        ['1-2days', 'Within one to two working days'], ['agreed', 'I’m comfortable with an agreed communication timeframe'],
+      ] }] },
+      { n: 27, q: 'What style of communication would suit you best?', items: [{ i: 'radio', group: 's27_style', opts: [
+        ['frequent', 'Frequent updates and ongoing conversations'], ['scheduled', 'Regular scheduled meetings and structured updates'],
+        ['key', 'Communication at key stages and important decision points'], ['flexible', 'A flexible approach depending on what’s happening'],
+      ] }] },
+      { n: 28, q: 'How do you prefer important decisions to be made?', items: [{ i: 'scale', group: 's28', a: 'I like to understand the alternatives, ask questions and carefully consider the options before deciding.', b: 'I appreciate a clear professional recommendation and am generally comfortable being guided by an expert.' }] },
+      { n: 29, q: 'When an unexpected challenge arises, what would you prefer your architect to do?', help: 'Select the approach that feels most comfortable.', items: [{ i: 'radio', group: 's29_challenge', opts: [
+        ['promptly', 'Tell me promptly, even if a solution hasn’t been found yet.'], ['solutions', 'Investigate the issue and come back with possible solutions.'],
+        ['involve', 'Involve me in discussing and resolving the issue.'], ['lead', 'Take the lead, recommend the best solution and keep me informed.'],
+      ] }] },
+      { n: 30, q: 'What are the three most important qualities you’re looking for in an architect?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+        ['s30_creative', 'Creative and imaginative'], ['s30_approachable', 'Approachable and personable'], ['s30_listener', 'An excellent listener'],
+        ['s30_organised', 'Highly organised and process-driven'], ['s30_detail', 'Detail-oriented and meticulous'], ['s30_practical', 'Practical and budget-conscious'],
+        ['s30_confident', 'Confident and decisive'], ['s30_collab', 'Collaborative and open-minded'], ['s30_reliable', 'Reliable and responsive'],
+        ['s30_calm', 'Calm and reassuring'], ['s30_experienced', 'Experienced and technically knowledgeable'],
+      ] }] },
+      { n: 31, q: 'Have you worked with an architect or designer before?', items: [
+        { i: 'radio', group: 's31_before', opts: [['yes', 'Yes'], ['no', 'No']] },
+        { i: 'when', group: 's31_before', vals: ['yes'], items: [
+          { i: 'sub', t: 'What did you particularly appreciate or find challenging about the experience?', help: 'Optional.' },
+          area('s31_experience', 'What you appreciated or found challenging'),
+        ] },
+      ] },
+      { n: 32, q: 'Is there anything else we should understand about the type of architect or working relationship that would suit you?', help: 'Perhaps there’s something you particularly value, something you’d prefer to avoid, or a quality we haven’t covered. Optional.', items: [area('s32_else', 'Anything else we should understand')] },
+    ] },
+];
+
+const MSG = 'We need your name and email to send your profile.';
+const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, count: s.qs.length }));
+---
+<!doctype html>
+<html lang="en-NZ">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Client discovery | Thorne Group</title>
+  <style is:global>
+    html{-webkit-text-size-adjust:100%}
+    body{margin:0;background:#FAF9F6;color:#393533;font-family:'Metric','Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:300;-webkit-font-smoothing:antialiased}
+    .cd *,.cd *::before,.cd *::after{box-sizing:border-box}
+    .cd [hidden]{display:none!important}
+    .cd a{color:#393533}
+    .cd a:hover{color:#7a746e}
+    .cd strong,.cd b{font-weight:500}
+    .cd button{font-family:inherit;-webkit-tap-highlight-color:transparent}
+
+    /* top line: logo and label */
+    .cd-row{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:18px clamp(24px,4vw,48px);border-bottom:1px solid #c8c3bb}
+    .cd-home{display:block;line-height:0}
+    .cd-logo{height:16px;width:auto;display:block}
+    .cd-lab{font-size:14px;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:#7a746e;white-space:nowrap}
+    @media (max-width:479px){ .cd-lab{display:none} }
+
+    /* one centred column */
+    .cd-wrap{width:100%;max-width:900px;margin:0 auto;padding:0 clamp(24px,5vw,64px)}
+    .cd-hero{display:grid;gap:24px;padding:72px 0 56px;max-width:680px}
+    .eb{display:flex;flex-wrap:wrap;gap:6px 20px;font-size:14px;font-weight:400;line-height:1.4;letter-spacing:.35em;text-transform:uppercase;color:#c8c3bb}
+    .eb span{white-space:nowrap}
+    .eb .t{color:#7a746e}
+    @media (max-width:479px){ .eb{letter-spacing:.25em} .eb .t{white-space:normal} }
+    .cd h1{margin:0;font-weight:300;font-size:clamp(34px,3.37vw,55px);line-height:1.15;letter-spacing:-.02em;color:#393533}
+    .cd h2{margin:0;font-weight:300;font-size:clamp(27px,3.37vw,55px);line-height:1.1;letter-spacing:-.02em;color:#393533}
+    .cd p{margin:0;font-size:clamp(19px,1.45vw,21px);line-height:1.75;color:#54504c}
+    @media (max-width:750px){ .cd p{font-size:18px} }
+    .ps{display:grid;gap:12px}
+    .cd p.small{font-size:17px;line-height:1.6}
+
+    /* the three stage tabs, pinned to the top while scrolling */
+    .tabs{position:sticky;top:0;z-index:5;background:#FAF9F6;border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
+    .tabs-in{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:900px;margin:0 auto;padding:0 clamp(24px,5vw,64px)}
+    .tab{display:grid;align-content:start;gap:4px;min-height:44px;margin:0;padding:18px 16px 16px 0;background:none;border:0;border-bottom:2px solid transparent;border-radius:0;color:#7a746e;text-align:left;cursor:pointer}
+    .tab+.tab{padding-left:16px;border-left:1px solid #c8c3bb}
+    .tab[aria-selected="true"]{color:#393533;border-bottom-color:#393533}
+    .tab:hover{color:#393533}
+    .tab-n{font-size:14px;font-weight:400;letter-spacing:.35em;color:#c8c3bb}
+    .tab[aria-selected="true"] .tab-n{color:#7a746e}
+    .tab-t{font-size:clamp(17px,1.45vw,21px);line-height:1.3}
+    .tab-s{font-size:14px;line-height:1.4;letter-spacing:.05em;color:#7a746e}
+    .tab-t .sh{display:none}
+    @media (max-width:750px){
+      .tabs-in{padding:0 16px}
+      .tab{padding:12px 8px 10px 0}
+      .tab+.tab{padding-left:10px}
+      .tab-n{letter-spacing:.2em}
+      .tab-t .lg{display:none}
+      .tab-t .sh{display:inline}
+    }
+    @media (max-width:379px){ .tab-t{font-size:16px} }
+
+    /* each stage */
+    .panel{padding:64px 0 24px}
+    .p-head{display:grid;gap:20px;padding-bottom:40px;max-width:680px}
+
+    /* questions */
+    .q{display:grid;gap:16px;padding:40px 0;border-top:1px solid #c8c3bb;scroll-margin-top:120px}
+    .qn{font-size:14px;font-weight:400;letter-spacing:.35em;color:#7a746e}
+    .ql{font-size:clamp(21px,1.7vw,25px);line-height:1.45;color:#393533;margin-top:-6px}
+    .qh{font-size:17px;line-height:1.6;color:#54504c;margin-top:-6px}
+    .sub{display:grid;gap:4px;margin-top:12px}
+    .sub span:first-child{font-size:19px;line-height:1.5;color:#393533}
+    .sub span+span{font-size:17px;line-height:1.6;color:#54504c}
+    .cnt{font-size:14px;letter-spacing:.05em;color:#7a746e;min-height:20px}
+    .cnt.full{color:#393533}
+    .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:28px 24px}
+    .fl{display:grid;gap:8px;align-content:start}
+    .fl>span:first-child{font-size:17px;line-height:1.5;color:#393533}
+    .in{font:inherit;font-size:17px;font-weight:300;color:#393533;background:transparent;border:1px solid #c8c3bb;border-radius:0;padding:14px 16px;outline:none;width:100%;margin:0;-webkit-appearance:none;appearance:none}
+    .in:focus{border-color:#393533}
+    textarea.in{display:block;line-height:1.7;min-height:120px;resize:vertical}
+    .inw{max-width:420px}
+    .fl.bad .in{border-color:#393533}
+    .fmsg{font-size:17px;line-height:1.5;color:#393533}
+
+    /* tick-box and radio cells, shared borders */
+    .og{display:grid;grid-template-columns:repeat(auto-fill,minmax(var(--min,260px),1fr));padding:0 1px 1px 0}
+    .og.one{grid-template-columns:minmax(0,1fr)}
+    .oc{position:relative;display:flex;align-items:center;gap:14px;min-height:60px;margin:0 -1px -1px 0;padding:10px 16px;border:1px solid #c8c3bb;border-radius:0;background:transparent;color:#393533;font-size:17px;font-weight:300;line-height:1.45;text-align:left;cursor:pointer}
+    .oc.rich{align-items:flex-start;padding:16px}
+    .oc.rich .ck{margin-top:4px}
+    .oc .tx{display:grid;gap:2px}
+    .oc .tx b{font-size:17px}
+    .oc .tx i{font-style:normal;color:#54504c}
+    .ck{position:relative;flex:none;width:18px;height:18px;border:1px solid #393533}
+    [role="radio"] .ck{border-radius:50%}
+    [aria-checked="true"] .ck::after{content:'';position:absolute;inset:2px;background:#393533}
+    [role="radio"][aria-checked="true"] .ck::after{border-radius:50%}
+    .oc[aria-checked="true"]::after{content:'';position:absolute;inset:-1px;border:1px solid #393533;z-index:1;pointer-events:none}
+    .oc[aria-disabled="true"]{color:#7a746e;cursor:default}
+    .oc[aria-disabled="true"] .ck{border-color:#c8c3bb}
+    .oth{grid-column:1/-1;display:flex;align-items:center;gap:16px;min-height:60px;margin:0 -1px -1px 0;padding:4px 16px;border:1px solid #c8c3bb}
+    .oth>span{flex:none;font-size:17px;color:#7a746e}
+    .oth input{flex:1;min-width:0;font:inherit;font-size:17px;font-weight:300;color:#393533;background:transparent;border:0;border-bottom:1px solid #c8c3bb;border-radius:0;padding:8px 0;outline:none;-webkit-appearance:none;appearance:none}
+    .oth input:focus{border-bottom-color:#393533}
+    .empty{padding:18px 16px;border:1px dashed #c8c3bb;font-size:17px;line-height:1.6;color:#54504c}
+
+    /* A or B, on a five-point scale */
+    .sc{display:grid;gap:16px}
+    .ab{display:grid;grid-template-columns:1fr 1fr;padding:0 1px 1px 0}
+    .abc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;margin:0 -1px -1px 0;padding:18px 20px;border:1px solid #c8c3bb;background:#F2F0ED;font-size:17px;line-height:1.6;color:#393533}
+    .abc b{font-size:14px;font-weight:500;letter-spacing:.2em;padding-top:2px}
+    .sr{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0 1px 1px 0}
+    .sr .oc{flex-direction:column;justify-content:center;gap:10px;min-height:88px;padding:14px 8px;text-align:center;font-size:14px;line-height:1.35}
+    .sr .oc .ck{width:20px;height:20px}
+    @media (max-width:750px){
+      .ab{grid-template-columns:minmax(0,1fr)}
+      .sr{grid-template-columns:minmax(0,1fr)}
+      .sr .oc{flex-direction:row;justify-content:flex-start;min-height:56px;padding:10px 16px;text-align:left;font-size:17px}
+    }
+
+    /* agree or disagree */
+    .quote{padding:18px 20px;border-left:2px solid #393533;background:#F2F0ED;font-size:19px;line-height:1.6;color:#393533}
+    .lk{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0 1px 1px 0}
+    .lk .oc{flex-direction:column;justify-content:center;gap:10px;min-height:88px;padding:14px 8px;text-align:center;font-size:14px;line-height:1.35}
+    @media (max-width:750px){
+      .lk{grid-template-columns:minmax(0,1fr)}
+      .lk .oc{flex-direction:row;justify-content:flex-start;min-height:56px;padding:10px 16px;text-align:left;font-size:17px}
+    }
+
+    /* image upload */
+    .upw{display:grid;gap:12px}
+    .up{position:relative;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;padding:20px 24px;border:1px solid #c8c3bb;cursor:pointer}
+    .up:focus-within,.up.drag{border-color:#393533}
+    .upt{display:grid;gap:2px}
+    .up1{font-size:19px;line-height:1.5;color:#393533}
+    .up2{font-size:17px;line-height:1.6;color:#54504c}
+    .up input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}
+    .thumbs{display:flex;flex-wrap:wrap;gap:12px}
+    .th{display:grid;gap:6px;width:120px}
+    .th img{display:block;width:120px;height:90px;object-fit:cover}
+    .th button{justify-self:start;min-height:32px;padding:4px 0;background:none;border:0;font-size:14px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:#7a746e;cursor:pointer}
+    .th button:hover{color:#393533}
+
+    /* end of each stage */
+    .p-end{display:grid;gap:12px;margin-top:8px;padding:48px 0 0;border-top:1px solid #c8c3bb}
+    .p-end .t{font-size:clamp(23px,2vw,30px);line-height:1.3;letter-spacing:-.01em;color:#393533}
+    .acts{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:28px}
+    .consent{display:flex;gap:14px;align-items:flex-start;width:100%;margin:0;padding:18px 16px;border:1px solid #c8c3bb;background:transparent;border-radius:0;color:#393533;font-size:17px;font-weight:300;line-height:1.6;text-align:left;cursor:pointer}
+    .consent .ck{margin-top:4px}
+    .consent[aria-checked="true"]{border-color:#393533}
+    .consent.bad{border-color:#393533;border-width:2px}
+    .cd p.err{font-size:17px;line-height:1.6;color:#393533}
+
+    /* buttons */
+    .btn-fill,.btn-outline{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin:0;padding:12px 28px;border-radius:0;font-family:inherit;font-size:14px;font-weight:400;line-height:1.3;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;transition:all .2s ease;text-align:center}
+    .btn-fill{background:#393533;color:#FAF9F6;border:1px solid #393533}
+    .btn-fill:hover{opacity:.85}
+    .btn-fill:disabled{opacity:.6;cursor:default}
+    .btn-outline{background:transparent;color:#393533;border:1px solid #c8c3bb}
+    .btn-outline:hover,.up:hover .btn-outline{background:#393533;color:#FAF9F6;border-color:#393533}
+    .cd button:focus-visible,.cd a:focus-visible{outline:1px solid #393533;outline-offset:2px}
+    .oc:focus-visible,.tab:focus-visible{outline-offset:-5px}
+
+    /* thank you */
+    .done{display:grid;gap:24px;padding:72px 0 40px;max-width:680px}
+    .cd p.prev{padding:14px 18px;border:1px solid #c8c3bb;font-size:17px;line-height:1.6;color:#393533}
+    .cd p.motto{font-size:clamp(21px,1.7vw,25px);color:#393533}
+
+    .cd-foot{max-width:900px;margin:0 auto;padding:40px clamp(24px,5vw,64px) 64px}
+
+    /* spam trap: hidden from people, bots fill it in */
+    .hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+
+    /* print-friendly summary (Review your answers) */
+    .cd-print{display:none}
+    @media print{
+      .cd{display:none}
+      .cd-print{display:block;color:#393533;font-size:12pt;line-height:1.5}
+      .cd-print h1{font-weight:400;font-size:20pt;margin:0 0 4pt}
+      .cd-print h2{font-weight:500;font-size:13pt;margin:18pt 0 6pt;padding-top:8pt;border-top:1px solid #c8c3bb}
+      .cd-print dt{font-weight:500;margin-top:8pt}
+      .cd-print dd{margin:2pt 0 0;white-space:pre-wrap}
+      .cd-print .pics{display:flex;flex-wrap:wrap;gap:6pt;margin-top:6pt}
+      .cd-print .pics img{width:90pt;height:68pt;object-fit:cover}
+    }
+  </style>
+</head>
+<body>
+<div class="cd" data-endpoint={ENDPOINT} data-tabs={JSON.stringify(TABS)}>
+  <div class="cd-row">
+    <a class="cd-home" href="/"><img class="cd-logo" src={P + 'logo.png'} alt="Thorne Group" width="559" height="48" /></a>
+    <span class="cd-lab">Client discovery</span>
+  </div>
+
+  <div class="cd-wrap" data-intro>
+    <div class="cd-hero">
+      <div class="eb"><span class="t">The client discovery journey</span></div>
+      <h1>Finding the right architect starts with <strong>you</strong>.</h1>
+      <div class="ps">
+        <p>Three short stages: your life and project, your architectural outlook, and how you like to work.</p>
+        <p>Answer what you can. Your answers save on this device as you go, so you can stop and come back.</p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="tabs" data-tabbar>
+    <div class="tabs-in" role="tablist" aria-label="Stages">
+      {TABS.map((t, j) => (
+        <button type="button" class="tab" role="tab" id={`tab-${j + 1}`} aria-controls={`stage-${j + 1}`} aria-selected={j === 0 ? 'true' : 'false'} tabindex={j === 0 ? 0 : -1} data-tab={j + 1}>
+          <span class="tab-n">{t.n}</span>
+          <span class="tab-t"><span class="lg">{t.tab}</span><span class="sh">{t.short}</span></span>
+          <span class="tab-s" data-status={j + 1}>{t.count} questions</span>
+        </button>
+      ))}
+    </div>
+  </nav>
+
+  <main class="cd-wrap">
+    {STAGES.map((s, j) => (
+      <section class="panel" role="tabpanel" id={`stage-${j + 1}`} aria-labelledby={`tab-${j + 1}`} data-stage={j + 1} hidden={j > 0}>
+        <div class="p-head">
+          <div class="eb"><span>Stage {j + 1}</span><span class="t">{s.tab}</span></div>
+          <h2 set:html={s.h} />
+          <div class="ps">{s.intro.map((p) => <p>{p}</p>)}</div>
+        </div>
+
+        {s.qs.map((qq) => (
+          <div class="q" data-q={qq.n}>
+            <span class="qn">{pad(qq.n)}</span>
+            <div class="ql">{qq.q}</div>
+            {qq.help && <div class="qh">{qq.help}</div>}
+            {qq.items.map(function render(it: Item): any {
+              if (it.i === 'fields') return (
+                <div class="fg">
+                  {it.fields.map((f) => (
+                    <label class="fl">
+                      <span>{f.label}</span>
+                      <input class="in" name={f.name} type={f.type || 'text'} autocomplete={f.ac} />
+                      {f.req && <span class="fmsg" hidden>{MSG}</span>}
+                    </label>
+                  ))}
+                </div>
+              );
+              if (it.i === 'sub') return <div class="sub"><span>{it.t}</span>{it.help && <span>{it.help}</span>}</div>;
+              if (it.i === 'input') return <div class="inw"><input class="in" name={it.name} aria-label={it.aria} placeholder="Town or region" /></div>;
+              if (it.i === 'area') return <textarea class="in" name={it.name} aria-label={it.aria}></textarea>;
+              if (it.i === 'radio') {
+                const rich = it.opts.some((o) => o.length === 3);
+                return (
+                  <div class={rich ? 'og one' : 'og'} role="radiogroup" aria-label={qq.q}>
+                    {it.opts.map((o) => (
+                      <button type="button" class={o.length === 3 ? 'oc rich' : 'oc'} role="radio" aria-checked="false" data-radio={it.group} data-val={o[0]}>
+                        <span class="ck"></span>
+                        {o.length === 3 ? <span class="tx"><b>{o[1]}</b><i>{o[2]}</i></span> : <span>{o[1]}</span>}
+                      </button>
+                    ))}
+                  </div>
+                );
+              }
+              if (it.i === 'check') {
+                const rich = it.opts.some((o) => o.length === 3) || it.opts.some((o) => o[1].length > 60);
+                return (
+                  <div class="ckw" data-max={it.max}>
+                    <div class={rich ? 'og one' : 'og'}>
+                      {it.opts.map((o) => (
+                        <button type="button" class={o.length === 3 ? 'oc rich' : 'oc'} role="checkbox" aria-checked="false" data-opt={o[0]}>
+                          <span class="ck"></span>
+                          {o.length === 3 ? <span class="tx"><b>{o[1]}</b><i>{o[2]}</i></span> : <span>{o[1]}</span>}
+                        </button>
+                      ))}
+                      {it.other && <label class="oth" data-other-for={it.opts[it.opts.length - 1][0]} hidden><span>{it.other[1]}</span><input name={it.other[0]} /></label>}
+                    </div>
+                    {it.max && <div class="cnt" aria-live="polite" data-cnt></div>}
+                  </div>
+                );
+              }
+              if (it.i === 'scale') return (
+                <div class="sc">
+                  <div class="ab">
+                    <div class="abc"><b>A</b><span>{it.a}</span></div>
+                    <div class="abc"><b>B</b><span>{it.b}</span></div>
+                  </div>
+                  <div class="sr" role="radiogroup" aria-label={qq.q}>
+                    {SCALE.map(([v, l]) => <button type="button" class="oc" role="radio" aria-checked="false" data-radio={it.group} data-val={v}><span class="ck"></span><span>{l}</span></button>)}
+                  </div>
+                </div>
+              );
+              if (it.i === 'likert') return (
+                <div class="sc">
+                  <div class="quote">{it.quote}</div>
+                  <div class="lk" role="radiogroup" aria-label={qq.q}>
+                    {LIKERT.map(([v, l]) => <button type="button" class="oc" role="radio" aria-checked="false" data-radio={it.group} data-val={v}><span class="ck"></span><span>{l}</span></button>)}
+                  </div>
+                </div>
+              );
+              if (it.i === 'top') return (
+                <div>
+                  <div class="empty" data-top-empty>Your choices from question 5 will appear here.</div>
+                  <div class="og one" role="radiogroup" aria-label={qq.q}>
+                    {LIFE.map((o) => <button type="button" class="oc" role="radio" aria-checked="false" data-radio="s6_top" data-val={o[0]} hidden><span class="ck"></span><span>{o[1]}</span></button>)}
+                  </div>
+                </div>
+              );
+              if (it.i === 'upload') return (
+                <div class="upw">
+                  <label class="up">
+                    <span class="upt"><span class="up1">Add a few images</span><span class="up2">Drop images here, or choose them from your device.</span></span>
+                    <span class="btn-outline">Choose images</span>
+                    <input type="file" accept="image/*" multiple data-upload={it.zone} aria-label={it.aria} />
+                  </label>
+                  <div class="thumbs" data-thumbs={it.zone} hidden></div>
+                </div>
+              );
+              return <div class="when" data-when={it.group} data-vals={it.vals.join(' ')} hidden>{it.items.map(render)}</div>;
+            })}
+          </div>
+        ))}
+
+        {s.next ? (
+          <div class="p-end">
+            <span class="t">{s.next[0]}</span>
+            <p>{s.next[1]}</p>
+            <div class="acts"><button type="button" class="btn-fill" data-tab={j + 2}>Continue to stage {j + 2}: {STAGES[j + 1].tab}</button></div>
+          </div>
+        ) : (
+          <div class="p-end">
+            <span class="t">Before you send.</span>
+            <p>We share your profile only with architects we think could suit you, and only with your permission.</p>
+            <button type="button" class="consent" role="checkbox" aria-checked="false" data-consent>
+              <span class="ck"></span>
+              <span>I agree that Thorne Group may share this profile with the architects it recommends for my project.</span>
+            </button>
+            <p class="err" data-consent-msg hidden>Please tick the box above so we can send your profile.</p>
+            <p class="err" data-send-err role="alert" hidden>Your profile did not send. Your answers are still saved on this device. Try again, or email <a href="mailto:info@thornegroup.co.nz">info@thornegroup.co.nz</a>.</p>
+            <div class="acts"><button type="button" class="btn-fill" data-submit>Send my profile</button></div>
+          </div>
+        )}
+      </section>
+    ))}
+
+    <section class="done" data-done hidden>
+      <div class="eb"><span class="t">Your profile is complete</span></div>
+      <h1>Thank <strong>you</strong>.</h1>
+      <p class="prev" hidden>Preview only. Nothing was sent. On the live site this step sends your profile to Thorne Group.</p>
+      <div class="ps">
+        <p>We’ve learned about your project, your lifestyle, your architectural preferences and the type of working relationship you’re looking for.</p>
+        <p>We’ll use this information to identify architects whose experience, creative approach and way of working could be a great fit for you.</p>
+        <p>Once you’ve found the right architect, they’ll guide you through developing your detailed architectural brief and design.</p>
+      </div>
+      <p class="motto">Your life. Your project. <strong>The right architect.</strong></p>
+      <div class="acts"><button type="button" class="btn-outline" data-review>Review your answers</button></div>
+    </section>
+
+    <div class="hp" aria-hidden="true"><label>Leave this empty <input data-hp tabindex="-1" autocomplete="off" /></label></div>
+  </main>
+
+  <div class="cd-foot" data-intro>
+    <p class="small">Your details are confidential. Read our <a href="/privacy-statement">privacy statement</a>.</p>
+  </div>
+</div>
+<div class="cd-print" aria-hidden="true"></div>
+
+<script is:inline>
+(() => {
+  const KEY = 'tg-client-discovery-v1';
+  const root = document.querySelector('.cd');
+  const ENDPOINT = root.dataset.endpoint || '';
+  const TABS = JSON.parse(root.dataset.tabs);
+  const $ = (s, el) => (el || root).querySelector(s);
+  const $$ = (s, el) => [...(el || root).querySelectorAll(s)];
+  const pad = (n) => String(n).padStart(2, '0');
+  const WORDS = ['', 'one', 'two', 'three', 'four'];
+  const load = () => { try { return JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { return {}; } };
+  const saved = load();
+  const query = new URLSearchParams(location.search);
+  const st = {
+    tab: Math.max(1, Math.min(3, parseInt(query.get('tab'), 10) || saved.tab || 1)),
+    sel: saved.sel || {}, text: saved.text || {}, files: saved.files || {}, consent: !!saved.consent
+  };
+  let sent = null, sending = false, timer = 0;
+
+  // autosave (debounced); if the images make it too big for storage, save without them
+  function save() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      const data = { tab: st.tab, sel: st.sel, text: st.text, files: st.files, consent: st.consent };
+      try { localStorage.setItem(KEY, JSON.stringify(data)); }
+      catch (e) { try { localStorage.setItem(KEY, JSON.stringify(Object.assign({}, data, { files: {} }))); } catch (e2) {} }
+    }, 200);
+  }
+
+  // a question counts as answered once anything in it is chosen or typed
+  function answered(q) {
+    if ($$('[aria-checked="true"]', q).some((el) => !el.closest('.when[hidden]'))) return true;
+    if ($$('input[name], textarea[name]', q).some((el) => (st.text[el.name] || '').trim())) return true;
+    return $$('[data-upload]', q).some((el) => (st.files[el.dataset.upload] || []).length);
+  }
+  function status() {
+    $$('[data-stage]').forEach((p) => {
+      const qs = $$('.q', p), n = qs.filter(answered).length;
+      $('[data-status="' + p.dataset.stage + '"]').textContent = n ? n + ' of ' + qs.length + ' answered' : qs.length + ' questions';
+    });
+  }
+
+  function showTab(n, scroll) {
+    st.tab = n;
+    $$('.tab').forEach((t) => {
+      const on = +t.dataset.tab === n;
+      t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+    });
+    $$('[data-stage]').forEach((p) => { p.hidden = +p.dataset.stage !== n; });
+    if (scroll) {
+      const bar = $('[data-tabbar]');
+      const y = bar.getBoundingClientRect().top + window.scrollY;
+      if (window.scrollY > y) window.scrollTo(0, y);
+    }
+    save();
+  }
+
+  // limits: "choose up to three" greys out the rest once three are ticked
+  function limits() {
+    $$('.ckw[data-max]').forEach((w) => {
+      const max = +w.dataset.max, opts = $$('[data-opt]', w);
+      const n = opts.filter((o) => st.sel[o.dataset.opt]).length;
+      opts.forEach((o) => { if (!st.sel[o.dataset.opt] && n >= max) o.setAttribute('aria-disabled', 'true'); else o.removeAttribute('aria-disabled'); });
+      const c = $('[data-cnt]', w);
+      c.textContent = n ? n + ' of ' + max + ' chosen' + (n >= max ? '. Untick one to change.' : '.') : '';
+      c.classList.toggle('full', n >= max);
+    });
+    // "other" text boxes appear when their tick box is ticked
+    $$('[data-other-for]').forEach((o) => { o.hidden = !st.sel[o.dataset.otherFor]; });
+  }
+
+  // question 6 lists only what was ticked in question 5
+  function top() {
+    const opts = $$('[data-radio="s6_top"]');
+    let any = false;
+    opts.forEach((o) => { const on = !!st.sel[o.dataset.val]; o.hidden = !on; any = any || on; });
+    if (st.sel.s6_top && !st.sel[st.sel.s6_top]) { st.sel.s6_top = ''; radios('s6_top'); }
+    $('[data-top-empty]').hidden = any;
+  }
+
+  function radios(g) { $$('[data-radio="' + g + '"]').forEach((r) => r.setAttribute('aria-checked', String(st.sel[g] === r.dataset.val))); }
+  function whens() { $$('[data-when]').forEach((w) => { w.hidden = !w.dataset.vals.split(' ').includes(st.sel[w.dataset.when]); }); }
+  function refresh() { limits(); top(); whens(); status(); }
+
+  function thumbs(z) {
+    const box = $('[data-thumbs="' + z + '"]');
+    if (!box) return;
+    box.replaceChildren(...(st.files[z] || []).filter(Boolean).map((f) => {
+      const d = document.createElement('div'); d.className = 'th';
+      const im = new Image(); im.src = f.url; im.alt = f.name || '';
+      const b = document.createElement('button'); b.type = 'button'; b.textContent = 'Remove';
+      b.dataset.remove = z + ':' + f.id; b.setAttribute('aria-label', 'Remove ' + (f.name || 'image'));
+      d.append(im, b); return d;
+    }));
+    box.hidden = !box.children.length;
+  }
+  // a small copy of each chosen image, kept with the answers
+  function thumb(file) {
+    return new Promise((res) => {
+      const url = URL.createObjectURL(file), img = new Image();
+      img.onload = () => {
+        const k = Math.min(1, 480 / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        URL.revokeObjectURL(url);
+        res({ id: Math.random().toString(36).slice(2, 9), name: file.name, url: c.toDataURL('image/jpeg', 0.8) });
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); res(null); };
+      img.src = url;
+    });
+  }
+
+  // restore saved answers into the page
+  $$('input[name], textarea[name]').forEach((el) => { const v = st.text[el.name]; if (v != null) el.value = v; });
+  $$('[data-opt]').forEach((el) => el.setAttribute('aria-checked', String(!!st.sel[el.dataset.opt])));
+  [...new Set($$('[data-radio]').map((el) => el.dataset.radio))].forEach(radios);
+  $$('[data-thumbs]').forEach((el) => thumbs(el.dataset.thumbs));
+  $('[data-consent]').setAttribute('aria-checked', String(st.consent));
+
+  root.addEventListener('click', (e) => {
+    const el = e.target.closest('[data-opt],[data-radio],[data-remove],[data-tab],[data-consent],[data-submit],[data-review]');
+    if (!el) return;
+    if (el.dataset.opt) {
+      if (el.getAttribute('aria-disabled') === 'true') return;
+      const k = el.dataset.opt;
+      if (st.sel[k]) delete st.sel[k]; else st.sel[k] = true;
+      el.setAttribute('aria-checked', String(!!st.sel[k]));
+      refresh(); save(); return;
+    }
+    if (el.dataset.radio) {
+      const g = el.dataset.radio;
+      st.sel[g] = st.sel[g] === el.dataset.val ? '' : el.dataset.val;
+      radios(g); refresh(); save(); return;
+    }
+    if (el.dataset.remove) {
+      const [z, id] = el.dataset.remove.split(':');
+      st.files[z] = (st.files[z] || []).filter((f) => f && f.id !== id);
+      thumbs(z); status(); save(); return;
+    }
+    if (el.hasAttribute('data-consent')) {
+      st.consent = !st.consent;
+      el.setAttribute('aria-checked', String(st.consent));
+      if (st.consent) { el.classList.remove('bad'); $('[data-consent-msg]').hidden = true; }
+      save(); return;
+    }
+    if (el.hasAttribute('data-submit')) return submit();
+    if (el.hasAttribute('data-review')) return printSummary();
+    showTab(+el.dataset.tab, true);
+  });
+
+  // arrow keys move between the stage tabs
+  $('[role="tablist"]').addEventListener('keydown', (e) => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    const n = ((st.tab - 1 + (e.key === 'ArrowRight' ? 1 : 2)) % 3) + 1;
+    showTab(n, false); $('#tab-' + n).focus(); e.preventDefault();
+  });
+
+  root.addEventListener('input', (e) => {
+    const t = e.target;
+    if (!t.name || t.type === 'file') return;
+    st.text[t.name] = t.value;
+    const fl = t.closest('.fl.bad');
+    if (fl) { fl.classList.remove('bad'); $('.fmsg', fl).hidden = true; }
+    status(); save();
+  });
+
+  root.addEventListener('change', (e) => {
+    const t = e.target, z = t.dataset && t.dataset.upload;
+    if (!z || !t.files || !t.files.length) return;
+    const list = [...t.files].filter((f) => /^image\//.test(f.type)).slice(0, 12);
+    t.value = '';
+    t.closest('.up').classList.remove('drag');
+    Promise.all(list.map(thumb)).then((items) => {
+      const ok = items.filter(Boolean);
+      if (!ok.length) return;
+      st.files[z] = (st.files[z] || []).concat(ok).slice(-12);
+      thumbs(z); status(); save();
+    });
+  });
+  ['dragenter', 'dragover'].forEach((ev) => root.addEventListener(ev, (e) => { const u = e.target.closest && e.target.closest('.up'); if (u) u.classList.add('drag'); }));
+  ['dragleave', 'drop'].forEach((ev) => root.addEventListener(ev, (e) => { const u = e.target.closest && e.target.closest('.up'); if (u) u.classList.remove('drag'); }));
+
+  // the profile as labelled answers, stage by stage (unanswered questions left out)
+  function build() {
+    const secs = [];
+    $$('[data-stage]').forEach((p) => {
+      const n = +p.dataset.stage, rows = [], pics = [];
+      $$('.q', p).forEach((q) => {
+        const lines = [];
+        $$('.fl', q).forEach((fl) => { const v = (st.text[$('input', fl).name] || '').trim(); if (v) lines.push($('span', fl).textContent + ': ' + v); });
+        const scale = $('.ab', q);
+        q.querySelectorAll('.sub, .og, .sc, .inw, textarea.in, .upw').forEach((el) => {
+          if (el.closest('.when[hidden]')) return;
+          if (el.matches('.sub')) { lines.push('[' + $('span', el).textContent + ']'); return; }
+          if (el.matches('.og')) {
+            const ticks = $$('[aria-checked="true"]', el).filter((o) => !o.hidden).map((o) => { const b = $('b', o); return b ? b.textContent : o.textContent.trim(); });
+            if (ticks.length) lines.push(ticks.join(', '));
+            $$('.oth', el).forEach((o) => { const v = (st.text[$('input', o).name] || '').trim(); if (!o.hidden && v) lines.push($('span', o).textContent + ': ' + v); });
+            return;
+          }
+          if (el.matches('.sc')) {
+            const on = $('[aria-checked="true"]', el);
+            if (!on) return;
+            if (scale) lines.push('A: ' + $$('.abc span', el)[0].textContent + '\nB: ' + $$('.abc span', el)[1].textContent + '\nAnswer: ' + on.textContent.trim() + ' (' + on.dataset.val + ' of 5)');
+            else lines.push(on.textContent.trim());
+            return;
+          }
+          if (el.matches('.upw')) {
+            const f = (st.files[$('[data-upload]', el).dataset.upload] || []).filter(Boolean);
+            if (f.length) { lines.push(f.length + (f.length === 1 ? ' image added' : ' images added')); f.forEach((x) => pics.push(x.url)); }
+            return;
+          }
+          const i = el.matches('.inw') ? $('input', el) : el;
+          const v = (st.text[i.name] || '').trim(); if (v) lines.push(v);
+        });
+        // drop sub-headings that have no answer under them
+        const clean = lines.filter((l, k) => !(l[0] === '[' && (k === lines.length - 1 || lines[k + 1][0] === '['))).map((l) => l[0] === '[' ? l.slice(1, -1) + ':' : l);
+        if (clean.length) rows.push([pad(+q.dataset.q) + '. ' + $('.ql', q).textContent, clean.join('\n')]);
+      });
+      if (rows.length) secs.push({ n, title: TABS[n - 1].tab, rows, pics });
+    });
+    const text = secs.map((s) => 'Stage ' + s.n + ': ' + s.title + '\n\n' + s.rows.map(([l, v]) => l + '\n' + v).join('\n\n')).join('\n\n\n');
+    return { secs, text };
+  }
+
+  function printSummary() {
+    const box = document.querySelector('.cd-print');
+    const el = (tag, text) => { const x = document.createElement(tag); if (text != null) x.textContent = text; return x; };
+    box.replaceChildren(el('h1', 'Client discovery'), el('div', 'Thorne Group'));
+    (sent || build()).secs.forEach((s) => {
+      box.append(el('h2', 'Stage ' + s.n + ': ' + s.title));
+      const dl = el('dl');
+      s.rows.forEach(([l, v]) => dl.append(el('dt', l), el('dd', v)));
+      box.append(dl);
+      if (s.pics.length) { const p = el('div'); p.className = 'pics'; s.pics.forEach((u) => { const im = new Image(); im.src = u; im.alt = ''; p.append(im); }); box.append(p); }
+    });
+    window.print();
+  }
+
+  function mark(name, bad) {
+    const fl = $('[name="' + name + '"]').closest('.fl');
+    fl.classList.toggle('bad', bad); $('.fmsg', fl).hidden = !bad;
+  }
+
+  function finish(brief, preview) {
+    sent = brief;
+    $$('[data-stage], [data-tabbar], [data-intro]').forEach((x) => { x.hidden = true; });
+    $('.prev').hidden = !preview;
+    $('[data-done]').hidden = false;
+    window.scrollTo(0, 0);
+  }
+
+  async function submit() {
+    if (sending) return;
+    const name = (st.text.s1_name || '').trim(), email = (st.text.s1_email || '').trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    mark('s1_name', !name); mark('s1_email', !emailOk);
+    if (!name || !emailOk) {
+      showTab(1, true);
+      const first = $('.fl.bad .in');
+      if (first) { first.closest('.q').scrollIntoView(); first.focus({ preventScroll: true }); }
+      return;
+    }
+    if (!st.consent) { $('[data-consent]').classList.add('bad'); $('[data-consent-msg]').hidden = false; $('[data-consent]').focus(); return; }
+    const brief = build();
+    if ($('[data-hp]').value) return finish(brief, false);
+    if (!ENDPOINT) return finish(brief, true);
+    const btn = $('[data-submit]'), err = $('[data-send-err]');
+    sending = true; btn.disabled = true; btn.textContent = 'Sending…'; err.hidden = true;
+    try {
+      const r = await fetch(ENDPOINT, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contact: name, email, phone: st.text.s1_phone || '', site: st.text.s3_location || '', summary: brief.text })
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      clearTimeout(timer);
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      finish(brief, false);
+    } catch (e) {
+      err.hidden = false;
+    } finally {
+      sending = false; btn.disabled = false; btn.textContent = 'Send my profile';
+    }
+  }
+
+  refresh();
+  showTab(st.tab, false);
+})();
+</script>
+</body>
+</html>
