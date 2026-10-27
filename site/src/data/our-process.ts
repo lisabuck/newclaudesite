@@ -10,13 +10,15 @@ const tick = (i: string) => `<li><span class="mk"></span><span>${i}</span></li>`
 const ticks = (items: string[], two = false) =>
   '<ul class="ticks' + (two ? ' two' : '') + '">' + items.map(tick).join('') + '</ul>';
 
-export type Step = { n: number; title: string; sum: string; price?: number; id: string; pos: string; alt: string; more: string };
+/* textOnly: the pop-up leaves the photo out so the text has the full width
+   (step 2, where the two options sit side by side). */
+export type Step = { n: number; title: string; sum: string; price?: number; textOnly?: boolean; id: string; pos: string; alt: string; more: string };
 
 export const STEPS: Step[] = [
   { n: 1, title: 'Complete the Design Brief', sum: 'Your site, how you want to live, your priorities, style and budget.',
     id: 'b2375c_70854ba20b7d4ce4ae68d390bd3e5cb1~mv2.jpg', pos: '55% 50%', alt: 'A house design on an iPad beside architecture books',
     more: p('We start by understanding the site, how you want to live, your priorities, style, budget and what is most important to you.') + p('This gives us a clear brief to work from before design begins.') },
-  { n: 2, title: 'Match the Right Architect or Architectural Designer', sum: 'We recommend the architect or designer best suited to your project.',
+  { n: 2, title: 'Match the Right Architect or Architectural Designer', sum: 'We recommend the architect or designer best suited to your project.', textOnly: true,
     id: 'b2375c_1c8bb5882e124aaa9fb80ee64c5fd9b5~mv2.jpg', pos: '50% 35%', alt: 'Three people looking through designs on an iPad',
     more: p('Based on the brief, we recommend the architect or designer we think is best suited to the project, considering style, budget, site, project complexity and how they work.') + p('There are two ways we can approach this:') +
       '<div class="opts"><div class="opt"><span class="tag">Option A</span><h3>Select one architect</h3><p>We recommend the architect we believe is the best fit and move directly into the concept design process with them.</p></div>' +
