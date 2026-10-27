@@ -29,10 +29,10 @@ type Q = { q: string; help?: string; items: Item[] };
 type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; next?: [string, string] };
 
 const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
-// agree or disagree, as a 1 to 5 slider (1 is strongly agree)
-const AGREE = ['Strongly agree', 'Agree', 'Neither agree nor disagree', 'Disagree', 'Strongly disagree'];
+// agree or disagree, as a 1 to 5 slider (1 is strongly disagree, 5 is strongly agree)
+const AGREE = ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'];
 // A or B, as a 1 to 5 slider (1 is statement A, 5 is statement B)
-const SCALE = ['A', 'Closer to A', 'In the middle', 'Closer to B', 'B'];
+const SCALE = ['Strongly agree with A', 'Agree with A', 'Neutral', 'Agree with B', 'Strongly agree with B'];
 
 // Q5 options, reused by Q6 (which of these matters most)
 const LIFE: Opt[] = [
@@ -158,8 +158,8 @@ const STAGES: Stage[] = [
   { tab: 'Your ideal architect', short: 'Your architect', h: 'The right relationship makes all the <strong>difference</strong>.',
     intro: ['Creating a home is a personal and collaborative journey. Architects have different ways of developing ideas, communicating, managing their work and involving clients.', 'We’d love to understand what makes a working relationship successful for you.'],
     qs: [
-      { q: 'How important is a clearly structured process?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's21_agree', quote: '“I like to know what happens next, what decisions are required of me, and when key stages are expected to be completed.”' }] },
-      { q: 'How comfortable are you with the creative process being fluid?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's22_agree', quote: '“I understand that design ideas can evolve as possibilities are explored, and I’m comfortable with some uncertainty as the design develops.”' }] },
+      { q: 'How important is a clearly structured process?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's21_agreement', quote: '“I like to know what happens next, what decisions are required of me, and when key stages are expected to be completed.”' }] },
+      { q: 'How comfortable are you with the creative process being fluid?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's22_agreement', quote: '“I understand that design ideas can evolve as possibilities are explored, and I’m comfortable with some uncertainty as the design develops.”' }] },
       { q: 'How involved would you like to be in the design journey?', items: [{ i: 'scale', group: 's23', a: 'I enjoy being involved in exploring ideas, reviewing options and making decisions along the way.', b: 'I prefer to establish my aspirations and trust the architect to develop and present considered recommendations.' }] },
       { q: 'How would you like your architect to approach your ideas?', items: [{ i: 'scale', group: 's24', a: 'I want an architect who carefully listens to my ideas and works closely with them.', b: 'I want an architect who will confidently challenge my thinking and introduce ideas I may never have considered.' }] },
       { q: 'How would you prefer design ideas to be presented?', items: [{ i: 'scale', group: 's25', a: 'I prefer to see well-developed, considered concepts rather than lots of early possibilities.', b: 'I enjoy seeing the creative thinking unfold and exploring different concepts before settling on a direction.' }] },
@@ -500,13 +500,13 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
                     <div class="abc"><b>A</b><span>{it.a}</span></div>
                     <div class="abc"><b>B</b><span>{it.b}</span></div>
                   </div>
-                  {slide(it.group, SCALE, `${qq.q} 1 is statement A, 5 is statement B.`)}
+                  {slide(it.group, SCALE, `${qq.q} 1 is strongly agree with A, 5 is strongly agree with B.`)}
                 </div>
               );
               if (it.i === 'agree') return (
                 <div class="sc">
                   <div class="quote">{it.quote}</div>
-                  {slide(it.group, AGREE, `${qq.q} 1 is strongly agree, 5 is strongly disagree.`)}
+                  {slide(it.group, AGREE, `${qq.q} 1 is strongly disagree, 5 is strongly agree.`)}
                 </div>
               );
               if (it.i === 'top') return (
@@ -812,8 +812,8 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
             const sl = $('[data-slider]', el), v = st.sel[sl.dataset.slider], ab = $$('.abc span', el);
             if (!v) return;
             const label = $$('.sl-l', sl)[v - 1].textContent;
-            if (ab.length) lines.push('A: ' + ab[0].textContent + '\nB: ' + ab[1].textContent + '\nAnswer: ' + label + ' (' + v + ' on a scale of 1 to 5, where 1 is A and 5 is B)');
-            else lines.push(label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly agree)');
+            if (ab.length) lines.push('A: ' + ab[0].textContent + '\nB: ' + ab[1].textContent + '\nAnswer: ' + label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly agree with A and 5 is strongly agree with B)');
+            else lines.push(label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly disagree and 5 is strongly agree)');
             return;
           }
           if (el.matches('.upw')) {
