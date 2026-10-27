@@ -32,7 +32,8 @@ type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; 
 const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
 // agree or disagree, as a 1 to 5 slider (1 is strongly agree)
 const AGREE = ['Strongly agree', 'Agree', 'Neither agree nor disagree', 'Disagree', 'Strongly disagree'];
-const SCALE: [string, string][] = [['1', 'A'], ['2', 'Closer to A'], ['3', 'In the middle'], ['4', 'Closer to B'], ['5', 'B']];
+// A or B, as a 1 to 5 slider (1 is statement A, 5 is statement B)
+const SCALE = ['A', 'Closer to A', 'In the middle', 'Closer to B', 'B'];
 
 // Q5 options, reused by Q6 (which of these matters most)
 const LIFE: Opt[] = [
@@ -311,19 +312,12 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
     .oth input:focus{border-bottom-color:#393533}
     .empty{padding:18px 16px;border:1px dashed #c8c3bb;font-size:17px;line-height:1.6;color:#54504c}
 
-    /* A or B, on a five-point scale */
+    /* A or B: the two statements, then a 1 to 5 slider between them */
     .sc{display:grid;gap:16px}
     .ab{display:grid;grid-template-columns:1fr 1fr;padding:0 1px 1px 0}
     .abc{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;margin:0 -1px -1px 0;padding:18px 20px;border:1px solid #c8c3bb;background:#F2F0ED;font-size:17px;line-height:1.6;color:#393533}
     .abc b{font-size:14px;font-weight:500;letter-spacing:.2em;padding-top:2px}
-    .sr{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));padding:0 1px 1px 0}
-    .sr .oc{flex-direction:column;justify-content:center;gap:10px;min-height:88px;padding:14px 8px;text-align:center;font-size:14px;line-height:1.35}
-    .sr .oc .ck{width:20px;height:20px}
-    @media (max-width:750px){
-      .ab{grid-template-columns:minmax(0,1fr)}
-      .sr{grid-template-columns:minmax(0,1fr)}
-      .sr .oc{flex-direction:row;justify-content:flex-start;min-height:56px;padding:10px 16px;text-align:left;font-size:17px}
-    }
+    @media (max-width:750px){ .ab{grid-template-columns:minmax(0,1fr)} }
 
     /* agree or disagree: a 1 to 5 slider. The track is inset so the circle
        stops exactly above each number (each number sits in a fifth). */
@@ -346,6 +340,7 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
     .sl-n:hover,.sl-n.on{color:#393533}
     .sl-n.on b{font-weight:500}
     .sl-ends{display:none;justify-content:space-between;gap:16px;margin-top:6px;font-size:14px;line-height:1.4;color:#7a746e}
+    .sl-ends span{min-width:20%;text-align:center}
     .sl-out{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 16px;min-height:44px;margin-top:12px;font-size:17px;line-height:1.5;color:#54504c}
     .sl-out b{font-weight:500;color:#393533}
     .sl-clear{min-height:44px;padding:4px 0;background:none;border:0;font-size:14px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:#7a746e;cursor:pointer}
@@ -455,6 +450,16 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
             <div class="ql">{qq.q}</div>
             {qq.help && <div class="qh">{qq.help}</div>}
             {qq.items.map(function render(it: Item): any {
+              const slide = (group: string, labels: string[], aria: string) => (
+                <div class="sl" data-slider={group}>
+                  <input type="range" class="sl-in unset" min="1" max="5" step="1" value="3" aria-label={aria} aria-valuetext="Not answered yet" />
+                  <div class="sl-scale" aria-hidden="true">
+                    {labels.map((l, k) => <span class="sl-n" data-pick={k + 1}><b>{k + 1}</b><span class="sl-l">{l}</span></span>)}
+                  </div>
+                  <div class="sl-ends" aria-hidden="true"><span>{labels[0]}</span><span>{labels[4]}</span></div>
+                  <div class="sl-out"><span data-out>Not answered yet. Slide the circle, or tap a number.</span><button type="button" class="sl-clear" data-clear hidden>Clear</button></div>
+                </div>
+              );
               if (it.i === 'fields') return (
                 <div class="fg">
                   {it.fields.map((f) => (
@@ -505,22 +510,13 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
                     <div class="abc"><b>A</b><span>{it.a}</span></div>
                     <div class="abc"><b>B</b><span>{it.b}</span></div>
                   </div>
-                  <div class="sr" role="radiogroup" aria-label={qq.q}>
-                    {SCALE.map(([v, l]) => <button type="button" class="oc" role="radio" aria-checked="false" data-radio={it.group} data-val={v}><span class="ck"></span><span>{l}</span></button>)}
-                  </div>
+                  {slide(it.group, SCALE, `${qq.q} 1 is statement A, 5 is statement B.`)}
                 </div>
               );
               if (it.i === 'agree') return (
                 <div class="sc">
                   <div class="quote">{it.quote}</div>
-                  <div class="sl" data-slider={it.group}>
-                    <input type="range" class="sl-in unset" min="1" max="5" step="1" value="3" aria-label={`${qq.q} 1 is strongly agree, 5 is strongly disagree.`} aria-valuetext="Not answered yet" />
-                    <div class="sl-scale" aria-hidden="true">
-                      {AGREE.map((l, k) => <span class="sl-n" data-pick={k + 1}><b>{k + 1}</b><span class="sl-l">{l}</span></span>)}
-                    </div>
-                    <div class="sl-ends" aria-hidden="true"><span>{AGREE[0]}</span><span>{AGREE[4]}</span></div>
-                    <div class="sl-out"><span data-out>Not answered yet. Slide the circle, or tap a number.</span><button type="button" class="sl-clear" data-clear hidden>Clear</button></div>
-                  </div>
+                  {slide(it.group, AGREE, `${qq.q} 1 is strongly agree, 5 is strongly disagree.`)}
                 </div>
               );
               if (it.i === 'top') return (
@@ -823,10 +819,11 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
             return;
           }
           if (el.matches('.sc')) {
-            const sl = $('[data-slider]', el);
-            if (sl) { const v = st.sel[sl.dataset.slider]; if (v) lines.push($$('.sl-l', sl)[v - 1].textContent + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly agree)'); return; }
-            const on = $('[aria-checked="true"]', el);
-            if (on) lines.push('A: ' + $$('.abc span', el)[0].textContent + '\nB: ' + $$('.abc span', el)[1].textContent + '\nAnswer: ' + on.textContent.trim() + ' (' + on.dataset.val + ' of 5)');
+            const sl = $('[data-slider]', el), v = st.sel[sl.dataset.slider], ab = $$('.abc span', el);
+            if (!v) return;
+            const label = $$('.sl-l', sl)[v - 1].textContent;
+            if (ab.length) lines.push('A: ' + ab[0].textContent + '\nB: ' + ab[1].textContent + '\nAnswer: ' + label + ' (' + v + ' on a scale of 1 to 5, where 1 is A and 5 is B)');
+            else lines.push(label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly agree)');
             return;
           }
           if (el.matches('.upw')) {
