@@ -6,7 +6,10 @@
    It finds the right architect. The detailed design brief stays with them.
    Answers save on the visitor's device as they go (localStorage key
    tg-client-discovery-v1). ENDPOINT is empty on the Vercel preview, so Submit
-   checks the name, email and consent, sends nothing, and says so. */
+   checks the name, email and consent, sends nothing, and says so.
+   On the Wix site it is /api/brief, the same route as the design brief:
+   photos go to /api/brief-upload as they are chosen, and Submit sends the
+   profile to the Wix "Design Brief" form, which emails info@thornegroup.co.nz. */
 import '../styles/fonts.css';
 
 const ENDPOINT = '';
@@ -153,7 +156,7 @@ const STAGES: Stage[] = [
       ] },
       { q: 'Are there any homes, buildings or architects whose work you particularly admire?', help: 'You can share a Pinterest board, Instagram link, website or a few images. This is optional, and you don’t have to have a particular style in mind.', items: [
         area('s20_admire', 'Homes, buildings or architects you admire, with any links'),
-        { i: 'upload', zone: 's20', aria: 'Upload images of homes or buildings you admire' },
+        { i: 'upload', zone: 'cd_admire', aria: 'Upload images of homes or buildings you admire' },
       ] },
     ] },
   { tab: 'Your ideal architect', short: 'Your architect', h: 'The right relationship makes all the <strong>difference</strong>.',
@@ -591,6 +594,40 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
   };
   let sent = null, sending = false, timer = 0;
 
+  // live site only: each chosen photo goes to Wix (as a copy up to 2000px)
+  // straight away, so Submit only has to send the answers
+  const UPLOAD = ENDPOINT ? ENDPOINT + '-upload' : '';
+  const originals = {};
+  let queue = Promise.resolve();
+  function toJpeg(src) {
+    return new Promise((res) => {
+      const url = typeof src === 'string' ? src : URL.createObjectURL(src), img = new Image();
+      const done = (v) => { if (typeof src !== 'string') URL.revokeObjectURL(url); res(v); };
+      img.onload = () => {
+        const k = Math.min(1, 2000 / Math.max(img.width, img.height));
+        const c = document.createElement('canvas');
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        c.toBlob((b) => done(b), 'image/jpeg', 0.85);
+      };
+      img.onerror = () => done(null);
+      img.src = url;
+    });
+  }
+  async function sendPhoto(f) {
+    if (!UPLOAD || !f || f.wix) return true;
+    const blob = await toJpeg(originals[f.id] || f.url);
+    if (!blob) return false;
+    const name = (f.name || 'image').replace(/\.[^.]+$/, '').slice(0, 80) + '.jpg';
+    try {
+      const r = await fetch(UPLOAD, { method: 'POST', headers: { 'Content-Type': 'image/jpeg', 'X-File-Name': encodeURIComponent(name) }, body: blob });
+      const out = r.ok ? await r.json() : null;
+      if (!out || !out.fileId) return false;
+      f.wix = out; save(); return true;
+    } catch (e) { return false; }
+  }
+  const queuePhoto = (f) => { queue = queue.then(() => sendPhoto(f)); };
+
   // autosave (debounced); if the images make it too big for storage, save without them
   function save() {
     clearTimeout(timer);
@@ -696,7 +733,9 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
         c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
         URL.revokeObjectURL(url);
-        res({ id: Math.random().toString(36).slice(2, 9), name: file.name, url: c.toDataURL('image/jpeg', 0.8) });
+        const id = Math.random().toString(36).slice(2, 9);
+        originals[id] = file;
+        res({ id, name: file.name, url: c.toDataURL('image/jpeg', 0.8) });
       };
       img.onerror = () => { URL.revokeObjectURL(url); res(null); };
       img.src = url;
@@ -782,6 +821,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
       if (!ok.length) return;
       st.files[z] = (st.files[z] || []).concat(ok).slice(-12);
       thumbs(z); status(); save();
+      if (UPLOAD) ok.forEach(queuePhoto);
     });
   });
   ['dragenter', 'dragover'].forEach((ev) => root.addEventListener(ev, (e) => { const u = e.target.closest && e.target.closest('.up'); if (u) u.classList.add('drag'); }));
@@ -824,7 +864,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
       });
       if (rows.length) secs.push({ n, title: TABS[n - 1].tab, rows, pics });
     });
-    const text = secs.map((s) => 'Stage ' + s.n + ': ' + s.title + '\n\n' + s.rows.map(([l, v]) => l + '\n' + v).join('\n\n')).join('\n\n\n');
+    const text = 'Client discovery profile (from /client-discovery)\n\n\n' + secs.map((s) => 'Stage ' + s.n + ': ' + s.title + '\n\n' + s.rows.map(([l, v]) => l + '\n' + v).join('\n\n')).join('\n\n\n');
     return { secs, text };
   }
 
@@ -873,9 +913,19 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
     const btn = $('[data-submit]'), err = $('[data-send-err]');
     sending = true; btn.disabled = true; btn.textContent = 'Sending…'; err.hidden = true;
     try {
+      // finish any photos still on their way, then retry ones that failed
+      await queue;
+      let missed = 0;
+      const photos = {};
+      for (const z of Object.keys(st.files)) {
+        for (const f of (st.files[z] || []).filter(Boolean)) if (!(await sendPhoto(f))) missed++;
+        const done = (st.files[z] || []).filter((f) => f && f.wix).map((f) => f.wix);
+        if (done.length) photos[z] = done;
+      }
+      const note = missed ? '\n\n' + missed + (missed === 1 ? ' image' : ' images') + ' could not be attached.' : '';
       const r = await fetch(ENDPOINT, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contact: name, email, phone: st.text.s1_phone || '', summary: brief.text })
+        body: JSON.stringify({ contact: name, email, phone: st.text.s1_phone || '', summary: brief.text + note, photos })
       });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       clearTimeout(timer);
