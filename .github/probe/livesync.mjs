@@ -1,9 +1,42 @@
+import { chromium } from '/tmp/p/node_modules/playwright/index.mjs';
 import fs from 'fs';
-const out = 'diagnostics/livesync/cs'; fs.mkdirSync(out, { recursive: true });
-const URLS = ["https://static.wixstatic.com/media/b2375c_8c102e2601444cf59c34b6479147ee5f~mv2.jpeg/v1/fit/w_360,h_360,q_85,enc_auto/northface.jpg", "https://static.wixstatic.com/media/b2375c_fae84b57d32f4db081d48940b02d0215~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-2.jpg", "https://static.wixstatic.com/media/b2375c_b975baae5ac94897a978559c45deecfb~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-3.jpg", "https://static.wixstatic.com/media/b2375c_0f99fa51f4974b5c97902d001e39a60d~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-4.jpg", "https://static.wixstatic.com/media/b2375c_e0e20ca7f95f47b0ab7c5b9879ab7452~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-5.jpg", "https://static.wixstatic.com/media/b2375c_b51d7cdbb23049d68fe579345e951d79~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-6.jpg", "https://static.wixstatic.com/media/b2375c_723fe8ede0f54fee8fd66afc6d8cfcfb~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-7.jpg", "https://static.wixstatic.com/media/b2375c_4c58d8b2835f4793b4b2d4b2ad040d41~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-8.jpg", "https://static.wixstatic.com/media/b2375c_4bb33dc338014b6d9d2768373c8b2264~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-9.jpg", "https://static.wixstatic.com/media/b2375c_a7712d1c13b24584b30d1d59986b8ec5~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-10.jpg", "https://static.wixstatic.com/media/b2375c_84407909787e4f798c0af456285838a4~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-11.jpg", "https://static.wixstatic.com/media/b2375c_604bf541509f422f9de32af1b2272e4a~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-12.jpg", "https://static.wixstatic.com/media/b2375c_c651f0c2cd4247428a33355f917fa257~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-13.jpg", "https://static.wixstatic.com/media/b2375c_3ba1e1004e344604bbaee834c5e76b76~mv2.jpg/v1/fit/w_360,h_360,q_85,enc_auto/nf-14.jpg"];
-const L = [];
-for (let i = 0; i < URLS.length; i++) {
-  try { const r = await fetch(URLS[i]); const b = Buffer.from(await r.arrayBuffer()); fs.writeFileSync(`${out}/${String(i + 1).padStart(2, '0')}.jpg`, b); L.push(`${i + 1} ${r.status} ${b.length}`); }
-  catch (e) { L.push(`${i + 1} ERR ${e.message}`); }
+const out = 'diagnostics/livesync'; fs.mkdirSync(out, { recursive: true });
+const L = []; const log = s => { L.push(s); console.log(s); };
+const SITE = 'https://www.thornegroup.co.nz';
+const browser = await chromium.launch({ channel: 'chrome' });
+for (const [label, vp] of [['desktop', { width: 1440, height: 900 }], ['phone', { width: 390, height: 844 }]]) {
+  for (const proj of ['Coastal Sanctuary', 'On the dunes']) {
+    const ctx = await browser.newContext({ viewport: vp }); const page = await ctx.newPage();
+    const bad = [], errs = [];
+    page.on('pageerror', e => errs.push(e.message.slice(0, 200)));
+    page.on('response', r => { if (r.status() >= 400) bad.push(r.status() + ' ' + r.url().slice(0, 150)); });
+    const res = await page.goto(SITE + '/projects?probe=' + Date.now(), { waitUntil: 'networkidle', timeout: 90000 });
+    const info = await page.evaluate(name => {
+      const c = [...document.querySelectorAll('thorne-gallery .card')].find(c => (c.getAttribute('aria-label') || '').indexOf(name) !== -1);
+      const v = [...document.scripts].map(s => s.src).find(s => /GALLERY6/.test(s)) || '';
+      if (c) c.click();
+      return { meta: c ? c.querySelector('.card-meta').textContent : 'NO CARD', v: v.split('?')[1] };
+    }, proj);
+    await page.waitForTimeout(1500);
+    const seq = [], notLoaded = [];
+    for (let k = 0; k < 26; k++) {
+      await page.waitForTimeout(1100);
+      const st = await page.evaluate(() => {
+        const th = document.querySelector('.th'), stg = th.querySelector('.th-stage');
+        const a = stg.querySelector('.th-img:not(.th-img2)'), b = stg.querySelector('.th-img2'), pair = stg.classList.contains('th-pair');
+        const ok = x => x.complete && x.naturalWidth > 0;
+        return { t: th.querySelector('.th-title').textContent, c: th.querySelector('.th-counter').textContent, pair, ok: ok(a) && (!pair || ok(b)) };
+      });
+      if (st.t !== proj) break;
+      seq.push(st.c.replace(/ of \d+/, '') + (st.pair ? 'P' : ''));
+      if (!st.ok) notLoaded.push(st.c);
+      if (label === 'desktop' && proj === 'Coastal Sanctuary' && /^6-7/.test(st.c)) await page.screenshot({ path: `${out}/cs-pair-6-7.png` });
+      await page.keyboard.press('ArrowRight');
+    }
+    log(`${label} ${proj}: HTTP ${res.status()} | card "${info.meta}" | GALLERY6 ${info.v} | ${seq.join(' ')}`);
+    log(`  photos not loaded: ${notLoaded.length ? notLoaded.join(', ') : 'none'} | errors ${errs.length ? errs.join(' ; ') : 'none'} | failed requests ${bad.length ? bad.slice(0, 5).join(' ; ') : 'none'}`);
+    await ctx.close();
+  }
 }
-fs.writeFileSync('diagnostics/livesync/report.txt', L.join('\n') + '\n');
+await browser.close();
+fs.writeFileSync(`${out}/report.txt`, L.join('\n') + '\n');
