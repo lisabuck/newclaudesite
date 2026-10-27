@@ -9,7 +9,6 @@
 import '../styles/fonts.css';
 
 const LOGO = 'https://static.wixstatic.com/media/b2375c_d131631007ca414294e9b97aadae5e77~mv2.png';
-const BRIEF = 'https://www.thornegroup.co.nz/brief';
 const tick = (i: string) => `<li><span class="mk"></span><span>${i}</span></li>`;
 const ticks = (items: string[], two = false) =>
   '<ul class="ticks' + (two ? ' two' : '') + '">' + items.map(tick).join('') + '</ul>';
@@ -186,7 +185,6 @@ const ticks = (items: string[], two = false) =>
             <div class="more"><div>
               <p>We start by understanding the site, how you want to live, your priorities, style, budget and what is most important to you.</p>
               <p>This gives us a clear brief to work from before design begins.</p>
-              <a class="go" href={BRIEF}>Start the Design Brief &rarr;</a>
             </div></div>
           </details>
         </li>
