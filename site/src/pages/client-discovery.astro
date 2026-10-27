@@ -2,7 +2,7 @@
 /* Client discovery: private page at /client-discovery, shared by link only.
    Not in any menu, not in the sitemap, and marked noindex.
    A second version of the design brief: the three-stage client and architect
-   matching questionnaire (32 questions), laid out as three tabs on one page.
+   matching questionnaire (34 questions), laid out as three tabs on one page.
    It finds the right architect. The detailed design brief stays with them.
    Answers save on the visitor's device as they go (localStorage key
    tg-client-discovery-v1). ENDPOINT is empty on the Vercel preview, so Submit
@@ -21,7 +21,6 @@ type Item =
   | { i: 'radio'; group: string; opts: Opt[] }
   | { i: 'check'; max?: number; opts: Opt[]; other?: [string, string] }
   | { i: 'scale'; group: string; a: string; b: string }
-  | { i: 'agree'; group: string; quote: string }
   | { i: 'top' }
   | { i: 'upload'; zone: string; aria: string }
   | { i: 'when'; group: string; vals: string[]; items: Item[] };
@@ -29,8 +28,6 @@ type Q = { q: string; help?: string; items: Item[] };
 type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; next?: [string, string] };
 
 const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
-// agree or disagree, as a 1 to 5 slider (1 is strongly disagree, 5 is strongly agree)
-const AGREE = ['Strongly disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly agree'];
 // A or B, as a 1 to 5 slider (1 is statement A, 5 is statement B)
 const SCALE = ['Strongly agree with A', 'Agree with A', 'Neutral', 'Agree with B', 'Strongly agree with B'];
 
@@ -162,8 +159,10 @@ const STAGES: Stage[] = [
   { tab: 'Your ideal architect', short: 'Your architect', h: 'The right relationship makes all the <strong>difference</strong>.',
     intro: ['Creating a home is a personal and collaborative journey. Architects have different ways of developing ideas, communicating, managing their work and involving clients.', 'We’d love to understand what makes a working relationship successful for you.'],
     qs: [
-      { q: 'How important is a clearly structured process?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's21_agreement', quote: '“I like to know what happens next, what decisions are required of me, and when key stages are expected to be completed.”' }] },
-      { q: 'How comfortable are you with the creative process being fluid?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's22_agreement', quote: '“I understand that design ideas can evolve as possibilities are explored, and I’m comfortable with some uncertainty as the design develops.”' }] },
+      { q: 'How much structure do you need from your architect?', items: [{ i: 'scale', group: 's_structure', a: 'A clear programme from the start, with set dates for each stage and each decision.', b: 'A loose plan that can change as the design develops.' }] },
+      { q: 'Partway through, your architect suggests a new direction for the design. How would you feel?', items: [{ i: 'scale', group: 's_change', a: 'Unsettled. I would rather stay with what we agreed.', b: 'Interested. I would rather find the better idea, even if it adds time.' }] },
+      { q: 'Which matters more to you?', items: [{ i: 'scale', group: 's_dates', a: 'Keeping to the agreed dates, even if the design is good rather than perfect.', b: 'Getting the design right, even if the programme moves.' }] },
+      { q: 'How should your architect keep track of things?', items: [{ i: 'scale', group: 's_records', a: 'Written meeting notes, a record of each decision and a clear list of what is needed from me next.', b: 'Conversations and sketches. I don’t need everything written down.' }] },
       { q: 'How involved would you like to be in the design journey?', items: [{ i: 'scale', group: 's23', a: 'I enjoy being involved in exploring ideas, reviewing options and making decisions along the way.', b: 'I prefer to establish my aspirations and trust the architect to develop and present considered recommendations.' }] },
       { q: 'How would you like your architect to approach your ideas?', items: [{ i: 'scale', group: 's24', a: 'I want an architect who carefully listens to my ideas and works closely with them.', b: 'I want an architect who will confidently challenge my thinking and introduce ideas I may never have considered.' }] },
       { q: 'How would you prefer design ideas to be presented?', items: [{ i: 'scale', group: 's25', a: 'I prefer to see well-developed, considered concepts rather than lots of early possibilities.', b: 'I enjoy seeing the creative thinking unfold and exploring different concepts before settling on a direction.' }] },
@@ -314,9 +313,8 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
     .abc b{font-size:14px;font-weight:500;letter-spacing:.2em;padding-top:2px}
     @media (max-width:750px){ .ab{grid-template-columns:minmax(0,1fr)} }
 
-    /* agree or disagree: a 1 to 5 slider. The track is inset so the circle
+    /* the 1 to 5 slider. The track is inset so the circle
        stops exactly above each number (each number sits in a fifth). */
-    .quote{padding:18px 20px;border-left:2px solid #393533;background:#F2F0ED;font-size:19px;line-height:1.6;color:#393533}
     .sl{padding-top:8px}
     .sl-in{position:relative;z-index:1;-webkit-appearance:none;appearance:none;display:block;width:calc(80% + 32px);height:44px;margin:0 calc(10% - 16px);padding:0;background:transparent;cursor:pointer}
     .sl-in:focus{outline:none}
@@ -505,12 +503,6 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
                     <div class="abc"><b>B</b><span>{it.b}</span></div>
                   </div>
                   {slide(it.group, SCALE, `${qq.q} 1 is strongly agree with A, 5 is strongly agree with B.`)}
-                </div>
-              );
-              if (it.i === 'agree') return (
-                <div class="sc">
-                  <div class="quote">{it.quote}</div>
-                  {slide(it.group, AGREE, `${qq.q} 1 is strongly disagree, 5 is strongly agree.`)}
                 </div>
               );
               if (it.i === 'top') return (
@@ -816,8 +808,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
             const sl = $('[data-slider]', el), v = st.sel[sl.dataset.slider], ab = $$('.abc span', el);
             if (!v) return;
             const label = $$('.sl-l', sl)[v - 1].textContent;
-            if (ab.length) lines.push('A: ' + ab[0].textContent + '\nB: ' + ab[1].textContent + '\nAnswer: ' + label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly agree with A and 5 is strongly agree with B)');
-            else lines.push(label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly disagree and 5 is strongly agree)');
+            lines.push('A: ' + ab[0].textContent + '\nB: ' + ab[1].textContent + '\nAnswer: ' + label + ' (' + v + ' on a scale of 1 to 5, where 1 is strongly agree with A and 5 is strongly agree with B)');
             return;
           }
           if (el.matches('.upw')) {
