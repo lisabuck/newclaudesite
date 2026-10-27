@@ -284,6 +284,14 @@ thorne-gallery .th-ctrls{ padding:8px 12px 12px; }
 /* Portrait slideshow photos display as a centred 4:5 frame (slight crop) instead of a skinny tall strip. */
 thorne-gallery .th-stage .th-img.tg-portrait{ inset:auto; top:0; bottom:0; left:50%; transform:translateX(-50%); width:auto; height:100%; aspect-ratio:4/5; object-fit:cover; }
 
+/* Portrait pairs (wide screens only, see the project's "pairs" list in GALLERY6.js): two
+   portraits side by side, whole photos, meeting in the middle with a 12px gap. The second
+   photo element stays hidden for single photos. */
+thorne-gallery .th-stage .th-img2{ display:none; }
+thorne-gallery .th.open .th-stage.th-pair .th-img{ display:block; inset:auto; top:0; bottom:0; transform:none; aspect-ratio:auto; width:calc(50% - 6px); height:100%; object-fit:contain; }
+thorne-gallery .th.open .th-stage.th-pair .th-img:not(.th-img2){ left:0; right:auto; object-position:right center; }
+thorne-gallery .th.open .th-stage.th-pair .th-img2{ left:auto; right:0; object-position:left center; }
+
 /* Next project button in the slideshow top bar */
 thorne-gallery .th-b.th-nextproj{ width:auto; padding:0 22px; font-size:14px; letter-spacing:.22em; text-transform:uppercase; }
 
