@@ -1,7 +1,6 @@
-/* Our process: the twelve design + build steps, shared by the /our-process
-   page and its preview options. Copy is Lisa's (the short "sum" lines are the
-   one-line summaries shown before a step is opened). "more" is the full
-   detail as HTML, styled by the page that shows it (.dt). */
+/* Our process: the twelve design + build steps for the /our-process page.
+   Copy is Lisa's (the short "sum" lines are the one-line summaries on each
+   card). "more" is the full detail as HTML, shown in the pop-up (.dt). */
 
 const W = 'https://static.wixstatic.com/media/';
 export const photo = (id: string, w = 640) => `${W}${id}/v1/fit/w_${w},h_${w},q_80,enc_auto/our-process.jpg`;
