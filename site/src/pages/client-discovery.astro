@@ -2,7 +2,7 @@
 /* Client discovery: private page at /client-discovery, shared by link only.
    Not in any menu, not in the sitemap, and marked noindex.
    A second version of the design brief: the three-stage client and architect
-   matching questionnaire (32 questions), laid out as three tabs on one page.
+   matching questionnaire (31 questions), laid out as three tabs on one page.
    It finds the right architect. The detailed design brief stays with them.
    Answers save on the visitor's device as they go (localStorage key
    tg-client-discovery-v1). ENDPOINT is empty on the Vercel preview, so Submit
@@ -17,7 +17,6 @@ type Opt = [string, string] | [string, string, string];
 type Item =
   | { i: 'fields'; fields: { name: string; label: string; type?: string; ac?: string; req?: boolean }[] }
   | { i: 'sub'; t: string; help?: string }
-  | { i: 'input'; name: string; aria: string }
   | { i: 'area'; name: string; aria: string }
   | { i: 'radio'; group: string; opts: Opt[] }
   | { i: 'check'; max?: number; opts: Opt[]; other?: [string, string] }
@@ -26,7 +25,7 @@ type Item =
   | { i: 'top' }
   | { i: 'upload'; zone: string; aria: string }
   | { i: 'when'; group: string; vals: string[]; items: Item[] };
-type Q = { n: number; q: string; help?: string; items: Item[] };
+type Q = { q: string; help?: string; items: Item[] };
 type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; next?: [string, string] };
 
 const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
@@ -53,25 +52,16 @@ const STAGES: Stage[] = [
     intro: ['Finding the right architect starts with understanding you: how you live, what matters to you, and what you’re hoping to achieve.', 'You don’t need to have everything figured out. Just tell us a little about your life and what you have in mind.'],
     next: ['Wonderful, that’s a great start.', 'Next, we’d love to discover what inspires you architecturally and the type of design approach that appeals to you.'],
     qs: [
-      { n: 1, q: 'Let’s start with a few details.', items: [{ i: 'fields', fields: [
+      { q: 'Let’s start with a few details.', items: [{ i: 'fields', fields: [
         { name: 's1_name', label: 'Your name', ac: 'name', req: true },
         { name: 's1_email', label: 'Email address', type: 'email', ac: 'email', req: true },
         { name: 's1_phone', label: 'Phone number (optional)', type: 'tel', ac: 'tel' },
       ] }] },
-      { n: 2, q: 'What type of project are you considering?', help: 'Select one.', items: [{ i: 'radio', group: 's2_type', opts: [
+      { q: 'What type of project are you considering?', help: 'Select one.', items: [{ i: 'radio', group: 's2_type', opts: [
         ['new', 'A new home'], ['reno', 'A renovation or extension'], ['holiday', 'A holiday home or bach'], ['multigen', 'A multi-generational home'],
         ['multires', 'A multi-residential development'], ['commercial', 'A commercial project'], ['else', 'Something else / I’m still exploring'],
       ] }] },
-      { n: 3, q: 'Where is your project, and how far along are you?', items: [
-        { i: 'sub', t: 'Project location' },
-        { i: 'input', name: 's3_location', aria: 'Project location: town or region' },
-        { i: 'sub', t: 'Where are you in the process?' },
-        { i: 'radio', group: 's3_stage', opts: [
-          ['exploring', 'Just exploring ideas'], ['land', 'Looking for land or a property'], ['site', 'Have a site or existing property'],
-          ['ideas', 'Have some initial ideas or plans'], ['ready', 'Ready to engage an architect'],
-        ] },
-      ] },
-      { n: 4, q: 'Do you have an approximate construction budget and timeframe in mind?', help: 'An estimate is absolutely fine.', items: [
+      { q: 'Do you have an approximate construction budget and timeframe in mind?', help: 'An estimate is absolutely fine.', items: [
         { i: 'sub', t: 'Budget (excluding land)' },
         { i: 'radio', group: 's4_budget', opts: [
           ['u500', 'Under $500,000'], ['500-1m', '$500,000 to $1 million'], ['1-1.5m', '$1 million to $1.5 million'], ['1.5-2m', '$1.5 million to $2 million'],
@@ -83,30 +73,30 @@ const STAGES: Stage[] = [
           ['12m', 'More than a year away'], ['exploring', 'Just exploring at this stage'],
         ] },
       ] },
-      { n: 5, q: 'Where are you in life, and what would you like your home to accommodate?', help: 'Think about how you live today and how your circumstances might change over time. Select up to four.', items: [
+      { q: 'Where are you in life, and what would you like your home to accommodate?', help: 'Think about how you live today and how your circumstances might change over time. Select up to four.', items: [
         { i: 'check', max: 4, opts: LIFE, other: ['s5_else_text', 'Tell us more'] },
       ] },
-      { n: 6, q: 'Of the options you’ve selected, which is most important to you?', help: 'Choose one from your answers to question 5.', items: [{ i: 'top' }] },
-      { n: 7, q: 'How do you most enjoy spending your time at home?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+      { q: 'Of the options you’ve selected, which is most important to you?', help: 'Choose one from your answers to the previous question.', items: [{ i: 'top' }] },
+      { q: 'How do you most enjoy spending your time at home?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
         ['s7_entertain', 'Entertaining friends and family'], ['s7_cook', 'Cooking and sharing meals'], ['s7_relax', 'Relaxing and enjoying quiet time'],
         ['s7_outdoors', 'Spending time outdoors'], ['s7_work', 'Working or studying from home'], ['s7_creative', 'Pursuing creative interests or hobbies'],
         ['s7_family', 'Spending time together as a family'], ['s7_privacy', 'Enjoying privacy and personal space'], ['s7_active', 'Staying active, exercising or enjoying recreation'],
         ['s7_other', 'Other'],
       ], other: ['s7_other_text', 'Tell us more'] }] },
-      { n: 8, q: 'What are the three most important things you want to achieve with your project?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+      { q: 'What are the three most important things you want to achieve with your project?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
         ['s8_enhance', 'A home that enhances the way I live'], ['s8_beautiful', 'A beautiful and inspiring environment'], ['s8_unique', 'Something architecturally unique and personal'],
         ['s8_timeless', 'A timeless home that will age well'], ['s8_practical', 'A practical and functional home'], ['s8_quality', 'Exceptional quality and craftsmanship'],
         ['s8_value', 'A home that offers good long-term value'], ['s8_maintain', 'A home that’s easy to maintain'], ['s8_sanctuary', 'A place that feels like a sanctuary'],
         ['s8_budget', 'Staying within my intended construction budget'],
       ] }] },
-      { n: 9, q: 'How important is it that your home can adapt to your changing needs over time?', help: 'Think about the next 10 to 20 years and how your lifestyle, family circumstances or mobility may change.', items: [{ i: 'radio', group: 's9_adapt', opts: [
+      { q: 'How important is it that your home can adapt to your changing needs over time?', help: 'Think about the next 10 to 20 years and how your lifestyle, family circumstances or mobility may change.', items: [{ i: 'radio', group: 's9_adapt', opts: [
         ['essential', 'Essential', 'I want a home that will comfortably accommodate different stages of life.'],
         ['very', 'Very important', 'I’d like future flexibility to be a significant consideration.'],
         ['somewhat', 'Somewhat important', 'It would be good to allow for change where practical.'],
         ['not', 'Not a major priority', 'I’m primarily focused on how I want to live today.'],
         ['unsure', 'Unsure', 'I’d welcome guidance on what to consider.'],
       ] }] },
-      { n: 10, q: 'How important is accessibility and ease of movement within your home?', help: 'For example, step-free access, wheelchair accessibility or accommodating changing mobility needs. Select any that apply.', items: [{ i: 'check', opts: [
+      { q: 'How important is accessibility and ease of movement within your home?', help: 'For example, step-free access, wheelchair accessibility or accommodating changing mobility needs. Select any that apply.', items: [{ i: 'check', opts: [
         ['s10_wheelchair', 'Wheelchair accessibility is an essential requirement from the outset.'],
         ['s10_future', 'I’d like my home to accommodate wheelchair use or reduced mobility in the future.'],
         ['s10_ease', 'Ease of movement, including avoiding unnecessary stairs or level changes, is important to me.'],
@@ -114,34 +104,34 @@ const STAGES: Stage[] = [
         ['s10_none', 'Accessibility is not currently a particular priority.'],
         ['s10_unsure', 'I’m not sure what I should be considering.'],
       ] }] },
-      { n: 11, q: 'What would you most like to improve about the way you live now?', help: 'This could be something about your current home, your lifestyle or how you imagine living in the future. Optional.', items: [area('s11_improve', 'What you would most like to improve')] },
+      { q: 'What would you most like to improve about the way you live now?', help: 'This could be something about your current home, your lifestyle or how you imagine living in the future. Optional.', items: [area('s11_improve', 'What you would most like to improve')] },
     ] },
   { tab: 'Your architectural outlook', short: 'Your outlook', h: 'What does great architecture mean to <strong>you</strong>?',
     intro: ['Every architect has their own design philosophy, creative strengths and way of thinking. Understanding what appeals to you helps us identify architects whose approach may align with your aspirations.', 'For questions with two opposing statements, simply choose where you sit on a five-point scale between them. You may fall somewhere in the middle. There are no right or wrong answers.'],
     next: ['We’re getting a picture of your architectural preferences.', 'One last step: understanding how you like to work, communicate and make decisions will help us find an architect who suits you personally.'],
     qs: [
-      { n: 12, q: 'How would you like your home to relate to its surroundings?', items: [{ i: 'scale', group: 's12', a: 'I would like my home to complement its surroundings and be in keeping with the area.', b: 'I would like something architecturally unique and distinctive that stands apart.' }] },
-      { n: 13, q: 'Which architectural expression appeals to you more?', items: [{ i: 'scale', group: 's13', a: 'Understated, restrained and timeless architecture.', b: 'Bold, expressive and perhaps unconventional architecture.' }] },
-      { n: 14, q: 'How do you feel about specific architectural detailing?', help: 'Think about features such as beautifully crafted joinery, carefully resolved material connections, customised fittings and other small elements that make a design special.', items: [{ i: 'radio', group: 's14_detail', opts: [
+      { q: 'How would you like your home to relate to its surroundings?', items: [{ i: 'scale', group: 's12', a: 'I would like my home to complement its surroundings and be in keeping with the area.', b: 'I would like something architecturally unique and distinctive that stands apart.' }] },
+      { q: 'Which architectural expression appeals to you more?', items: [{ i: 'scale', group: 's13', a: 'Understated, restrained and timeless architecture.', b: 'Bold, expressive and perhaps unconventional architecture.' }] },
+      { q: 'How do you feel about specific architectural detailing?', help: 'Think about features such as beautifully crafted joinery, carefully resolved material connections, customised fittings and other small elements that make a design special.', items: [{ i: 'radio', group: 's14_detail', opts: [
         ['notice', 'I don’t tend to notice those details. The overall look and feeling matter more.'],
         ['appreciate', 'I appreciate thoughtful detailing where it adds to the overall experience.'],
         ['love', 'I love beautiful, bespoke architectural detailing and would be open to investing in it.'],
         ['unsure', 'I’m not sure. I’d like an architect to help me understand the possibilities.'],
       ] }] },
-      { n: 15, q: 'What qualities do you value most in architecture?', help: 'Select your top three.', items: [{ i: 'check', max: 3, opts: [
+      { q: 'What qualities do you value most in architecture?', help: 'Select your top three.', items: [{ i: 'check', max: 3, opts: [
         ['s15_creative', 'Creativity and originality'], ['s15_simple', 'Simplicity and restraint'], ['s15_materials', 'Beautiful materials and craftsmanship'],
         ['s15_practical', 'Practicality and functionality'], ['s15_timeless', 'Timelessness and longevity'], ['s15_innovative', 'Innovative ideas and technologies'],
         ['s15_nature', 'Connection to the natural environment'], ['s15_comfort', 'Comfort and atmosphere'], ['s15_value', 'Value and cost-conscious design'],
         ['s15_space', 'Thoughtful use of space and proportion'],
       ] }] },
-      { n: 16, q: 'How do you feel about architectural experimentation?', items: [{ i: 'scale', group: 's16', a: 'I’m drawn to established design ideas and proven approaches that work well.', b: 'I’m excited by the possibility of exploring new or unconventional design ideas.' }] },
-      { n: 17, q: 'What kind of feeling would you most love your home to create?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+      { q: 'How do you feel about architectural experimentation?', items: [{ i: 'scale', group: 's16', a: 'I’m drawn to established design ideas and proven approaches that work well.', b: 'I’m excited by the possibility of exploring new or unconventional design ideas.' }] },
+      { q: 'What kind of feeling would you most love your home to create?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
         ['s17_calm', 'Calm and peaceful'], ['s17_warm', 'Warm and welcoming'], ['s17_elegant', 'Elegant and sophisticated'], ['s17_relaxed', 'Relaxed and informal'],
         ['s17_inspiring', 'Inspiring and uplifting'], ['s17_bold', 'Bold and memorable'], ['s17_natural', 'Natural and grounded'], ['s17_light', 'Light and spacious'],
         ['s17_intimate', 'Intimate and private'], ['s17_playful', 'Playful and creative'],
       ] }] },
-      { n: 18, q: 'How do you feel about balancing aesthetics and ongoing maintenance?', items: [{ i: 'scale', group: 's18', a: 'I strongly prefer materials and design choices that minimise ongoing care and maintenance.', b: 'I’m comfortable with some additional care or maintenance if it achieves an architectural quality I really value.' }] },
-      { n: 19, q: 'How important are environmental sustainability and energy efficiency to you?', items: [
+      { q: 'How do you feel about balancing aesthetics and ongoing maintenance?', items: [{ i: 'scale', group: 's18', a: 'I strongly prefer materials and design choices that minimise ongoing care and maintenance.', b: 'I’m comfortable with some additional care or maintenance if it achieves an architectural quality I really value.' }] },
+      { q: 'How important are environmental sustainability and energy efficiency to you?', items: [
         { i: 'radio', group: 's19_sustain', opts: [
           ['essential', 'Essential', 'Environmental responsibility is a core value, and I want it to be central to my project.'],
           ['very', 'Very important', 'I’d like sustainability to be a significant part of the architectural approach.'],
@@ -160,7 +150,7 @@ const STAGES: Stage[] = [
           ] },
         ] },
       ] },
-      { n: 20, q: 'Are there any homes, buildings or architects whose work you particularly admire?', help: 'You can share a Pinterest board, Instagram link, website or a few images. This is optional, and you don’t have to have a particular style in mind.', items: [
+      { q: 'Are there any homes, buildings or architects whose work you particularly admire?', help: 'You can share a Pinterest board, Instagram link, website or a few images. This is optional, and you don’t have to have a particular style in mind.', items: [
         area('s20_admire', 'Homes, buildings or architects you admire, with any links'),
         { i: 'upload', zone: 's20', aria: 'Upload images of homes or buildings you admire' },
       ] },
@@ -168,43 +158,45 @@ const STAGES: Stage[] = [
   { tab: 'Your ideal architect', short: 'Your architect', h: 'The right relationship makes all the <strong>difference</strong>.',
     intro: ['Creating a home is a personal and collaborative journey. Architects have different ways of developing ideas, communicating, managing their work and involving clients.', 'We’d love to understand what makes a working relationship successful for you.'],
     qs: [
-      { n: 21, q: 'How important is a clearly structured process?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's21_agree', quote: '“I like to know what happens next, what decisions are required of me, and when key stages are expected to be completed.”' }] },
-      { n: 22, q: 'How comfortable are you with the creative process being fluid?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's22_agree', quote: '“I understand that design ideas can evolve as possibilities are explored, and I’m comfortable with some uncertainty as the design develops.”' }] },
-      { n: 23, q: 'How involved would you like to be in the design journey?', items: [{ i: 'scale', group: 's23', a: 'I enjoy being involved in exploring ideas, reviewing options and making decisions along the way.', b: 'I prefer to establish my aspirations and trust the architect to develop and present considered recommendations.' }] },
-      { n: 24, q: 'How would you like your architect to approach your ideas?', items: [{ i: 'scale', group: 's24', a: 'I want an architect who carefully listens to my ideas and works closely with them.', b: 'I want an architect who will confidently challenge my thinking and introduce ideas I may never have considered.' }] },
-      { n: 25, q: 'How would you prefer design ideas to be presented?', items: [{ i: 'scale', group: 's25', a: 'I prefer to see well-developed, considered concepts rather than lots of early possibilities.', b: 'I enjoy seeing the creative thinking unfold and exploring different concepts before settling on a direction.' }] },
-      { n: 26, q: 'When you send an email or ask a non-urgent question, when would you generally expect a response or acknowledgement?', items: [{ i: 'radio', group: 's26_response', opts: [
+      { q: 'How important is a clearly structured process?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's21_agree', quote: '“I like to know what happens next, what decisions are required of me, and when key stages are expected to be completed.”' }] },
+      { q: 'How comfortable are you with the creative process being fluid?', help: 'How strongly do you agree with this statement?', items: [{ i: 'agree', group: 's22_agree', quote: '“I understand that design ideas can evolve as possibilities are explored, and I’m comfortable with some uncertainty as the design develops.”' }] },
+      { q: 'How involved would you like to be in the design journey?', items: [{ i: 'scale', group: 's23', a: 'I enjoy being involved in exploring ideas, reviewing options and making decisions along the way.', b: 'I prefer to establish my aspirations and trust the architect to develop and present considered recommendations.' }] },
+      { q: 'How would you like your architect to approach your ideas?', items: [{ i: 'scale', group: 's24', a: 'I want an architect who carefully listens to my ideas and works closely with them.', b: 'I want an architect who will confidently challenge my thinking and introduce ideas I may never have considered.' }] },
+      { q: 'How would you prefer design ideas to be presented?', items: [{ i: 'scale', group: 's25', a: 'I prefer to see well-developed, considered concepts rather than lots of early possibilities.', b: 'I enjoy seeing the creative thinking unfold and exploring different concepts before settling on a direction.' }] },
+      { q: 'When you send an email or ask a non-urgent question, when would you generally expect a response or acknowledgement?', items: [{ i: 'radio', group: 's26_response', opts: [
         ['hour', 'Almost immediately, or within an hour during working hours'], ['hours', 'Within a few hours'], ['day', 'By the end of the working day'],
         ['1-2days', 'Within one to two working days'], ['agreed', 'I’m comfortable with an agreed communication timeframe'],
       ] }] },
-      { n: 27, q: 'What style of communication would suit you best?', items: [{ i: 'radio', group: 's27_style', opts: [
+      { q: 'What style of communication would suit you best?', items: [{ i: 'radio', group: 's27_style', opts: [
         ['frequent', 'Frequent updates and ongoing conversations'], ['scheduled', 'Regular scheduled meetings and structured updates'],
         ['key', 'Communication at key stages and important decision points'], ['flexible', 'A flexible approach depending on what’s happening'],
       ] }] },
-      { n: 28, q: 'How do you prefer important decisions to be made?', items: [{ i: 'scale', group: 's28', a: 'I like to understand the alternatives, ask questions and carefully consider the options before deciding.', b: 'I appreciate a clear professional recommendation and am generally comfortable being guided by an expert.' }] },
-      { n: 29, q: 'When an unexpected challenge arises, what would you prefer your architect to do?', help: 'Select the approach that feels most comfortable.', items: [{ i: 'radio', group: 's29_challenge', opts: [
+      { q: 'How do you prefer important decisions to be made?', items: [{ i: 'scale', group: 's28', a: 'I like to understand the alternatives, ask questions and carefully consider the options before deciding.', b: 'I appreciate a clear professional recommendation and am generally comfortable being guided by an expert.' }] },
+      { q: 'When an unexpected challenge arises, what would you prefer your architect to do?', help: 'Select the approach that feels most comfortable.', items: [{ i: 'radio', group: 's29_challenge', opts: [
         ['promptly', 'Tell me promptly, even if a solution hasn’t been found yet.'], ['solutions', 'Investigate the issue and come back with possible solutions.'],
         ['involve', 'Involve me in discussing and resolving the issue.'], ['lead', 'Take the lead, recommend the best solution and keep me informed.'],
       ] }] },
-      { n: 30, q: 'What are the three most important qualities you’re looking for in an architect?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
+      { q: 'What are the three most important qualities you’re looking for in an architect?', help: 'Choose up to three.', items: [{ i: 'check', max: 3, opts: [
         ['s30_creative', 'Creative and imaginative'], ['s30_approachable', 'Approachable and personable'], ['s30_listener', 'An excellent listener'],
         ['s30_organised', 'Highly organised and process-driven'], ['s30_detail', 'Detail-oriented and meticulous'], ['s30_practical', 'Practical and budget-conscious'],
         ['s30_confident', 'Confident and decisive'], ['s30_collab', 'Collaborative and open-minded'], ['s30_reliable', 'Reliable and responsive'],
         ['s30_calm', 'Calm and reassuring'], ['s30_experienced', 'Experienced and technically knowledgeable'],
       ] }] },
-      { n: 31, q: 'Have you worked with an architect or designer before?', items: [
+      { q: 'Have you worked with an architect or designer before?', items: [
         { i: 'radio', group: 's31_before', opts: [['yes', 'Yes'], ['no', 'No']] },
         { i: 'when', group: 's31_before', vals: ['yes'], items: [
           { i: 'sub', t: 'What did you particularly appreciate or find challenging about the experience?', help: 'Optional.' },
           area('s31_experience', 'What you appreciated or found challenging'),
         ] },
       ] },
-      { n: 32, q: 'Is there anything else we should understand about the type of architect or working relationship that would suit you?', help: 'Perhaps there’s something you particularly value, something you’d prefer to avoid, or a quality we haven’t covered. Optional.', items: [area('s32_else', 'Anything else we should understand')] },
+      { q: 'Is there anything else we should understand about the type of architect or working relationship that would suit you?', help: 'Perhaps there’s something you particularly value, something you’d prefer to avoid, or a quality we haven’t covered. Optional.', items: [area('s32_else', 'Anything else we should understand')] },
     ] },
 ];
 
 const MSG = 'We need your name and email to send your profile.';
 const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, count: s.qs.length }));
+// number of the first question in each stage, less one
+const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.length, 0));
 ---
 <!doctype html>
 <html lang="en-NZ">
@@ -286,7 +278,6 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
     .in{font:inherit;font-size:17px;font-weight:300;color:#393533;background:transparent;border:1px solid #c8c3bb;border-radius:0;padding:14px 16px;outline:none;width:100%;margin:0;-webkit-appearance:none;appearance:none}
     .in:focus{border-color:#393533}
     textarea.in{display:block;line-height:1.7;min-height:120px;resize:vertical}
-    .inw{max-width:420px}
     .fl.bad .in{border-color:#393533}
     .fmsg{font-size:17px;line-height:1.5;color:#393533}
 
@@ -444,9 +435,9 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
           <div class="ps">{s.intro.map((p) => <p>{p}</p>)}</div>
         </div>
 
-        {s.qs.map((qq) => (
-          <div class="q" data-q={qq.n}>
-            <span class="qn">{pad(qq.n)}</span>
+        {s.qs.map((qq, k) => (
+          <div class="q" data-q={START[j] + k + 1}>
+            <span class="qn">{pad(START[j] + k + 1)}</span>
             <div class="ql">{qq.q}</div>
             {qq.help && <div class="qh">{qq.help}</div>}
             {qq.items.map(function render(it: Item): any {
@@ -472,7 +463,6 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
                 </div>
               );
               if (it.i === 'sub') return <div class="sub"><span>{it.t}</span>{it.help && <span>{it.help}</span>}</div>;
-              if (it.i === 'input') return <div class="inw"><input class="in" name={it.name} aria-label={it.aria} placeholder="Town or region" /></div>;
               if (it.i === 'area') return <textarea class="in" name={it.name} aria-label={it.aria}></textarea>;
               if (it.i === 'radio') {
                 const rich = it.opts.some((o) => o.length === 3);
@@ -521,7 +511,7 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
               );
               if (it.i === 'top') return (
                 <div>
-                  <div class="empty" data-top-empty>Your choices from question 5 will appear here.</div>
+                  <div class="empty" data-top-empty>Your choices from the previous question will appear here.</div>
                   <div class="og one" role="radiogroup" aria-label={qq.q}>
                     {LIFE.map((o) => <button type="button" class="oc" role="radio" aria-checked="false" data-radio="s6_top" data-val={o[0]} hidden><span class="ck"></span><span>{o[1]}</span></button>)}
                   </div>
@@ -658,7 +648,7 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
     $$('[data-other-for]').forEach((o) => { o.hidden = !st.sel[o.dataset.otherFor]; });
   }
 
-  // question 6 lists only what was ticked in question 5
+  // "which is most important" lists only what was ticked in the question before it
   function top() {
     const opts = $$('[data-radio="s6_top"]');
     let any = false;
@@ -809,7 +799,7 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
       $$('.q', p).forEach((q) => {
         const lines = [];
         $$('.fl', q).forEach((fl) => { const v = (st.text[$('input', fl).name] || '').trim(); if (v) lines.push($('span', fl).textContent + ': ' + v); });
-        q.querySelectorAll('.sub, .og, .sc, .inw, textarea.in, .upw').forEach((el) => {
+        q.querySelectorAll('.sub, .og, .sc, textarea.in, .upw').forEach((el) => {
           if (el.closest('.when[hidden]')) return;
           if (el.matches('.sub')) { lines.push('[' + $('span', el).textContent + ']'); return; }
           if (el.matches('.og')) {
@@ -831,8 +821,7 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
             if (f.length) { lines.push(f.length + (f.length === 1 ? ' image added' : ' images added')); f.forEach((x) => pics.push(x.url)); }
             return;
           }
-          const i = el.matches('.inw') ? $('input', el) : el;
-          const v = (st.text[i.name] || '').trim(); if (v) lines.push(v);
+          const v = (st.text[el.name] || '').trim(); if (v) lines.push(v);
         });
         // drop sub-headings that have no answer under them
         const clean = lines.filter((l, k) => !(l[0] === '[' && (k === lines.length - 1 || lines[k + 1][0] === '['))).map((l) => l[0] === '[' ? l.slice(1, -1) + ':' : l);
@@ -891,7 +880,7 @@ const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, 
     try {
       const r = await fetch(ENDPOINT, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contact: name, email, phone: st.text.s1_phone || '', site: st.text.s3_location || '', summary: brief.text })
+        body: JSON.stringify({ contact: name, email, phone: st.text.s1_phone || '', summary: brief.text })
       });
       if (!r.ok) throw new Error('HTTP ' + r.status);
       clearTimeout(timer);
