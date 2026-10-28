@@ -12,7 +12,7 @@
    profile to the Wix "Design Brief" form, which emails info@thornegroup.co.nz. */
 import '../styles/fonts.css';
 
-const ENDPOINT = '';
+const ENDPOINT = '/api/brief';
 const P = '/brief-photos/';
 const pad = (n: number) => String(n).padStart(2, '0');
 
@@ -28,7 +28,7 @@ type Item =
   | { i: 'upload'; zone: string; aria: string }
   | { i: 'when'; group: string; vals: string[]; items: Item[] };
 type Q = { q: string; help?: string; items: Item[] };
-type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; next?: [string, string] };
+type Stage = { tab: string; short: string; h: string; intro: string[]; qs: Q[]; pics?: boolean; next?: [string, string] };
 
 const area = (name: string, aria: string): Item => ({ i: 'area', name, aria });
 // A or B, as a 1 to 5 slider (1 is statement A, 5 is statement B)
@@ -112,7 +112,7 @@ const STAGES: Stage[] = [
     ] },
   { tab: 'Your architectural outlook', short: 'Your outlook', h: 'What does great architecture mean to <strong>you</strong>?',
     intro: ['Every architect has their own design philosophy, creative strengths and way of thinking. Understanding what appeals to you helps us identify architects whose approach may align with your aspirations.', 'For questions with two opposing statements, simply choose where you sit on a five-point scale between them. You may fall somewhere in the middle. There are no right or wrong answers.'],
-    next: ['We’re getting a picture of your architectural preferences.', 'One last step: understanding how you like to work, communicate and make decisions will help us find an architect who suits you personally.'],
+    next: ['We’re getting a picture of your architectural preferences.', 'Next, show us some images that appeal to you.'],
     qs: [
       { q: 'How would you like your home to relate to its surroundings?', items: [{ i: 'scale', group: 's12', a: 'I would like my home to complement its surroundings and be in keeping with the area.', b: 'I would like something architecturally unique and distinctive that stands apart.' }] },
       { q: 'Which architectural expression appeals to you more?', items: [{ i: 'scale', group: 's13', a: 'Understated, restrained and timeless architecture.', b: 'Bold, expressive and perhaps unconventional architecture.' }] },
@@ -159,6 +159,10 @@ const STAGES: Stage[] = [
         { i: 'upload', zone: 'cd_admire', aria: 'Upload images of homes or buildings you admire' },
       ] },
     ] },
+  { tab: 'Images you like', short: 'Images', h: 'Show us what <strong>appeals</strong> to you.',
+    intro: ['Tap any image you like. It moves to the bottom of the page, where you can rate it.', 'Choose as many or as few as you like. There are no right or wrong answers.'],
+    qs: [], pics: true,
+    next: ['That gives us a clear picture of what you like.', 'One last step: understanding how you like to work, communicate and make decisions will help us find an architect who suits you personally.'] },
   { tab: 'Your ideal architect', short: 'Your architect', h: 'The right relationship makes all the <strong>difference</strong>.',
     intro: ['Creating a home is a personal and collaborative journey. Architects have different ways of developing ideas, communicating, managing their work and involving clients.', 'We’d love to understand what makes a working relationship successful for you.'],
     qs: [
@@ -200,7 +204,19 @@ const STAGES: Stage[] = [
 ];
 
 const MSG = 'We need your name and email to send your profile.';
-const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, count: s.qs.length }));
+
+// the image stage: Lisa's own Wix uploads (b2375c, added after the media transfer, so no 2d7300 copies)
+const PIC_GROUPS: { key: string; title: string; ids: string[] }[] = [
+  { key: 'p', title: 'Pinterest inspiration', ids: ['13048039ef3f458997adbf06634c36f7', '02c31cd195984638b696280d4b07cb74', 'e661c605d57746b182a799a81ff5dd3c', 'bf7d42897cbb4523933cbf5e97b90807', '67fafd3613254e74873bcc753a7ad53a', 'ba32768e660341728de2799b68db7480', '9837458fd3f540b781e63ef9ff9709be'] },
+  { key: 't', title: 'Thorne Group prior projects', ids: ['eadbf6cd2b0049e6901e02b5590953ed', 'c18fed8179a04ca19de1ba3a2efa134a', 'f93e753033cb4a56bb6836024045414d', '643c0c1e64e148ee8a005fbe2d30db26', '57c461c0273e4779bfeab2b38b958d79', 'f30e6583bfd8430995d026c2a47ef837', 'ef2036f2a56f44e1a9f1f06d103cc720', '91b9433f03a54e9983ec34e41ce7f6ac', '1df95cf30f6646a190c17e4fcef98d75', '4883f6b70ab8411daf330d5a5703efc7', '4191bb24dbc747639a82d3d62c9ac434', '2d9d2e2d9b374df9a98353ec54fa948b', 'd0d66d7b05c04ee7b961c1500ee01faf', 'd01aafe5ceac4271b93eddb21f2b12c7', '26d81908835240288156dcafce9cd297', 'aebcf2a30d3249498029a87895b74c7f', 'f7a7a43fdbe643af9c2a2c61220bf472', '5f56ac352c78400c82cdc283069c432f', '33dd86f9ffc94535bd8d0f9cce412273', '7ced7960fecf4f548265fab201e4a8f3', '2120a95d487d470d9d350f047dc671ab', 'bff28e68e41b4633ab8a770b68d67801', 'd7ad36e5f60440efa3e1198dd45917e2', 'e66edb02001f4e438a90c7c8efab5844', '2ec3eefd642b4eb781975ee7a24c040e', 'd4b94b72bbb8411c967be1767bedaccc', '99ea2881f48b41deb4485e9d84704e18.jpeg', '7387837f2f7146ae8c627275cf17d26f', 'e13b1d5152024e358543fbc96ea6c2ff', '370f212303e94772b2c88f9401a17784', '49991ca98b134f38867c018ab4ad1476', 'cdae597c6dd04cfe9c821225a85a9477'] },
+];
+// "fit" keeps each photo's own shape (landscape stays landscape); ids are .jpg unless they say otherwise
+const wixImg = (id: string, w: number) => {
+  const [h, ext = 'jpg'] = id.split('.'), f = `b2375c_${h}~mv2.${ext}`;
+  return `https://static.wixstatic.com/media/${f}/v1/fit/w_${w},h_${w},q_85,enc_auto/${f}`;
+};
+const PICS = PIC_GROUPS.flatMap((g) => g.ids.map((id, k) => ({ key: g.key + (k + 1), group: g.title, n: k + 1, id })));
+const TABS = STAGES.map((s, j) => ({ n: pad(j + 1), tab: s.tab, short: s.short, count: s.qs.length, pics: !!s.pics }));
 // number of the first question in each stage, less one
 const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.length, 0));
 ---
@@ -244,7 +260,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
 
     /* the three stage tabs, pinned to the top while scrolling */
     .tabs{position:sticky;top:0;z-index:5;background:#FAF9F6;border-top:1px solid #c8c3bb;border-bottom:1px solid #c8c3bb}
-    .tabs-in{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:900px;margin:0 auto;padding:0 clamp(24px,5vw,64px)}
+    .tabs-in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));max-width:900px;margin:0 auto;padding:0 clamp(24px,5vw,64px)}
     .tab{display:grid;align-content:start;gap:4px;min-height:44px;margin:0;padding:18px 16px 16px 0;background:none;border:0;border-bottom:2px solid transparent;border-radius:0;color:#7a746e;text-align:left;cursor:pointer}
     .tab+.tab{padding-left:16px;border-left:1px solid #c8c3bb}
     .tab[aria-selected="true"]{color:#393533;border-bottom-color:#393533}
@@ -263,9 +279,34 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
       .tab-t .sh{display:inline}
     }
     @media (max-width:379px){ .tab-t{font-size:16px} }
+    @media (max-width:479px){ .tab-s{display:none} }
 
     /* each stage */
     .panel{padding:64px 0 24px}
+
+    /* the image stage: tap an image to move it to "Your images", then rate it */
+    .pg-h{display:block;margin:8px 0 16px;font-size:14px;font-weight:400;letter-spacing:.35em;line-height:1.4;text-transform:uppercase;color:#7a746e}
+    .pg-grid{columns:2;column-gap:16px;margin-bottom:40px}
+    @media (max-width:750px){ .pg-grid{column-gap:8px} .pg-h{letter-spacing:.25em} }
+    @media (max-width:479px){ .pg-grid{columns:1} }
+    .pic{position:relative;display:block;width:100%;min-height:80px;margin:0 0 16px;padding:0;overflow:hidden;border:0;border-radius:0;background:#c8c3bb;cursor:pointer;break-inside:avoid}
+    @media (max-width:750px){ .pic{margin-bottom:8px} }
+    .pic img{display:block;width:100%;height:auto;transition:transform .6s ease}
+    .pic:hover img{transform:scale(1.03)}
+    .pic::after{content:'Add';position:absolute;right:8px;bottom:8px;padding:6px 10px;background:rgba(250,249,246,.94);font-size:14px;font-weight:400;letter-spacing:.15em;text-transform:uppercase;color:#393533}
+    .pic:focus-visible{outline:2px solid #393533;outline-offset:2px}
+    .picks{padding-top:40px;border-top:1px solid #c8c3bb}
+    .picks .t{font-size:clamp(23px,2vw,30px);line-height:1.3;letter-spacing:-.01em;color:#393533}
+    .pk-none{margin-top:16px;padding:18px 16px;border:1px dashed #c8c3bb;font-size:17px;line-height:1.6;color:#54504c}
+    .pk-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:32px 24px;margin-top:24px}
+    .pk{display:grid;gap:10px;align-content:start}
+    .pk img{display:block;width:100%;height:auto;background:#c8c3bb}
+    .pk-src{font-size:14px;font-weight:400;letter-spacing:.2em;line-height:1.4;text-transform:uppercase;color:#7a746e}
+    .stars{display:flex;gap:2px;margin-left:-8px}
+    .star{width:44px;height:44px;margin:0;padding:0;border:0;background:none;font-size:30px;line-height:1;color:#c8c3bb;cursor:pointer}
+    .star.on{color:#393533}
+    .pk-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 12px}
+    .pk-rt{font-size:17px;line-height:1.5;color:#54504c}
     .p-head{display:grid;gap:20px;padding-bottom:40px;max-width:680px}
 
     /* questions */
@@ -413,7 +454,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
       <div class="eb"><span class="t">The client discovery journey</span></div>
       <h1>Finding the right architect starts with <strong>you</strong>.</h1>
       <div class="ps">
-        <p>Three short stages: your life and project, your architectural outlook, and how you like to work.</p>
+        <p>Four short stages: your life and project, your architectural outlook, images you like, and how you like to work.</p>
         <p>Answer what you can. Your answers save on this device as you go, so you can stop and come back.</p>
       </div>
     </div>
@@ -425,7 +466,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
         <button type="button" class="tab" role="tab" id={`tab-${j + 1}`} aria-controls={`stage-${j + 1}`} aria-selected={j === 0 ? 'true' : 'false'} tabindex={j === 0 ? 0 : -1} data-tab={j + 1}>
           <span class="tab-n">{t.n}</span>
           <span class="tab-t"><span class="lg">{t.tab}</span><span class="sh">{t.short}</span></span>
-          <span class="tab-s" data-status={j + 1}>{t.count} questions</span>
+          <span class="tab-s" data-status={j + 1}>{t.pics ? `${PICS.length} images` : `${t.count} questions`}</span>
         </button>
       ))}
     </div>
@@ -439,6 +480,40 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
           <h2 set:html={s.h} />
           <div class="ps">{s.intro.map((p) => <p>{p}</p>)}</div>
         </div>
+
+        {s.pics && (
+          <div class="pg" data-pics>
+            {PIC_GROUPS.map((g) => (
+              <div>
+                <span class="pg-h">{g.title}</span>
+                <div class="pg-grid">
+                  {PICS.filter((x) => x.group === g.title).map((x) => (
+                    <button type="button" class="pic" data-pic={x.key} aria-label={`Add ${g.title.toLowerCase()} image ${x.n} to your images`}>
+                      <img src={wixImg(x.id, 1000)} alt="" loading="lazy" decoding="async" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <div class="picks">
+              <span class="t">Your images</span>
+              <p class="pk-none" data-pk-none>Tap an image above to add it here.</p>
+              <div class="pk-list" data-pk-list aria-live="polite"></div>
+              <div hidden data-pk-store>
+                {PICS.map((x) => (
+                  <div class="pk" data-pk={x.key} data-group={x.group} data-n={x.n} data-full={wixImg(x.id, 1600)}>
+                    <img src={wixImg(x.id, 1000)} alt="" loading="lazy" decoding="async" />
+                    <span class="pk-src">{x.group}, image {x.n}</span>
+                    <div class="stars" role="radiogroup" aria-label={`Rate ${x.group.toLowerCase()} image ${x.n}`}>
+                      {[1, 2, 3, 4, 5].map((r) => <button type="button" class="star" role="radio" aria-checked="false" aria-label={`${r} of 5`} data-rate={`${x.key}:${r}`}>★</button>)}
+                    </div>
+                    <div class="pk-row"><span class="pk-rt" data-rt>Not rated yet.</span><button type="button" class="sl-clear" data-unpick={x.key}>Remove</button></div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
 
         {s.qs.map((qq, k) => (
           <div class="q" data-q={START[j] + k + 1}>
@@ -589,8 +664,9 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
   const saved = load();
   const query = new URLSearchParams(location.search);
   const st = {
-    tab: Math.max(1, Math.min(3, parseInt(query.get('tab'), 10) || saved.tab || 1)),
-    sel: saved.sel || {}, text: saved.text || {}, files: saved.files || {}, consent: !!saved.consent
+    tab: Math.max(1, Math.min(TABS.length, parseInt(query.get('tab'), 10) || saved.tab || 1)),
+    sel: saved.sel || {}, text: saved.text || {}, files: saved.files || {}, consent: !!saved.consent,
+    picks: saved.picks || [], rate: saved.rate || {}
   };
   let sent = null, sending = false, timer = 0;
 
@@ -632,7 +708,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
   function save() {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      const data = { tab: st.tab, sel: st.sel, text: st.text, files: st.files, consent: st.consent };
+      const data = { tab: st.tab, sel: st.sel, text: st.text, files: st.files, consent: st.consent, picks: st.picks, rate: st.rate };
       try { localStorage.setItem(KEY, JSON.stringify(data)); }
       catch (e) { try { localStorage.setItem(KEY, JSON.stringify(Object.assign({}, data, { files: {} }))); } catch (e2) {} }
     }, 200);
@@ -647,6 +723,10 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
   }
   function status() {
     $$('[data-stage]').forEach((p) => {
+      if ($('[data-pics]', p)) {
+        $('[data-status="' + p.dataset.stage + '"]').textContent = st.picks.length ? st.picks.length + ' chosen' : $$('[data-pic]', p).length + ' images';
+        return;
+      }
       const qs = $$('.q', p), n = qs.filter(answered).length;
       $('[data-status="' + p.dataset.stage + '"]').textContent = n ? n + ' of ' + qs.length + ' answered' : qs.length + ' questions';
     });
@@ -750,10 +830,41 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
   $$('[data-slider]').forEach(slider);
   $('[data-consent]').setAttribute('aria-checked', String(st.consent));
 
+  // chosen images move from the grid to "Your images", in the order they were chosen
+  function picks() {
+    const list = $('[data-pk-list]'), store = $('[data-pk-store]');
+    st.picks = st.picks.filter((k) => $('[data-pk="' + k + '"]'));
+    $$('[data-pic]').forEach((b) => { b.hidden = st.picks.includes(b.dataset.pic); });
+    $$('[data-pk]', list).forEach((c) => { if (!st.picks.includes(c.dataset.pk)) store.append(c); });
+    st.picks.forEach((k) => list.append($('[data-pk="' + k + '"]')));
+    $$('[data-pk]').forEach((c) => {
+      const r = st.rate[c.dataset.pk] || 0;
+      $$('.star', c).forEach((b, i) => { b.classList.toggle('on', i < r); b.setAttribute('aria-checked', String(i + 1 === r)); });
+      $('[data-rt]', c).textContent = r ? 'Your rating: ' + r + ' of 5.' : 'Not rated yet.';
+    });
+    $('[data-pk-none]').hidden = st.picks.length > 0;
+  }
+  picks();
+
   root.addEventListener('click', (e) => {
-    const el = e.target.closest('[data-pick],[data-clear],[data-opt],[data-radio],[data-remove],[data-tab],[data-consent],[data-submit],[data-review]');
+    const el = e.target.closest('[data-pic],[data-rate],[data-unpick],[data-pick],[data-clear],[data-opt],[data-radio],[data-remove],[data-tab],[data-consent],[data-submit],[data-review]');
     if (!el) return;
     if (el.dataset.pick) { setSlider(el.closest('.sl'), el.dataset.pick); return; }
+    if (el.dataset.pic) {
+      const next = $$('[data-pic]').filter((b) => !b.hidden && b !== el)[$$('[data-pic]').filter((b) => !b.hidden).indexOf(el)];
+      st.picks.push(el.dataset.pic); picks(); status(); save();
+      (next || $('[data-pk="' + el.dataset.pic + '"] .star')).focus();
+      return;
+    }
+    if (el.dataset.rate) {
+      const [k, r] = el.dataset.rate.split(':');
+      st.rate[k] = st.rate[k] === +r ? 0 : +r; picks(); save(); return;
+    }
+    if (el.dataset.unpick) {
+      const k = el.dataset.unpick;
+      st.picks = st.picks.filter((x) => x !== k); delete st.rate[k];
+      picks(); status(); save(); $('[data-pic="' + k + '"]').focus(); return;
+    }
     if (el.hasAttribute('data-clear')) { const sl = el.closest('.sl'); setSlider(sl, ''); $('.sl-in', sl).focus(); return; }
     if (el.dataset.opt) {
       if (el.getAttribute('aria-disabled') === 'true') return;
@@ -786,7 +897,7 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
   // arrow keys move between the stage tabs
   $('[role="tablist"]').addEventListener('keydown', (e) => {
     if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-    const n = ((st.tab - 1 + (e.key === 'ArrowRight' ? 1 : 2)) % 3) + 1;
+    const n = ((st.tab - 1 + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length) + 1;
     showTab(n, false); $('#tab-' + n).focus(); e.preventDefault();
   });
 
@@ -832,6 +943,13 @@ const START = STAGES.map((_, j) => STAGES.slice(0, j).reduce((t, x) => t + x.qs.
     const secs = [];
     $$('[data-stage]').forEach((p) => {
       const n = +p.dataset.stage, rows = [], pics = [];
+      if ($('[data-pics]', p)) {
+        st.picks.forEach((k) => {
+          const c = $('[data-pk="' + k + '"]'), r = st.rate[k];
+          rows.push([c.dataset.group + ', image ' + c.dataset.n, (r ? 'Rating: ' + r + ' of 5' : 'Not rated') + '\n' + c.dataset.full]);
+          pics.push($('img', c).src);
+        });
+      }
       $$('.q', p).forEach((q) => {
         const lines = [];
         $$('.fl', q).forEach((fl) => { const v = (st.text[$('input', fl).name] || '').trim(); if (v) lines.push($('span', fl).textContent + ': ' + v); });

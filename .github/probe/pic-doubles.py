@@ -14,8 +14,9 @@ for n, i in zip(names, ids):
         print('OK', n, h[:8], im.size, 'landscape' if im.size[0] > im.size[1] else 'portrait' if im.size[0] < im.size[1] else 'square')
     except Exception as e:
         print('FAIL', n, h[:8], e)
-print('--- likely doubles (phash, dhash distance) ---')
-for a, b in itertools.combinations(hs, 2):
-    dp, dd = hs[a][0] - hs[b][0], hs[a][1] - hs[b][1]
-    if dp <= 12 or dd <= 10:
-        print('PAIR', a, hs[a][3], b, hs[b][3], dp, dd)
+print('--- closest pairs (phash, dhash, colour hash distance) ---')
+ch = {}
+for n in hs: pass
+pairs = sorted(((hs[a][0] - hs[b][0]) + (hs[a][1] - hs[b][1]), a, b) for a, b in itertools.combinations(hs, 2))
+for d, a, b in pairs[:12]:
+    print('PAIR', a, hs[a][3], b, hs[b][3], 'total', d)
