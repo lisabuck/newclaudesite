@@ -1,0 +1,12 @@
+name: Probe client discovery photos for doubles
+on:
+  push:
+    branches: [diag-pic-doubles]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install -q pillow imagehash
+      - run: python3 .github/probe/pic-doubles.py
