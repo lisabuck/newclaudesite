@@ -1,7 +1,7 @@
 ---
-/* Request Specialist Planning Guides: a small card pinned bottom right, the
+/* Request Planning Guides: a small card pinned bottom right, the
    same look as the project updates pop-up in Base.astro (which this does not
-   touch). It opens from the pinned "Request Specialist Planning Guides" button
+   touch). It opens from the pinned "Request Planning Guides" button
    (shown where `button` is set: the services pages, in place of the
    E-Newsletter button), from any link to #guides, and on any page opened with
    #guides on the end of its address (for social posts).
@@ -20,13 +20,13 @@ const GUIDES: [string, string][] = [
 ---
 {button && (
   <a class="tg-gd-cta" href="#guides" aria-haspopup="dialog" aria-controls="tg-gd">
-    <span class="tg-gd-long">Request Specialist Planning Guides</span><span class="tg-gd-short">Planning Guides</span>
+    <span class="tg-gd-long">Request Planning Guides</span><span class="tg-gd-short">Planning Guides</span>
   </a>
 )}
 <div class="tg-gd" id="tg-gd" hidden data-form-id={formId}>
   <div class="tg-gd-card" role="dialog" aria-labelledby="tg-gd-h">
     <button class="tg-gd-x" type="button" aria-label="Close">&times;</button>
-    <h2 id="tg-gd-h">Request specialist planning guides</h2>
+    <h2 id="tg-gd-h">Request planning guides</h2>
     <p class="tg-gd-lead">Tick the guides you would like. We will email them to you.</p>
     <form class="tg-gd-form" novalidate>
       <fieldset class="tg-gd-set">
@@ -39,7 +39,7 @@ const GUIDES: [string, string][] = [
       <input class="tg-gd-in" id="tg-gd-first" name="first_name" type="text" autocomplete="given-name" placeholder="First name" required />
       <label class="tg-gd-sr" for="tg-gd-email">Email address</label>
       <input class="tg-gd-in" id="tg-gd-email" name="email" type="email" autocomplete="email" placeholder="Email address" required />
-      <label class="tg-gd-opt tg-gd-news"><input type="checkbox" name="newsletter" /><span>Also send me the Thorne Group e-newsletter.</span></label>
+      <label class="tg-gd-opt tg-gd-news"><input type="checkbox" name="newsletter" /><span><strong>Be the first to know!</strong> Register for early access to new developments, inspiration from our homes and updates on current projects.</span></label>
       <button class="tg-gd-btn" type="submit">Request guides</button>
       <p class="tg-gd-msg" role="status" hidden></p>
     </form>
@@ -64,7 +64,9 @@ const GUIDES: [string, string][] = [
   .tg-gd-set{margin:0 0 14px;padding:0;border:0;border-top:1px solid #c8c3bb}
   .tg-gd-opt{display:flex;align-items:center;gap:12px;min-height:44px;padding:6px 0;border-bottom:1px solid #c8c3bb;font-size:16px;line-height:1.35;color:#393533;cursor:pointer}
   .tg-gd-opt input{flex:none;width:20px;height:20px;margin:0;accent-color:#393533;cursor:pointer}
-  .tg-gd-news{border-bottom:0;margin:2px 0 8px;font-size:15px;color:#54504c}
+  .tg-gd-news{align-items:flex-start;border-bottom:0;margin:2px 0 8px;font-size:15px;line-height:1.45;color:#54504c}
+  .tg-gd-news input{margin-top:2px}
+  .tg-gd-news strong{font-weight:500;color:#393533}
   .tg-gd-in{display:block;width:100%;box-sizing:border-box;margin:0 0 10px;padding:11px 12px;border:1px solid #c8c3bb;border-radius:0;background:#fff;font:inherit;font-size:16px;color:#393533}
   .tg-gd-in::placeholder{color:#7a746e;opacity:1}
   .tg-gd-in:focus{outline:2px solid #393533;outline-offset:1px;border-color:#393533}
