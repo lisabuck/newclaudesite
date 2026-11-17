@@ -2,14 +2,17 @@
 import '../styles/fonts.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
+import GuidesRequest from '../components/GuidesRequest.astro';
 
 interface Props {
   title: string;
   description: string;
   preloadImage?: string;
   hideNewsletterButton?: boolean;
+  /** pin the Request Specialist Planning Guides button (services pages) */
+  guidesButton?: boolean;
 }
-const { title, description, preloadImage, hideNewsletterButton } = Astro.props;
+const { title, description, preloadImage, hideNewsletterButton, guidesButton } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 ---
 <!doctype html>
@@ -248,5 +251,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
         setTimeout(function () { if (!sget('tgPopShown')) open(false); }, Math.max(3000, 30000 - (now - start))); /* a later page waits at least 3 seconds */
       })();
     </script>
+    <GuidesRequest button={guidesButton} />
 </body>
 </html>

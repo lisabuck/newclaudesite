@@ -1,0 +1,153 @@
+---
+/* Request Specialist Planning Guides: a small card pinned bottom right, the
+   same look as the project updates pop-up in Base.astro (which this does not
+   touch). It opens from the pinned "Request Specialist Planning Guides" button
+   (shown where `button` is set: the services pages, in place of the
+   E-Newsletter button), from any link to #guides, and on any page opened with
+   #guides on the end of its address (for social posts).
+   The visitor ticks the guides they want, adds a first name and email, and can
+   tick to join the e-newsletter. With `formId` set the request goes to that
+   Wix form through /api/contact; with it empty (the Vercel preview) nothing is
+   sent and the card says so. */
+interface Props { button?: boolean; formId?: string }
+const { button = false, formId = '' } = Astro.props;
+const GUIDES: [string, string][] = [
+  ['rural', 'Rural Construction Planning Guide'],
+  ['coastal', 'Coastal Construction Planning Guide'],
+  ['compact', 'Compact Site Planning Guide'],
+  ['renovation', 'Renovation or Build New Checklist'],
+];
+---
+{button && (
+  <a class="tg-gd-cta" href="#guides" aria-haspopup="dialog" aria-controls="tg-gd">
+    <span class="tg-gd-long">Request Specialist Planning Guides</span><span class="tg-gd-short">Planning Guides</span>
+  </a>
+)}
+<div class="tg-gd" id="tg-gd" hidden data-form-id={formId}>
+  <div class="tg-gd-card" role="dialog" aria-labelledby="tg-gd-h">
+    <button class="tg-gd-x" type="button" aria-label="Close">&times;</button>
+    <h2 id="tg-gd-h">Request specialist planning guides</h2>
+    <p class="tg-gd-lead">Tick the guides you would like. We will email them to you.</p>
+    <form class="tg-gd-form" novalidate>
+      <fieldset class="tg-gd-set">
+        <legend class="tg-gd-sr">Guides</legend>
+        {GUIDES.map(([v, l]) => (
+          <label class="tg-gd-opt"><input type="checkbox" name="guides" value={l} data-key={v} /><span>{l}</span></label>
+        ))}
+      </fieldset>
+      <label class="tg-gd-sr" for="tg-gd-first">First name</label>
+      <input class="tg-gd-in" id="tg-gd-first" name="first_name" type="text" autocomplete="given-name" placeholder="First name" required />
+      <label class="tg-gd-sr" for="tg-gd-email">Email address</label>
+      <input class="tg-gd-in" id="tg-gd-email" name="email" type="email" autocomplete="email" placeholder="Email address" required />
+      <label class="tg-gd-opt tg-gd-news"><input type="checkbox" name="newsletter" /><span>Also send me the Thorne Group e-newsletter.</span></label>
+      <button class="tg-gd-btn" type="submit">Request guides</button>
+      <p class="tg-gd-msg" role="status" hidden></p>
+    </form>
+  </div>
+</div>
+<style is:inline>
+  .tg-gd-cta{position:fixed;right:18px;bottom:18px;z-index:60;background:#393533;color:#FAF9F6;text-decoration:none;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;padding:14px 22px;box-shadow:0 4px 18px rgba(35,32,30,.28);transition:bottom .25s ease}
+  .tg-gd-cta:hover{opacity:.9}
+  .tg-gd-cta.tg-gd-up{bottom:96px}
+  .tg-gd-short{display:none}
+  @media(max-width:750px){.tg-gd-cta{right:12px;bottom:12px;padding:12px 16px}.tg-gd-cta.tg-gd-up{bottom:92px}.tg-gd-long{display:none}.tg-gd-short{display:inline}}
+  .tg-gd{position:fixed;right:18px;bottom:18px;z-index:2147483000;width:380px;max-width:calc(100vw - 36px);opacity:0;transition:opacity .45s ease}
+  .tg-gd[hidden]{display:none}
+  .tg-gd [hidden]{display:none!important}
+  .tg-gd.on{opacity:1}
+  .tg-gd-card{position:relative;max-height:calc(100vh - 36px);max-height:calc(100dvh - 36px);overflow:auto;background:#FAF9F6;color:#393533;padding:26px 24px 24px;border:1px solid #c8c3bb;box-shadow:0 10px 36px rgba(35,32,30,.3);font-family:'Metric',system-ui,sans-serif}
+  .tg-gd-x{position:absolute;top:4px;right:4px;width:44px;height:44px;border:0;background:none;color:#393533;font-size:28px;line-height:1;font-weight:300;cursor:pointer}
+  .tg-gd-x:hover{color:#7a746e}
+  .tg-gd-card h2{margin:0 30px 0 0;font-weight:300;font-size:22px;line-height:1.25;letter-spacing:-.01em;color:#393533}
+  .tg-gd-lead{margin:10px 0 12px;font-size:16px;line-height:1.5;color:#54504c}
+  .tg-gd-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .tg-gd-set{margin:0 0 14px;padding:0;border:0;border-top:1px solid #c8c3bb}
+  .tg-gd-opt{display:flex;align-items:center;gap:12px;min-height:44px;padding:6px 0;border-bottom:1px solid #c8c3bb;font-size:16px;line-height:1.35;color:#393533;cursor:pointer}
+  .tg-gd-opt input{flex:none;width:20px;height:20px;margin:0;accent-color:#393533;cursor:pointer}
+  .tg-gd-news{border-bottom:0;margin:2px 0 8px;font-size:15px;color:#54504c}
+  .tg-gd-in{display:block;width:100%;box-sizing:border-box;margin:0 0 10px;padding:11px 12px;border:1px solid #c8c3bb;border-radius:0;background:#fff;font:inherit;font-size:16px;color:#393533}
+  .tg-gd-in::placeholder{color:#7a746e;opacity:1}
+  .tg-gd-in:focus{outline:2px solid #393533;outline-offset:1px;border-color:#393533}
+  .tg-gd-btn{display:block;width:100%;margin-top:4px;padding:13px 18px;border:1px solid #393533;background:#393533;color:#FAF9F6;font:inherit;font-size:14px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;cursor:pointer}
+  .tg-gd-btn:hover{background:#54504c}
+  .tg-gd-btn[disabled]{opacity:.6;cursor:default}
+  .tg-gd-msg{margin:10px 0 0;font-size:15px;line-height:1.5;color:#393533}
+  @media(max-width:750px){.tg-gd{right:12px;bottom:12px;max-width:calc(100vw - 24px)}.tg-gd-card{max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);padding:22px 20px 20px}}
+  @media(prefers-reduced-motion:reduce){.tg-gd{transition:none}}
+</style>
+<script is:inline>
+  (function () {
+    var pop = document.getElementById('tg-gd'); if (!pop) return;
+    var form = pop.querySelector('form'), msg = pop.querySelector('.tg-gd-msg'), btn = pop.querySelector('.tg-gd-btn');
+    var lastFocus = null, done = false, marker = null;
+    function say(t) { msg.textContent = t; msg.hidden = false; }
+    function reset() {
+      form.reset(); done = false; msg.hidden = true;
+      form.querySelectorAll('.tg-gd-set,.tg-gd-in,.tg-gd-news,.tg-gd-btn').forEach(function (el) { el.hidden = false; });
+    }
+    function open(byHand) {
+      /* one card at a time: close the project updates pop-up if it is showing,
+         and hold its spot so it does not open over this one */
+      var news = document.querySelector('#tg-pop.on .tg-pop-x'); if (news) news.click();
+      if (!marker) { marker = document.createElement('span'); marker.className = 'tg-pop on'; marker.hidden = true; document.body.appendChild(marker); }
+      if (done) reset();
+      lastFocus = document.activeElement;
+      pop.hidden = false;
+      requestAnimationFrame(function () { pop.classList.add('on'); });
+      if (byHand) setTimeout(function () { var f = pop.querySelector('input[name="guides"]'); if (f) f.focus({ preventScroll: true }); }, 60);
+    }
+    function close() {
+      pop.classList.remove('on');
+      if (marker) { marker.remove(); marker = null; }
+      setTimeout(function () { pop.hidden = true; }, 450);
+      if (pop.contains(document.activeElement) && lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    }
+    pop.querySelector('.tg-gd-x').addEventListener('click', close);
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) close(); });
+    /* the pinned button and any link to #guides open the card */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest && e.target.closest('a[href$="#guides"]');
+      if (!a) return;
+      var u = new URL(a.href, location.href);
+      if (u.pathname !== location.pathname) return; /* a link to another page's #guides: let it load */
+      e.preventDefault(); open(true);
+    });
+    /* a page opened with #guides on the end (from a social post) shows the card */
+    function fromHash() { if (location.hash === '#guides') open(false); }
+    window.addEventListener('hashchange', fromHash);
+    if (document.readyState === 'complete') fromHash(); else window.addEventListener('load', fromHash);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var picked = [].slice.call(form.querySelectorAll('input[name="guides"]:checked')).map(function (i) { return i.value; });
+      var first = form.first_name.value.trim(), email = form.email.value.trim();
+      if (!picked.length) { say('Please tick at least one guide.'); return; }
+      if (!first || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Please add your first name and a valid email address.'); return; }
+      var formId = pop.getAttribute('data-form-id');
+      if (!formId) { say('Preview only: nothing was sent. Requests are connected on the live site.'); return; }
+      btn.disabled = true; btn.textContent = 'Sending...';
+      fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ formId: formId, submissions: { first_name: first, email: email, guides: picked, newsletter: form.newsletter.checked } }) })
+        .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, b: b }; }); })
+        .then(function (r) {
+          if (!r.ok) throw new Error((r.b && r.b.error) || 'Something went wrong.');
+          form.querySelectorAll('.tg-gd-set,.tg-gd-in,.tg-gd-news,.tg-gd-btn').forEach(function (el) { el.hidden = true; });
+          say('Thank you. We will email your guides shortly.'); done = true;
+        })
+        .catch(function (err) { say((err && err.message) || 'Something went wrong. Please try again or email info@thornegroup.co.nz.'); })
+        .then(function () { btn.disabled = false; btn.textContent = 'Request guides'; });
+    });
+
+    /* lift the pinned button clear of the footer social links at the bottom of the page */
+    var cta = document.querySelector('.tg-gd-cta');
+    if (cta) {
+      var place = function () {
+        var gap = document.documentElement.scrollHeight - (window.scrollY + window.innerHeight);
+        cta.classList.toggle('tg-gd-up', gap < 96);
+      };
+      window.addEventListener('scroll', place, { passive: true });
+      window.addEventListener('resize', place);
+      place();
+    }
+  })();
+</script>
