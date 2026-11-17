@@ -85,7 +85,7 @@ const GUIDES: [string, string][] = [
     function say(t) { msg.textContent = t; msg.hidden = false; }
     function reset() {
       form.reset(); done = false; msg.hidden = true;
-      form.querySelectorAll('.tg-gd-set,.tg-gd-in,.tg-gd-news,.tg-gd-btn').forEach(function (el) { el.hidden = false; });
+      pop.querySelectorAll('.tg-gd-lead,.tg-gd-set,.tg-gd-in,.tg-gd-news,.tg-gd-btn').forEach(function (el) { el.hidden = false; });
     }
     function open(byHand) {
       /* one card at a time: close the project updates pop-up if it is showing,
@@ -136,7 +136,7 @@ const GUIDES: [string, string][] = [
         .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, b: b }; }); })
         .then(function (r) {
           if (!r.ok) throw new Error((r.b && r.b.error) || 'Something went wrong.');
-          form.querySelectorAll('.tg-gd-set,.tg-gd-in,.tg-gd-news,.tg-gd-btn').forEach(function (el) { el.hidden = true; });
+          pop.querySelectorAll('.tg-gd-lead,.tg-gd-set,.tg-gd-in,.tg-gd-news,.tg-gd-btn').forEach(function (el) { el.hidden = true; });
           say('Thank you. We will email your guides shortly.'); done = true;
         })
         .catch(function (err) { say((err && err.message) || 'Something went wrong. Please try again or email info@thornegroup.co.nz.'); })
