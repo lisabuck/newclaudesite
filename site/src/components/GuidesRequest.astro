@@ -121,7 +121,7 @@ const GUIDES: [string, string][] = [
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var picked = [].slice.call(form.querySelectorAll('input[name="guides"]:checked')).map(function (i) { return i.value; });
+      var picked = [].slice.call(form.querySelectorAll('input[name="guides"]:checked')).map(function (i) { return i.getAttribute('data-key'); });
       var first = form.first_name.value.trim(), email = form.email.value.trim();
       if (!picked.length) { say('Please tick at least one guide.'); return; }
       if (!first || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { say('Please add your first name and a valid email address.'); return; }
@@ -129,7 +129,10 @@ const GUIDES: [string, string][] = [
       if (!formId) { say('Preview only: nothing was sent. Requests are connected on the live site.'); return; }
       btn.disabled = true; btn.textContent = 'Sending...';
       fetch('/api/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ formId: formId, submissions: { first_name: first, email: email, guides: picked, newsletter: form.newsletter.checked } }) })
+        body: JSON.stringify({ formId: formId, submissions: { first_name: first, email: email, newsletter: form.newsletter.checked,
+          /* one tick box per guide on the Wix "Planning Guide Requests" form */
+          guide_rural: picked.indexOf('rural') > -1, guide_coastal: picked.indexOf('coastal') > -1,
+          guide_compact: picked.indexOf('compact') > -1, guide_renovation: picked.indexOf('renovation') > -1 } }) })
         .then(function (r) { return r.json().then(function (b) { return { ok: r.ok, b: b }; }); })
         .then(function (r) {
           if (!r.ok) throw new Error((r.b && r.b.error) || 'Something went wrong.');
